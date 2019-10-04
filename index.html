@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Some time I may do something foolish, but wish I can prove I can head first to the Truth as Synaptics.">
+<meta name="description" content="Head first to the Truth as Synaptics.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="fooSynaptic">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="Some time I may do something foolish, but wish I can prove I can head first to the Truth as Synaptics.">
+<meta property="og:description" content="Head first to the Truth as Synaptics.">
 <meta property="og:locale" content="zh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fooSynaptic">
-<meta name="twitter:description" content="Some time I may do something foolish, but wish I can prove I can head first to the Truth as Synaptics.">
+<meta name="twitter:description" content="Head first to the Truth as Synaptics.">
 
 
 
@@ -160,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">Head first to the Truth as Synaptics.</p>
       
   </div>
 
@@ -218,6 +218,169 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/当我们把目光放在机器阅读理解，我们的期望到底是什么？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiaxin hu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/04/当我们把目光放在机器阅读理解，我们的期望到底是什么？/" itemprop="url">当我们把目光放在机器阅读理解，我们的期望到底是什么？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-04T07:41:50+08:00">
+                2019-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>=========<br>转载请注明出处<br>=========<br><strong><em>机器阅读理解不是一个end2end的任务，当你把目光看向了机器阅读理解，你需要非常的谨慎，自己的问题是否定义的足够清晰</em></strong></p>
+<p>好了我想我们首先还是要先介绍一下机器阅读理解这个任务，在学术圈这是一个端到端的任务，并且总体可以分成两类：</p>
+<ul>
+<li>开放领域的机器阅读理解，这个被google用于搜索技术中。</li>
+<li>针对于文档库的机器阅读理解，这个传统都是用检索系统，现在由于深度学习非常火热，所以大家都拿阅读理解的考试试题的模拟这部分任务。</li>
+</ul>
+<p>两者从技术原理上并没有太大的分歧，只是第一种稍难，第二种虽然说开放数据上被各种刷新SOTA（state of the art），但是远达不到公共对于深度学习能够理解文本信息的程度。<br>那么具体来看机器阅读理解经历了一个什么样的发展历程呢？</p>
+<pre><code>最著名的早期作品之一是 Lehnert ( 1977 ) 中详细描述的 QUALM。基于脚本和计划框架，Lehnert ( 1977 ) 设计了一个问答的理论，并且专注于语用问题和故事上下文在问答中的重要性，来作为对人类阅读理解的建模 ( Schank and Abelson， 1977 )。这个早期工作为语言理解设置了一个强大的愿景，但是当时构建的实际系统非常小，仅限于手工编码的脚本，并且很难推广到更广泛的领域。
+
+由于问题的复杂性，这方面的研究在20世纪80年代和90年代大多被忽视。在20世纪90年代末，人们对阅读理解的兴趣有了一些小小的复苏，例如 Hirschman 等人 ( 1999 ) 创建了一个阅读理解数据集，以及随后在 ANLP/NAACL 2000年举办了一个关于阅读理解测试作为基于计算机的理解系统评估的研讨会。数据集包括60个用于开发的故事和60个用于测试的三至六年级的故事，附有一些简单的 who，what，when，where，why 这样的简单问题。它只需要系统返回包含正确答案的句子。这一阶段开发的系统主要是基于规则的词包方法。例如 DEEP READ 系统 ( Hirschman et al. 1999 ) 中进行词干分析、语义类识别和代词解析等浅层语言处理，或者像是 QUARC 系统 ( Riloff and THElen，2000 ) 中手动生成基于词汇和语义对应的规则或者是以上两个的组合体 ( Charnizak et al.， 2000 )。这些系统在检索正确句子时达到了30%-40%的准确率。
+``` [ref](https://mp.weixin.qq.com/s/2gUhlgIaL_Qi0M8iPbWMkA)
+早期的工作者看到这个任务，首选的就是系统，这很符合直觉也和本文的观点一致，不管是设计qa问答机器人还是文本检索系统，其本身必定是一个系统，需要一定的特征设计和结合数据的程序设计。
+
+那么现在基于深度学习设计的阅读理解模型是如何做的呢？
+涉及到深度学习模型的MRC就一定要介绍SQUAD这个数据集了，在早期span detection这个数据f1已经刷到了超过90%，但是大家任然对包括Bert在内的这些机器阅读理解模型不抱太大期望能够做到理解文本，所以现在也已经推出了更新的SQUAD2。。。
+根据笔者的经验，机器阅读理解这个任务，在深度学习里面经历了这么几个过程
+denote： q和c分别对应阅读理解中的问题和文本内容
+- Match-LSTM 先把q和c分别经过双向的LSTM，再通过attention机制，得到c中每个词q里所有词的权重，得到新的q的向量
+- BIDAF 分别计算q到c和c到q的attention 权重，利用这个权重乘以q和c得到q-wise的c和c-wise的q，concat起来做fusion
+- R-net 利用了self-attention，这边文章在 May. 6, 2017，在transformer之后，很显然self-attention的借鉴打破了之前到处attend的局势
+- QA-net 利用了CNN，和self-attention一直cnn也能够捕捉到并行的词依赖特征，虽然不如self-attention那么棒，但是QAnet经过了精心设计的让他好transformer的encoder结构很像。
+- Bert bert开始刷榜
+
+---
+我们介绍的这些模型都不差，但是存在的问题也很明显，首先阅读理解这个任务分为好几个任务
+- 完形填空类型 ( Cloze style )：问题包含一个 placeholder ( 占位符 )。
+- 多项选择类型 ( Multiple choice )：在这个类别下，正确答案从 k 个假设答案中选择 ( 比如：k=4 ) 
+- 范围预测类型 ( Span prediction )：这个类别也被称为抽取式问答 ( extractive question answering ) 并且答案必须是文本中的一个范围。因此，答案可以表示为( astart，aend )，其中 1 ≤ astart ≤ aend ≤ lp。并且答案对英语 pastart, . . . , paend。
+- 自由形式回答类型 ( Free-form answer )：最后一种类型允许答案是任何形式的文本 ( 即，任意长度的单词序列 )，形式上：a ∈ V∗。
+
+那么现有的模型能够做的相对好的，只有完形填空和范围预测，前者是predict token，后者是CrossEntry(p-end,p-start)，我不知道读者现在脑海里想的是什么，我想到的就是检索，机器阅读理解就是更家复杂的文本检索，这既是当今机器阅读理解的全部，如果你期望他能够做一些推理的任务，比如帮你数多少个人，时间差，在当前是不可能完成的。
+那么我们能够用检索来完成，为何不用传统的方法BM25？
+事实上，BM25在这些任务上不会比机器阅读理解差太多，一个中规中矩的深度学习baseline不会比BM25加上更多的文本特征工程更好（仅限于范围预测），但是深度学习带来的优势是，他真的是在帮你做阅读理解，他会抛出一个短语，几个词，而不是像BM25那样给出一句一句话。
+根据我的个人实验，我使用了self-attention+Match_lstm+BIDAF+pointer_network的结构实现了一个阅读理解模型，比BM25召回的文本序列要短非常多，但是BLEU和Rouge要比BM25高。[ref](https://github.com/fooSynaptic/transfromer_NN_Block/tree/master/transformer_RC)
+
+经验：
+- 把问题分类，如果问题中详细的问道数字，人名，记录这部分信息。
+- 对文章进行命名实体识别，把能够对应上的实体特征，提高该部分词的权重。
+- 用最长的匹配字符串去找到后面的内容[lcs_continue_string](https://github.com/fooSynaptic/exam/blob/master/Coding/LCS_string.py)
+- 数字和特殊字符一定要保留完整信息并且成词
+
+
+如果您仍然觉得机器阅读理解不够棒，不能满足您的需求，请重新定义您的问题，或者不要期望阅读理解为您做更多。
+
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -309,6 +472,7 @@
 <p>在图中，左边是真实的因果结构，右边是PC算法计算推断出来的因果结构，他的变现形式是一个马尔可夫等价类的DAG，主要蕴含了条件独立性的信息。<br>如图中所示，在算法推断出来的因果结构中有单向和双向的箭头。单向的箭头代表着直接的有向因果效应。双向的箭头意味着对于PC算法来说无法去判断这个因果效应的方向应该是⬅️还是➡️。因此，在推断的结果当中，双向的箭头代表这因果关系的不确定性。这其中有一个非常重要的事实：普遍的，PC算法类似的算法无法从观测数据中得到一个单一的DAG，即便说这个数据量非常有限，因为存在的事实是多个DAGs可以描述相同的条件独立性信息。<br>然后我们重点介绍一下马尔可夫等价类：为什么是类其实也就是因为多个结构可以描述相同的条件概率（贝叶斯概率），举个例子——</p>
 <p>花了15分钟做的图，office online真辣鸡<br>对于： a. A&lt;—— C ——&gt;B 和b. A——&gt; C ——&gt; B是一对马尔可夫等价类，因为对于<br>a:   有- P(C)P(A|C)P(B|C) 。<br>b：有- P(A)P(C|A)P(B|C) = P(C)P(A|C)P(B|C) 。<br>所以a等价于b。<br>马尔科夫等价类在贝叶斯概率的计算上是等价的，却有着完全不同的结构。对于如上的链式图有两种贝叶斯概率。</p>
 <p>研究方法背景介绍：<br>一般的，贝叶斯网络图、模型常用来进行因果结构的推断，图模型可以被理解为从联合概率到有依赖关系的结构的一种映射关系。就好像是地图一样，如果你想要使用地图，那么你需要两个要素，第一，你需要一个物理位置的图包含了点和线的符号，第二，你需要合理的规则来对图上的符号来作出解释。从这个观点考虑就能够理解，虽然高速公路地图和电车轨道地图看起来非常相像，不过他们对于符号的解释规则会存在较大的差别，所以图模型可以被理解为一张地图。图模型中都包含了一张具备了点，线以及潜在的mark，比如说箭头或者环，并且，图模型都有一套解释自己的的规则。一般的，在统计学习中，图中的节点代表着随机变量，而边代表了某种依赖关系。<br>我们先考虑不存在隐变量的情况<br>一个例子，有向无环图-DAG模型，无环意味着从图中任何一个节点出发沿着边延伸都无法回到起始节点。先考虑一种简单的解释规则- d-separation。<br>Define D-separation：<br>如果在模型图中存在两个节点x和y，他们被一个node集合S所分隔-d-separated，那么相应的在集合S的存在下，两个随机变量Vx和Vy条件性相互独立。<br>denote： Vx \bot Vy  | S .<br>相应的，满足d-separation的变量分布被称之为faithful，并且在统计上也被证明了大部分的变量分布都是faithful的。所以in practice这个假设并不strong。<br>因为DAG模型可以编码条件独立性关系，PC算法利用这一关系来推断我们前面提到的因果关系。PC算法被证明能够重构潜在的DAG模型结构，这个算法依赖于马尔可夫等价类（some variable with some 联合分布）中的条件独立性关系。实际在算法中，条件独立性骨架通过一个条件独立性的统计检验来完成。在某些不存在隐变量的情况下，即便存在非常高纬度的随机变量（意味着可能会有非常稀疏的众多DAG模型）PC算法利用统计检验来进行条件独立性分析是有较好的计算效率。<br>PC算法伪代码<br>输入：一个代表图模型节点的随机变量集合V；条件独立性信息；统计检验显著性水平 \alpha 。<br>输出：部分的完备有向无环图CPDAG \tilde{G} ，分隔变量集合 \tilde{S} ，以及边的方向👈还是👉。<br>构造随机变量集合V的完全的联通图（所有节点相连接）。<br>利用显著性水平\alpha对相邻的统计变量集合进行条件独立性检验，如果存在条件性独立，就将两个变量之间的边去除掉。<br>确定V结构（确定方向）。<br>树立剩余的边。</p>
+<p>=========<br>转载请注明出处<br>=========</p>
 
           
         
@@ -438,6 +602,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">randomized_svd</span><span class="params">(M, n_components, n_oversamples=<span class="number">10</span>, n_iter=<span class="number">4</span>)</span>:</span></span><br><span class="line">    <span class="comment">#这里n_random就是truncate SVD中的r</span></span><br><span class="line">    n_random = n_components + n_oversamples</span><br><span class="line">    </span><br><span class="line">    Q = randomized_range_finder(M, n_random, n_iter)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#把原始观测投影到(k + p)维度空间</span></span><br><span class="line">    B = Q.T @ M</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 对B进行奇异值分解</span></span><br><span class="line">    Uhat, s, V = linalg.svd(B, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">del</span> B</span><br><span class="line">    U = Q @ Uhat</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> U[:, :n_components], s[:n_components], V[:n_components, :]</span><br></pre></td></tr></table></figure>
 
 <p>没有看懂？好吧让我们来讲讲这个原理，randomize SVD对于矩阵分解能够作为一种通用的算法，简单讲分成两步，<br>第一步是求原始矩阵范围的近似Q，这个过程中通过对一个随机初始化的小维度矩阵Q不断地进行和原矩阵相乘然后分解，最终得到一个稳定的向量矩阵，为什么不取对角矩阵，因为对角矩阵是特征基矩阵，而左边的向量矩阵可以作为量纲矩阵。最终我们的目标是得到A ≈ Q Qᵀ A。<br>第二步很简单，有了A ≈ Q Qᵀ A，我们构造一个矩阵B = Qᵀ A，因为Q是低秩的，所以矩阵B很小。我们可以用传统SVD的方法来对矩阵B进行分解B = S Σ Vᵀ，得到左奇异，奇异值矩阵，右奇异向量矩阵。到这里A ≈ Q Qᵀ A = Q (S Σ Vᵀ)，最右边所有量都已知，成功地对A求到了一个低秩的近似U Σ Vᵀ。<br>（通过上面的代码，可以很直接得理解这两步原理。）<br>Tricks and intuition:<br>randomized SVD的trick就是能够非常高效得求得范围近似矩阵Q，从直觉上来思考，为了估计原始矩阵的范围，我们可以用一些随机的向量，通过原始矩阵A和这些随机向量的相乘所作出的变动的近似来得到A的波动范围。<br>Specific：假设我们使用一个高斯向量矩阵M来和原矩阵相乘，计算Y = A M，然后对Y进行QR分解Q R = Y，这样得到的矩阵Q，它的没一列就是Y的范围的正交基，所以可以作为A的范围近似。</p>
+<p>=========<br>转载请注明出处<br>=========</p>
 
           
         
@@ -569,6 +734,7 @@
 <li>web应用开发</li>
 </ul>
 <h1 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h1><p>NLP researcher<br>如果你想了解更多关于我的项目，请参考我的github项目：<a href="https://github.com/fooSynaptic" target="_blank" rel="noopener">ref link</a></p>
+<p>=========<br>转载请注明出处<br>=========</p>
 
           
         
@@ -792,7 +958,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">jiaxin hu</p>
-              <p class="site-description motion-element" itemprop="description">Some time I may do something foolish, but wish I can prove I can head first to the Truth as Synaptics.</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptics.</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -802,7 +968,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -824,7 +990,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

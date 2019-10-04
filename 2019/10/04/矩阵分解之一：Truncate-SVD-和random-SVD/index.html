@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="fooSynaptic">
 <meta property="og:description" content="最近看了一点矩阵分解的论文发现了一些好玩的东西，所以会准备总结几篇矩阵分解的文章，标题图来自facebook research。 奇异值分解相对于矩阵分解的问题每个学过线性代数的人都不会对奇异值分解感到陌生，因为SVD广泛地应用于统计学，信号处理以及机器学习当中。形式上来看，一个维度为 m × n的实数矩阵的奇异值分列可以表示为A = U Σ Vᵀ；其中U代表的是一个维度为m × m的正交奇异向量">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-10-03T23:33:45.565Z">
+<meta property="og:updated_time" content="2019-10-04T00:47:16.862Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵分解之一：Truncate SVD 和random SVD">
 <meta name="twitter:description" content="最近看了一点矩阵分解的论文发现了一些好玩的东西，所以会准备总结几篇矩阵分解的文章，标题图来自facebook research。 奇异值分解相对于矩阵分解的问题每个学过线性代数的人都不会对奇异值分解感到陌生，因为SVD广泛地应用于统计学，信号处理以及机器学习当中。形式上来看，一个维度为 m × n的实数矩阵的奇异值分列可以表示为A = U Σ Vᵀ；其中U代表的是一个维度为m × m的正交奇异向量">
@@ -160,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">Head first to the Truth as Synaptics.</p>
       
   </div>
 
@@ -309,6 +309,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">randomized_svd</span><span class="params">(M, n_components, n_oversamples=<span class="number">10</span>, n_iter=<span class="number">4</span>)</span>:</span></span><br><span class="line">    <span class="comment">#这里n_random就是truncate SVD中的r</span></span><br><span class="line">    n_random = n_components + n_oversamples</span><br><span class="line">    </span><br><span class="line">    Q = randomized_range_finder(M, n_random, n_iter)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#把原始观测投影到(k + p)维度空间</span></span><br><span class="line">    B = Q.T @ M</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 对B进行奇异值分解</span></span><br><span class="line">    Uhat, s, V = linalg.svd(B, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">del</span> B</span><br><span class="line">    U = Q @ Uhat</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> U[:, :n_components], s[:n_components], V[:n_components, :]</span><br></pre></td></tr></table></figure>
 
 <p>没有看懂？好吧让我们来讲讲这个原理，randomize SVD对于矩阵分解能够作为一种通用的算法，简单讲分成两步，<br>第一步是求原始矩阵范围的近似Q，这个过程中通过对一个随机初始化的小维度矩阵Q不断地进行和原矩阵相乘然后分解，最终得到一个稳定的向量矩阵，为什么不取对角矩阵，因为对角矩阵是特征基矩阵，而左边的向量矩阵可以作为量纲矩阵。最终我们的目标是得到A ≈ Q Qᵀ A。<br>第二步很简单，有了A ≈ Q Qᵀ A，我们构造一个矩阵B = Qᵀ A，因为Q是低秩的，所以矩阵B很小。我们可以用传统SVD的方法来对矩阵B进行分解B = S Σ Vᵀ，得到左奇异，奇异值矩阵，右奇异向量矩阵。到这里A ≈ Q Qᵀ A = Q (S Σ Vᵀ)，最右边所有量都已知，成功地对A求到了一个低秩的近似U Σ Vᵀ。<br>（通过上面的代码，可以很直接得理解这两步原理。）<br>Tricks and intuition:<br>randomized SVD的trick就是能够非常高效得求得范围近似矩阵Q，从直觉上来思考，为了估计原始矩阵的范围，我们可以用一些随机的向量，通过原始矩阵A和这些随机向量的相乘所作出的变动的近似来得到A的波动范围。<br>Specific：假设我们使用一个高斯向量矩阵M来和原矩阵相乘，计算Y = A M，然后对Y进行QR分解Q R = Y，这样得到的矩阵Q，它的没一列就是Y的范围的正交基，所以可以作为A的范围近似。</p>
+<p>=========<br>转载请注明出处<br>=========</p>
 
       
     </div>
@@ -412,7 +413,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">jiaxin hu</p>
-              <p class="site-description motion-element" itemprop="description">Some time I may do something foolish, but wish I can prove I can head first to the Truth as Synaptics.</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptics.</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -422,7 +423,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -444,7 +445,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
