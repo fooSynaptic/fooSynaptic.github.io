@@ -232,6 +232,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/bidaf_sketch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiaxin hu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/bidaf_sketch/" itemprop="url">论文梗概：Bi-Directional Attention Flow for Machine Comprehension</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T16:47:58+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/19/bidaf_sketch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/11/19/bidaf_sketch/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Abstract-insights"><a href="#Abstract-insights" class="headerlink" title="Abstract insights:"></a>Abstract insights:</h1><ul>
+<li>requires modeling complex interactions between the context and the query.</li>
+<li>use attention to focus on a small portion of the context and summarize it with a fixed-size of vector</li>
+<li>muliti-stage hierachical process that represents the context at different levels of granularity and uses bi-directional attention flow mechanism to obtain a query-aware context representation without early summarization.</li>
+</ul>
+<h1 id="Introduction-insights"><a href="#Introduction-insights" class="headerlink" title="Introduction insights:"></a>Introduction insights:</h1><h2 id="Bi-directional-attention-flow"><a href="#Bi-directional-attention-flow" class="headerlink" title="Bi-directional attention flow:"></a>Bi-directional attention flow:</h2><ul>
+<li>First: the attention layer Is not used to summarize the context paragraph into a fixed-size vector. Instead, the attention is computed for every time step, and the attended vector at each time step, along with the representations form previous layers, is allowed to flow through to the subsequent modeling layer.(how similar to self-attention), prevent the information loss by early summary.</li>
+<li>Second, we use a memory-less attention mechanism. Thai is while we iteratively compute attention through time, the attention at each time step is a function of only the query and the context paragraph at the current time step and does not directly depend on the attention at the previous time step.<br>Second mechanism forces the attention layer to focus on learning the attention between the query and the context, and enables the modeling layer to focus on learning the interaction within the query-aware context representation( the output of the attention layer). It also allows the attention at each time step to be unaffected from incorrect attendances at previous time steps.</li>
+</ul>
+<h3 id="keynotes"><a href="#keynotes" class="headerlink" title="keynotes:"></a>keynotes:</h3><p>Conventional dynamic attention: the attention weights at the current time step are a function of the attended vector at the previous time step.<br>bidaf: the attention is a computed for every time step, and the attended vector at each time step. The memeory-less attention: the attention at each time step is a function of only the query and the context paragraph at the current time step and doses not directly depend on the attention at the previous time step.</p>
+<p><em>The author claim the memory-less attention gives a clear advanatge over dynamic attention.</em></p>
+<ul>
+<li>Third: the bi-direction provide complimentary information to each other.</li>
+</ul>
+<h1 id="BiDAF-network-Architecture"><a href="#BiDAF-network-Architecture" class="headerlink" title="BiDAF network Architecture:"></a>BiDAF network Architecture:</h1><p>First three layers, computing features from the query and context at different levels of granularity, akin to the multi-stage feature computation of convolutional NN in the CV field.</p>
+<ul>
+<li>character-level</li>
+<li>word-level</li>
+<li>contextual embedding： utilizes contextual cues from surrounding words to refine the embedding of the words.<br>::=&gt;We use a LSTM on top of the embeddings provided by the previous layers to model the temporal interactions between words. We place an LSTM in both directions and concatenate the outputs of the two LSTMs,</li>
+</ul>
+<ul>
+<li>Attention Flow Layer: couples the query and context vectors and produces a set of query-aware feature vectors for each word in the context.<br>α(h, u) = W[h;u;h@u]<br>Context-to-query attention. C2q attenton signifies which query words are most relevant to each context word.<br>Query-to-context(Q2C) attention signifies wich context words have the closest similarity to one of the query words and are hence critical for answering the query.</li>
+</ul>
+<ul>
+<li>Modeling Layer: employs a Recurrent Neural Network to scan the context.</li>
+<li>output Layer: provides an answer to the query(task oriented realization).</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/crf_from_scratch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1545,7 +1701,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1567,7 +1723,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
