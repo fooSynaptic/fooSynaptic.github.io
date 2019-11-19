@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="涉及到的书籍和学习材料  Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识  Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出">
+<meta name="description" content="涉及到的书籍和学习材料 Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概">
 <meta name="keywords" content="bayesian network,machine learning,causality infer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NLP学习笔记之——读香侬科技李级为《出入NLP领域的一些小建议》文章">
 <meta property="og:url" content="http://yoursite.com/2019/10/31/nlp/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="涉及到的书籍和学习材料  Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识  Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出">
+<meta property="og:description" content="涉及到的书籍和学习材料 Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-11-01T02:24:32.295Z">
+<meta property="og:updated_time" content="2019-11-19T05:12:55.059Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NLP学习笔记之——读香侬科技李级为《出入NLP领域的一些小建议》文章">
-<meta name="twitter:description" content="涉及到的书籍和学习材料  Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识  Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出">
+<meta name="twitter:description" content="涉及到的书籍和学习材料 Speech and Language Processing Introduction to infromation retrieval 吴恩达的机器学习 Pattern recognition and Machine learning  1.了解NLP的最基本的知识Ngramngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概">
 
 
 
@@ -310,57 +310,23 @@
       
 
       
-        <p>涉及到的书籍和学习材料</p>
-<ul>
+        <h3 id="涉及到的书籍和学习材料"><a href="#涉及到的书籍和学习材料" class="headerlink" title="涉及到的书籍和学习材料"></a>涉及到的书籍和学习材料</h3><ul>
 <li>Speech and Language Processing</li>
 <li>Introduction to infromation retrieval</li>
 <li>吴恩达的机器学习</li>
 <li>Pattern recognition and Machine learning</li>
 </ul>
-<p>1.了解NLP的最基本的知识</p>
-<ul>
-<li><p>Ngram<br>ngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概率只和它前面n-1个词相关<br>p(w_k|w1…k-1) = count(w(k-n+1…k)) / count(w(k-n+1…k-1))</p>
-</li>
-<li><p>Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因：<br>斯坦福的吴恩达组的ziang Xie的Data Noising as Smoothing in Neurala Network Language Models就首次提出了此方法，并且给了理论解释，这种random的替换其实本质上属于language model里面基于interpolation的平滑方式。</p>
-</li>
-</ul>
-<p>2.了解早点经典的NLP模型以及论文</p>
-<ul>
-<li>机器翻译中的IBM模型大概是干嘛的<br>对于每个词有一个alignment的list，目标函数为P(a|src, tgt)，表示以平行翻译语料作为条件，找到它对齐的概率。<br>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。<br>IBMmodel中的隐变量就是句子中词语的对齐信息a；<br>所以<br>P(a|src, tgt)<br>= P(a, src|tgt) / P(src|tgt)<br>P(src|tgt) 重点<br>= P(src, a|tgt)</li>
-</ul>
-<ul>
-<li><p>神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。</p>
-</li>
-<li><p>处理对话系统的无聊回复<br>用反向概率做rerank可以进一步提高检索的结果。在早期的统计机器翻译中（phrase-base MT）需要对一个大的N-best list用MERT做reranking，反向概率（given target， the p of source）是reranking中feature的重要标志。</p>
-</li>
-<li><p>诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。</p>
-</li>
-</ul>
-<ol start="3">
-<li>了解机器学习的基本模型</li>
-</ol>
-<ul>
-<li><p>EM算法是什么<br>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。</p>
-</li>
-<li><p>什么是variational inference</p>
-</li>
-<li><p>如何理解CRF<br>参考我的文章<a href="https://zhuanlan.zhihu.com/p/89553094" target="_blank" rel="noopener">ref</a></p>
-</li>
-<li><p>Dropout </p>
-</li>
-<li><p>SGD, momentum, adaboost, adagrad, adam</p>
-</li>
-</ul>
-<ol start="4">
-<li>多看NLP其他子领域的论文</li>
-</ol>
-<ul>
+<h2 id="1-了解NLP的最基本的知识"><a href="#1-了解NLP的最基本的知识" class="headerlink" title="1.了解NLP的最基本的知识"></a>1.了解NLP的最基本的知识</h2><h3 id="Ngram"><a href="#Ngram" class="headerlink" title="Ngram"></a>Ngram</h3><p>ngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概率只和它前面n-1个词相关<br>p(w_k|w1…k-1) = count(w(k-n+1…k)) / count(w(k-n+1…k-1))</p>
+<h3 id="Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因："><a href="#Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因：" class="headerlink" title="Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因："></a>Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因：</h3><p>斯坦福的吴恩达组的ziang Xie的Data Noising as Smoothing in Neurala Network Language Models就首次提出了此方法，并且给了理论解释，这种random的替换其实本质上属于language model里面基于interpolation的平滑方式。</p>
+<h2 id="了解早点经典的NLP模型以及论文"><a href="#了解早点经典的NLP模型以及论文" class="headerlink" title="了解早点经典的NLP模型以及论文"></a>了解早点经典的NLP模型以及论文</h2><h3 id="机器翻译中的IBM模型大概是干嘛的"><a href="#机器翻译中的IBM模型大概是干嘛的" class="headerlink" title="机器翻译中的IBM模型大概是干嘛的"></a>机器翻译中的IBM模型大概是干嘛的</h3><p>对于每个词有一个alignment的list，目标函数为P(a|src, tgt)，表示以平行翻译语料作为条件，找到它对齐的概率。<br>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。<br>IBMmodel中的隐变量就是句子中词语的对齐信息a；<br>所以<br>P(a|src, tgt)<br>= P(a, src|tgt) / P(src|tgt)<br>P(src|tgt) 重点<br>= P(src, a|tgt)</p>
+<h3 id="神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。"><a href="#神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。" class="headerlink" title="神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。"></a>神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。</h3><h3 id="处理对话系统的无聊回复"><a href="#处理对话系统的无聊回复" class="headerlink" title="处理对话系统的无聊回复"></a>处理对话系统的无聊回复</h3><p>用反向概率做rerank可以进一步提高检索的结果。在早期的统计机器翻译中（phrase-base MT）需要对一个大的N-best list用MERT做reranking，反向概率（given target， the p of source）是reranking中feature的重要标志。</p>
+<h3 id="诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。"><a href="#诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。" class="headerlink" title="诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。"></a>诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。</h3><h2 id="了解机器学习的基本模型"><a href="#了解机器学习的基本模型" class="headerlink" title="了解机器学习的基本模型"></a>了解机器学习的基本模型</h2><h3 id="EM算法是什么"><a href="#EM算法是什么" class="headerlink" title="EM算法是什么"></a>EM算法是什么</h3><p>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。</p>
+<h3 id="什么是variational-inference"><a href="#什么是variational-inference" class="headerlink" title="什么是variational inference"></a>什么是variational inference</h3><h3 id="如何理解CRF"><a href="#如何理解CRF" class="headerlink" title="如何理解CRF"></a>如何理解CRF</h3><p>参考我的文章<a href="https://zhuanlan.zhihu.com/p/89553094" target="_blank" rel="noopener">ref</a></p>
+<h3 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h3><p>一种bagging模型集成策略</p>
+<h3 id="SGD-momentum-adaboost-adagrad-adam"><a href="#SGD-momentum-adaboost-adagrad-adam" class="headerlink" title="SGD, momentum, adaboost, adagrad, adam"></a>SGD, momentum, adaboost, adagrad, adam</h3><h2 id="多看NLP其他子领域的论文"><a href="#多看NLP其他子领域的论文" class="headerlink" title="多看NLP其他子领域的论文"></a>多看NLP其他子领域的论文</h2><ul>
 <li>MT, information extracition, parsing, ragging, sentiment analysis, machine reading comprehension.</li>
 </ul>
-<ol start="5">
-<li>了解CV和data mining领域的基本重大进展</li>
-</ol>
-
+<h2 id="了解CV和data-mining领域的基本重大进展"><a href="#了解CV和data-mining领域的基本重大进展" class="headerlink" title="了解CV和data mining领域的基本重大进展"></a>了解CV和data mining领域的基本重大进展</h2>
       
     </div>
     
@@ -403,6 +369,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/19/MRC_craft/" rel="prev" title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
+                如何教会机器去理解问题和文本并且回答问题（tensorflow实战） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -460,8 +430,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -476,7 +455,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -498,7 +477,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -537,6 +516,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#涉及到的书籍和学习材料"><span class="nav-number">1.</span> <span class="nav-text">涉及到的书籍和学习材料</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#1-了解NLP的最基本的知识"><span class="nav-number"></span> <span class="nav-text">1.了解NLP的最基本的知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ngram"><span class="nav-number">1.</span> <span class="nav-text">Ngram</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因："><span class="nav-number">2.</span> <span class="nav-text">Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解早点经典的NLP模型以及论文"><span class="nav-number"></span> <span class="nav-text">了解早点经典的NLP模型以及论文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器翻译中的IBM模型大概是干嘛的"><span class="nav-number">1.</span> <span class="nav-text">机器翻译中的IBM模型大概是干嘛的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。"><span class="nav-number">2.</span> <span class="nav-text">神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理对话系统的无聊回复"><span class="nav-number">3.</span> <span class="nav-text">处理对话系统的无聊回复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。"><span class="nav-number">4.</span> <span class="nav-text">诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解机器学习的基本模型"><span class="nav-number"></span> <span class="nav-text">了解机器学习的基本模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EM算法是什么"><span class="nav-number">1.</span> <span class="nav-text">EM算法是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是variational-inference"><span class="nav-number">2.</span> <span class="nav-text">什么是variational inference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何理解CRF"><span class="nav-number">3.</span> <span class="nav-text">如何理解CRF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dropout"><span class="nav-number">4.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGD-momentum-adaboost-adagrad-adam"><span class="nav-number">5.</span> <span class="nav-text">SGD, momentum, adaboost, adagrad, adam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多看NLP其他子领域的论文"><span class="nav-number"></span> <span class="nav-text">多看NLP其他子领域的论文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#了解CV和data-mining领域的基本重大进展"><span class="nav-number"></span> <span class="nav-text">了解CV和data mining领域的基本重大进展</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

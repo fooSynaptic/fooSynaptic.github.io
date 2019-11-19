@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/jojo_small.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Machine reading comprehension,tensorflow,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+<meta name="keywords" content="Machine reading comprehension,tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
+<meta property="og:url" content="http://yoursite.com/2019/11/19/MRC_craft/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2019-11-19T05:19:06.565Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
+<meta name="twitter:description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/19/MRC_craft/">
+
+
+
+
+
+  <title>如何教会机器去理解问题和文本并且回答问题（tensorflow实战） | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fooSynaptic</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Any problem, please email me, my address -- ordinar@sjtu.edu.cn</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/MRC_craft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiaxin hu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T13:16:27+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/19/MRC_craft/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/11/19/MRC_craft/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"><a href="#如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" class="headerlink" title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"></a><em>如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</em></h2><h1 id="这部分主要是为了阐述机器阅读理解的实现"><a href="#这部分主要是为了阐述机器阅读理解的实现" class="headerlink" title="这部分主要是为了阐述机器阅读理解的实现"></a>这部分主要是为了阐述机器阅读理解的实现</h1><p>我们有的输入由这几部分组成：</p>
+<ul>
+<li>问题q</li>
+<li>和问题q相关的文档集合（利用symbolic matching做初步的召回）</li>
+<li>标注好的文档中的起始和结束位点</li>
+</ul>
+<p>现在需要解决的问题有：</p>
+<ul>
+<li>我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron network）</li>
+<li>如何在向量空间中表示问题和文档？</li>
+<li>什么样的损失函数是一个好的损失？</li>
+<li>在实际的答案中，如果答案存在于不连续的区间，如何解决这个问题？</li>
+<li>对于部分问题，如果要回答一定需要生成的手段而不是直接从原内容中抽取，要如何解决？</li>
+</ul>
+<h1 id="Network-Architecture"><a href="#Network-Architecture" class="headerlink" title="Network Architecture"></a>Network Architecture</h1><ul>
+<li>embedding layer</li>
+<li>matching layer</li>
+<li>funsion layer</li>
+<li>decoding layer</li>
+</ul>
+<h1 id="Embedding-and-Encoding-Layers"><a href="#Embedding-and-Encoding-Layers" class="headerlink" title="Embedding and Encoding Layers"></a>Embedding and Encoding Layers</h1><ul>
+<li><p>embedding and encoding layers输入一个token的序列，输出一个向量的序列，在下面的演示中，使用一个预训练的embedding matrix和双向的GRU来初始化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">embed_shape = [vocab_size, vocab_embed_dim]</span><br><span class="line">embed_placeholder = tf.placeholder(tf.float32, embed_shape)</span><br><span class="line">word_embed = tf.get_variable(<span class="string">"word_embeddings"</span>, embed_shape, trainable = <span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">embed_init_op = word_embed.assign(embed_placeholder)</span><br><span class="line"></span><br><span class="line"><span class="comment"># to load precomputed embedding from numpy array `pre_embed` to the graph</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">	sess.run(embed_init_op, feed_dict = &#123;embed_placeholder: pre_embed&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>encode问题和文档</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">q_emb = tf.nn.embedding_lookup(word_embed, q)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.variable_scope(<span class="string">"Question_Encoder"</span>):</span><br><span class="line">	cell_fw = GRUCell(num_units=hidden_size)</span><br><span class="line">	cell_bw = GRUCell(num_units=hidden_size)</span><br><span class="line">	output, _ = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, q_emb, sequence_length = q_len)</span><br><span class="line"></span><br><span class="line">	<span class="comment"># concat the forwaed and backward encoded information</span></span><br><span class="line">	q_encodes = tf.concat(output, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># do the same to get `p_encodes`</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="Match-Layer"><a href="#Match-Layer" class="headerlink" title="Match Layer"></a>Match Layer</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">p_mask = tf.sequence_mask(p_len, tf.shape(p)[<span class="number">1</span>], dtype=tf.float32, name=<span class="string">"passage_mask"</span>)</span><br><span class="line">q_mask = tf.sequence_mask(q_len, tf.shape(q)[<span class="number">1</span>], dtype=tf.float32, name=<span class="string">"question_mask"</span>)</span><br><span class="line"></span><br><span class="line">sim_matrix = tf.matmul(p_encodes, q_encodes, transpose_b = <span class="literal">True</span>)</span><br><span class="line">sim_mask = tf.matmul(tf.expand_dims(p_mask, <span class="number">-1</span>), tf.expand_dims(q_mask, <span class="number">-1</span>), transpose_b=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># mask out zeros by replacing it with very small number</span></span><br><span class="line">sim_matrix -= (<span class="number">1</span>-sim_mask)*<span class="number">1E30</span></span><br><span class="line"></span><br><span class="line">passage2question_attn = tf.matmul(tf.nn.softmax(sim_matrix, <span class="number">-1</span>), q_encodes)</span><br><span class="line">b = tf.nn.softmax(tf.expand_dims(tf.reduce_max(sim_matrix, <span class="number">2</span>), <span class="number">1</span>), <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">question2passage_attn = tf.tile(tf.matmul(b, p_encodes),[<span class="number">1</span>, tf.shape(p_encodes)[<span class="number">1</span>], <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">p_mask = tf.expand_dims(p_mask, <span class="number">-1</span>)</span><br><span class="line">passage2question_attn *= p_mask</span><br><span class="line">question2passage_attn *= p_mask</span><br><span class="line"></span><br><span class="line">match_out = tf.concat([p_encodes,</span><br><span class="line">	p_encodes*passage2question_attn,</span><br><span class="line">	p_encodes*question2passage_attn], <span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Fusing-Layer"><a href="#Fusing-Layer" class="headerlink" title="Fusing Layer"></a>Fusing Layer</h1><p>fusing layer的目的是为了：</p>
+<ul>
+<li>first:获取到match_out中长程的依赖。</li>
+<li>second: 获取到目前为止尽可能多的信息然后准备最好的decoding阶段。</li>
+</ul>
+<p>采用的方法有：</p>
+<ul>
+<li>将match_out作为双向RNN的输入，输出就是fusing layer.</li>
+<li>CNN,用多个conv1d to cross-correlated with match-out to produce the output of the fusing layer.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use CNN</span></span><br><span class="line">out_dim = <span class="number">64</span></span><br><span class="line">window_len = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">conv_match = tf.layers.conv1d(match_out, out_dim, window_len, strides = window_len)</span><br><span class="line">conv_match_up = tf.squeeze(tf.image.resize_images(tf.expand_dims(conv_match, axis=<span class="number">-1</span>),</span><br><span class="line">	[tf.shape(match_out)[<span class="number">1</span>], out_dim],</span><br><span class="line">	method = ResizeMethod.NEAREST_NEIGHBOR), axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">fuse_out - tf.concat([p_encodes, match_out, conv_match_up], axis=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>The upsampling step is required for concatenating the convoluted features with match_out and p_encodes. It can be implemented with resize_images from Tensorflow API. The size of fuse_out is [B,L,D], where B is the batch size; L is the passage length and D is the depth controlled by the convolution filters in the fusing layer.</em></strong></p>
+<h1 id="Decoding-Layer-amp-Loss-Function"><a href="#Decoding-Layer-amp-Loss-Function" class="headerlink" title="Decoding Layer &amp; Loss Function"></a>Decoding Layer &amp; Loss Function</h1><p>decode <code>fuse_out</code> as an answer span.<br>A simple way to get such distribution is to reduce the last dimension of <code>fuse_out</code> to 1 using a dense layer, and then put a softmax over its output.<br>利用交叉熵损失来评估损失</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">start_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line">end_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># mask out those padded symbols before softmax</span></span><br><span class="line">start_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line">end_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># compute the loss</span></span><br><span class="line">start_loss = tf.losses.sparse_softmax_cross_entropy(labels = start_label, logit=start_logit)</span><br><span class="line">end_loss = tf.losses.sparse_softmax_cross_entropy(labels=end_label, logit=end_logit)</span><br><span class="line">loss = (start_loss+end_loss)/<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="generate-final-answer"><a href="#generate-final-answer" class="headerlink" title="generate final answer"></a>generate final answer</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">max_answ_len = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">start_prob = tf.nn.softmax(start_logit, axis=<span class="number">1</span>)</span><br><span class="line">end_prob = tf.nn.softmax(end_logit, axis= <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># do the outer product</span></span><br><span class="line">outer = tf.matmul(tf.expand_dims(start_prob, axis=<span class="number">2</span>),</span><br><span class="line">		tf.expand_dims(end_prob, axis=<span class="number">1</span>))</span><br><span class="line">outer = tf.matrix_band_part(outer, <span class="number">0</span>, max_answ_len)</span><br><span class="line"></span><br><span class="line">start_pos = tf.argmax(tf.reduce_max(outer, axis=<span class="number">2</span>), axis=<span class="number">1</span>)</span><br><span class="line">end_pos = tf.argmax(tf.reduce_max(outer, axis=<span class="number">1</span>), axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># extract the answer from the original passages</span></span><br><span class="line">final_answer = passage_tokens[start_pos: end_pos+<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><ul>
+<li><a href="http://hanxiao.io/2018/04/21/Teach-Machine-to-Comprehend-Text-and-Answer-Question-with-Tensorflow/" target="_blank" rel="noopener">http://hanxiao.io/2018/04/21/Teach-Machine-to-Comprehend-Text-and-Answer-Question-with-Tensorflow/</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-reading-comprehension/" rel="tag"># Machine reading comprehension</a>
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/31/nlp/" rel="next" title="NLP学习笔记之——读香侬科技李级为《出入NLP领域的一些小建议》文章">
+                <i class="fa fa-chevron-left"></i> NLP学习笔记之——读香侬科技李级为《出入NLP领域的一些小建议》文章
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2019/11/19/MRC_craft/" data-title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" data-url="http://yoursite.com/2019/11/19/MRC_craft/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">jiaxin hu</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptics.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fooSynaptic" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/jiu-san-gong-ren/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"><span class="nav-number">1.</span> <span class="nav-text">如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#这部分主要是为了阐述机器阅读理解的实现"><span class="nav-number"></span> <span class="nav-text">这部分主要是为了阐述机器阅读理解的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Network-Architecture"><span class="nav-number"></span> <span class="nav-text">Network Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Embedding-and-Encoding-Layers"><span class="nav-number"></span> <span class="nav-text">Embedding and Encoding Layers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Match-Layer"><span class="nav-number"></span> <span class="nav-text">Match Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fusing-Layer"><span class="nav-number"></span> <span class="nav-text">Fusing Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Decoding-Layer-amp-Loss-Function"><span class="nav-number"></span> <span class="nav-text">Decoding Layer &amp; Loss Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#generate-final-answer"><span class="nav-number"></span> <span class="nav-text">generate final answer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number"></span> <span class="nav-text">reference</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiaxin hu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"your-duoshuo-shortname"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'm3IyaPmV3FOoJuQ9ic9ToH5x-gzGzoHsz',
+        appKey: 'Gu82zvrKj6u6gHD5UN0iL222',
+        placeholder: 'Welecome to share your idea!',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
