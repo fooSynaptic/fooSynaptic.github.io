@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="bayesian network,machine learning,causality infer,">
+  <meta name="keywords" content="MRC,bidaf,dynamic attention vs memory-less attention,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="咳咳，真正的科普写起来太费劲又有点枯燥，先给大家带来一些相关工具的文档可以上手，理论部分如果以后还是懒得写的话就去抄之前的论文（过分。这篇文章的内容来自于“  Causal Inference with Graphical Models in R Package pcalg ”，如果有时间的话可以直接跳转阅读。如果你在寻求尝试因果推断的结构学习算法，可以参考PC算法的python版本，fooSyn">
-<meta name="keywords" content="bayesian network,machine learning,causality infer">
+<meta name="description" content="Abstract insights: requires modeling complex interactions between the context and the query. use attention to focus on a small portion of the context and summarize it with a fixed-size of vector mulit">
+<meta name="keywords" content="MRC,bidaf,dynamic attention vs memory-less attention">
 <meta property="og:type" content="article">
-<meta property="og:title" content="因果关系推断介绍">
-<meta property="og:url" content="http://fooSynaptic.com/2019/10/04/因果关系推断介绍/index.html">
+<meta property="og:title" content="论文梗概：Bi-Directional Attention Flow for Machine Comprehension">
+<meta property="og:url" content="http://fooSynaptic.com/2019/11/19/bidaf_sketch/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="咳咳，真正的科普写起来太费劲又有点枯燥，先给大家带来一些相关工具的文档可以上手，理论部分如果以后还是懒得写的话就去抄之前的论文（过分。这篇文章的内容来自于“  Causal Inference with Graphical Models in R Package pcalg ”，如果有时间的话可以直接跳转阅读。如果你在寻求尝试因果推断的结构学习算法，可以参考PC算法的python版本，fooSyn">
+<meta property="og:description" content="Abstract insights: requires modeling complex interactions between the context and the query. use attention to focus on a small portion of the context and summarize it with a fixed-size of vector mulit">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-11-19T05:33:54.210Z">
+<meta property="og:updated_time" content="2019-11-19T08:50:18.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="因果关系推断介绍">
-<meta name="twitter:description" content="咳咳，真正的科普写起来太费劲又有点枯燥，先给大家带来一些相关工具的文档可以上手，理论部分如果以后还是懒得写的话就去抄之前的论文（过分。这篇文章的内容来自于“  Causal Inference with Graphical Models in R Package pcalg ”，如果有时间的话可以直接跳转阅读。如果你在寻求尝试因果推断的结构学习算法，可以参考PC算法的python版本，fooSyn">
+<meta name="twitter:title" content="论文梗概：Bi-Directional Attention Flow for Machine Comprehension">
+<meta name="twitter:description" content="Abstract insights: requires modeling complex interactions between the context and the query. use attention to focus on a small portion of the context and summarize it with a fixed-size of vector mulit">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://fooSynaptic.com/2019/10/04/因果关系推断介绍/">
+  <link rel="canonical" href="http://fooSynaptic.com/2019/11/19/bidaf_sketch/">
 
 
 
 
 
-  <title>因果关系推断介绍 | fooSynaptic</title>
+  <title>论文梗概：Bi-Directional Attention Flow for Machine Comprehension | fooSynaptic</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/因果关系推断介绍/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/bidaf_sketch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">因果关系推断介绍</h1>
+          <h1 class="post-title" itemprop="name headline">论文梗概：Bi-Directional Attention Flow for Machine Comprehension</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-04T07:34:37+08:00">
-                2019-10-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T16:47:58+08:00">
+                2019-11-19
               </time>
             
 
@@ -281,8 +281,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/04/因果关系推断介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/04/因果关系推断介绍/" itemprop="commentCount"></span>
+                <a href="/2019/11/19/bidaf_sketch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/11/19/bidaf_sketch/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -310,14 +310,33 @@
       
 
       
-        <p>咳咳，真正的科普写起来太费劲又有点枯燥，先给大家带来一些相关工具的文档可以上手，理论部分如果以后还是懒得写的话就去抄之前的论文（过分。<br>这篇文章的内容来自于“  Causal Inference with Graphical Models in R Package pcalg ”，如果有时间的话可以直接跳转阅读。<br>如果你在寻求尝试因果推断的结构学习算法，可以参考PC算法的python版本，<a href="https://github.com/fooSynaptic/py_pcalg" target="_blank" rel="noopener">fooSynaptic/py_pcalg</a>，rep中提供了PC算法的结构学习算法并且支持可视化。</p>
-<p>有关贝叶斯网络的内容其实火起来是从图模型，结构方程到因果推断，因此如果很介意因果推断这个说法的话，那么其实可以讲其等价于两个部分：1.变量之间的图结构的学习；2.图结构中方向的推断（大部分人其实不认同因果关系能够从数据中推断出来，然而在因果推断的研究中默认研究的是非时序的观测数据）。</p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>在很多学科当中，去理解变量之间的cause-effect关系都是一个非常让人感兴趣的话题。一般的，实验科学都会通过在实验中干预特殊的因素来观察这种关系。但是在现实生活中，存在因为时间，费用以及伦理等限制是没有办法做实验来发现这一关系的。<br>所以数据科学家们对于从观测数据中推断出因果的信息这个问题很感兴趣，也产生了非常多有意义的研究结果。通过合理的假设（这个以后补充），类似像PC算法这种可以通过观测的数据来推断出因果的结构。这些结果能够告诉我们-我们感兴趣的一部分变量能不能够成为另外一部分变量的cause（forgive me）。但是他并不像结构方程那样能够告诉我们这个影响的效应有多强（除非部分funcitonal causal model）。因此有了IDA算法的出现，它能够在没有隐变量和选择变量的存在下通过观测数据来推断出因果效应的边界，它综合了PC算法和Judea pear的后门准则。并且IDA算法在大规模的生物系统中得到了证实。然而，让观测系统中不存在隐变量是一个非常强的假设，现实的情况往往没法满足这种情况，因此，作者将后门准则衍化成一些其他类型的图结构来描述满足马尔可夫等价类的DAGs（有向无环图）。<br>R package pcalg整合了这诸多算法，包括了PC，FCI，RFCI，GES和GIES以及IDA。这篇文章也是通过一些模拟数据来应用这些方法的调用。<br>先简单看一个例子来理解因果推断</p>
-<p>在图中，左边是真实的因果结构，右边是PC算法计算推断出来的因果结构，他的变现形式是一个马尔可夫等价类的DAG，主要蕴含了条件独立性的信息。<br>如图中所示，在算法推断出来的因果结构中有单向和双向的箭头。单向的箭头代表着直接的有向因果效应。双向的箭头意味着对于PC算法来说无法去判断这个因果效应的方向应该是⬅️还是➡️。因此，在推断的结果当中，双向的箭头代表这因果关系的不确定性。这其中有一个非常重要的事实：普遍的，PC算法类似的算法无法从观测数据中得到一个单一的DAG，即便说这个数据量非常有限，因为存在的事实是多个DAGs可以描述相同的条件独立性信息。<br>然后我们重点介绍一下马尔可夫等价类：为什么是类其实也就是因为多个结构可以描述相同的条件概率（贝叶斯概率），举个例子——</p>
-<p>花了15分钟做的图，office online真辣鸡<br>对于： a. A&lt;—— C ——&gt;B 和b. A——&gt; C ——&gt; B是一对马尔可夫等价类，因为对于<br>a:   有- P(C)P(A|C)P(B|C) 。<br>b：有- P(A)P(C|A)P(B|C) = P(C)P(A|C)P(B|C) 。<br>所以a等价于b。<br>马尔科夫等价类在贝叶斯概率的计算上是等价的，却有着完全不同的结构。对于如上的链式图有两种贝叶斯概率。</p>
-<h2 id="研究方法背景介绍"><a href="#研究方法背景介绍" class="headerlink" title="研究方法背景介绍"></a>研究方法背景介绍</h2><p>一般的，贝叶斯网络图、模型常用来进行因果结构的推断，图模型可以被理解为从联合概率到有依赖关系的结构的一种映射关系。就好像是地图一样，如果你想要使用地图，那么你需要两个要素，第一，你需要一个物理位置的图包含了点和线的符号，第二，你需要合理的规则来对图上的符号来作出解释。从这个观点考虑就能够理解，虽然高速公路地图和电车轨道地图看起来非常相像，不过他们对于符号的解释规则会存在较大的差别，所以图模型可以被理解为一张地图。图模型中都包含了一张具备了点，线以及潜在的mark，比如说箭头或者环，并且，图模型都有一套解释自己的的规则。一般的，在统计学习中，图中的节点代表着随机变量，而边代表了某种依赖关系。<br>我们先考虑不存在隐变量的情况</p>
-<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>有向无环图-DAG模型，无环意味着从图中任何一个节点出发沿着边延伸都无法回到起始节点。先考虑一种简单的解释规则- d-separation。<br>Define D-separation：<br>如果在模型图中存在两个节点x和y，他们被一个node集合S所分隔-d-separated，那么相应的在集合S的存在下，两个随机变量Vx和Vy条件性相互独立。<br>denote： Vx \bot Vy  | S .<br>相应的，满足d-separation的变量分布被称之为faithful，并且在统计上也被证明了大部分的变量分布都是faithful的。所以in practice这个假设并不strong。<br>因为DAG模型可以编码条件独立性关系，PC算法利用这一关系来推断我们前面提到的因果关系。PC算法被证明能够重构潜在的DAG模型结构，这个算法依赖于马尔可夫等价类（some variable with some 联合分布）中的条件独立性关系。实际在算法中，条件独立性骨架通过一个条件独立性的统计检验来完成。在某些不存在隐变量的情况下，即便存在非常高纬度的随机变量（意味着可能会有非常稀疏的众多DAG模型）PC算法利用统计检验来进行条件独立性分析是有较好的计算效率。<br>PC算法伪代码<br>输入：一个代表图模型节点的随机变量集合V；条件独立性信息；统计检验显著性水平 \alpha 。<br>输出：部分的完备有向无环图CPDAG \tilde{G} ，分隔变量集合 \tilde{S} ，以及边的方向👈还是👉。<br>构造随机变量集合V的完全的联通图（所有节点相连接）。<br>利用显著性水平\alpha对相邻的统计变量集合进行条件独立性检验，如果存在条件性独立，就将两个变量之间的边去除掉。<br>确定V结构（确定方向）。<br>树立剩余的边。</p>
-<p>=========<br>转载请注明出处<br>=========</p>
+        <h1 id="Abstract-insights"><a href="#Abstract-insights" class="headerlink" title="Abstract insights:"></a>Abstract insights:</h1><ul>
+<li>requires modeling complex interactions between the context and the query.</li>
+<li>use attention to focus on a small portion of the context and summarize it with a fixed-size of vector</li>
+<li>muliti-stage hierachical process that represents the context at different levels of granularity and uses bi-directional attention flow mechanism to obtain a query-aware context representation without early summarization.</li>
+</ul>
+<h1 id="Introduction-insights"><a href="#Introduction-insights" class="headerlink" title="Introduction insights:"></a>Introduction insights:</h1><h2 id="Bi-directional-attention-flow"><a href="#Bi-directional-attention-flow" class="headerlink" title="Bi-directional attention flow:"></a>Bi-directional attention flow:</h2><ul>
+<li>First: the attention layer Is not used to summarize the context paragraph into a fixed-size vector. Instead, the attention is computed for every time step, and the attended vector at each time step, along with the representations form previous layers, is allowed to flow through to the subsequent modeling layer.(how similar to self-attention), prevent the information loss by early summary.</li>
+<li>Second, we use a memory-less attention mechanism. Thai is while we iteratively compute attention through time, the attention at each time step is a function of only the query and the context paragraph at the current time step and does not directly depend on the attention at the previous time step.<br>Second mechanism forces the attention layer to focus on learning the attention between the query and the context, and enables the modeling layer to focus on learning the interaction within the query-aware context representation( the output of the attention layer). It also allows the attention at each time step to be unaffected from incorrect attendances at previous time steps.</li>
+</ul>
+<h3 id="keynotes"><a href="#keynotes" class="headerlink" title="keynotes:"></a>keynotes:</h3><p>Conventional dynamic attention: the attention weights at the current time step are a function of the attended vector at the previous time step.<br>bidaf: the attention is a computed for every time step, and the attended vector at each time step. The memeory-less attention: the attention at each time step is a function of only the query and the context paragraph at the current time step and doses not directly depend on the attention at the previous time step.</p>
+<p><em>The author claim the memory-less attention gives a clear advanatge over dynamic attention.</em></p>
+<ul>
+<li>Third: the bi-direction provide complimentary information to each other.</li>
+</ul>
+<h1 id="BiDAF-network-Architecture"><a href="#BiDAF-network-Architecture" class="headerlink" title="BiDAF network Architecture:"></a>BiDAF network Architecture:</h1><p>First three layers, computing features from the query and context at different levels of granularity, akin to the multi-stage feature computation of convolutional NN in the CV field.</p>
+<ul>
+<li>character-level</li>
+<li>word-level</li>
+<li>contextual embedding： utilizes contextual cues from surrounding words to refine the embedding of the words.<br>::=&gt;We use a LSTM on top of the embeddings provided by the previous layers to model the temporal interactions between words. We place an LSTM in both directions and concatenate the outputs of the two LSTMs,</li>
+</ul>
+<ul>
+<li>Attention Flow Layer: couples the query and context vectors and produces a set of query-aware feature vectors for each word in the context.<br>α(h, u) = W[h;u;h@u]<br>Context-to-query attention. C2q attenton signifies which query words are most relevant to each context word.<br>Query-to-context(Q2C) attention signifies wich context words have the closest similarity to one of the query words and are hence critical for answering the query.</li>
+</ul>
+<ul>
+<li>Modeling Layer: employs a Recurrent Neural Network to scan the context.</li>
+<li>output Layer: provides an answer to the query(task oriented realization).</li>
+</ul>
 
       
     </div>
@@ -335,11 +354,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/bayesian-network/" rel="tag"># bayesian network</a>
+            <a href="/tags/MRC/" rel="tag"># MRC</a>
           
-            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+            <a href="/tags/bidaf/" rel="tag"># bidaf</a>
           
-            <a href="/tags/causality-infer/" rel="tag"># causality infer</a>
+            <a href="/tags/dynamic-attention-vs-memory-less-attention/" rel="tag"># dynamic attention vs memory-less attention</a>
           
         </div>
       
@@ -352,8 +371,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/04/矩阵分解之一：Truncate-SVD-和random-SVD/" rel="next" title="矩阵分解之一：Truncate SVD 和random SVD">
-                <i class="fa fa-chevron-left"></i> 矩阵分解之一：Truncate SVD 和random SVD
+              <a href="/2019/11/19/crf_from_scratch/" rel="next" title="条件随机场的原理以及从零实现">
+                <i class="fa fa-chevron-left"></i> 条件随机场的原理以及从零实现
               </a>
             
           </div>
@@ -362,8 +381,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/04/当我们把目光放在机器阅读理解，我们的期望到底是什么？/" rel="prev" title="当我们把目光放在机器阅读理解，我们的期望到底是什么？">
-                当我们把目光放在机器阅读理解，我们的期望到底是什么？ <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/22/MRC_and_dialogue/" rel="prev" title="Nuural Approaches to Machine Reading Comprehension and Dialogue">
+                Nuural Approaches to Machine Reading Comprehension and Dialogue <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -395,7 +414,7 @@
 
   
     <div class="comments" id="comments">
-      <div class="ds-thread" data-thread-key="2019/10/04/因果关系推断介绍/" data-title="因果关系推断介绍" data-url="http://fooSynaptic.com/2019/10/04/因果关系推断介绍/">
+      <div class="ds-thread" data-thread-key="2019/11/19/bidaf_sketch/" data-title="论文梗概：Bi-Directional Attention Flow for Machine Comprehension" data-url="http://fooSynaptic.com/2019/11/19/bidaf_sketch/">
       </div>
     </div>
 
@@ -518,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">1.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#研究方法背景介绍"><span class="nav-number">2.</span> <span class="nav-text">研究方法背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个例子"><span class="nav-number">3.</span> <span class="nav-text">一个例子</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Abstract-insights"><span class="nav-number">1.</span> <span class="nav-text">Abstract insights:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-insights"><span class="nav-number">2.</span> <span class="nav-text">Introduction insights:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bi-directional-attention-flow"><span class="nav-number">2.1.</span> <span class="nav-text">Bi-directional attention flow:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#keynotes"><span class="nav-number">2.1.1.</span> <span class="nav-text">keynotes:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BiDAF-network-Architecture"><span class="nav-number">3.</span> <span class="nav-text">BiDAF network Architecture:</span></a></li></ol></div>
             
 
           </div>

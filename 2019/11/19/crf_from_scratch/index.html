@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/jojo_small.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CRF,build from scratch,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="条件随机场在概率图模型当中相对比较复杂，因此也比较难理解，随着深度学习在工业界渐渐地后劲不足，传统的概率语言模型渐渐地被程序员青睐，因此深入理解这些统计语言模型对于一个合格的算法岗位来说是非常有必要的。很多人觉得crf很难，包括我也是，但是希望通过阅读这篇文章并且了解CRF的从头实现过程能够帮助您理解条件随机场。 条件随机场（CRF）是给定一组输入随机变量的条件下另一组输出随机变量的条件概率分布模">
+<meta name="keywords" content="CRF,build from scratch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="条件随机场的原理以及从零实现">
+<meta property="og:url" content="http://fooSynaptic.com/2019/11/19/crf_from_scratch/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="条件随机场在概率图模型当中相对比较复杂，因此也比较难理解，随着深度学习在工业界渐渐地后劲不足，传统的概率语言模型渐渐地被程序员青睐，因此深入理解这些统计语言模型对于一个合格的算法岗位来说是非常有必要的。很多人觉得crf很难，包括我也是，但是希望通过阅读这篇文章并且了解CRF的从头实现过程能够帮助您理解条件随机场。 条件随机场（CRF）是给定一组输入随机变量的条件下另一组输出随机变量的条件概率分布模">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-2a8951656433bbafaa116f1fc031d624_hd.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-f6496848d92f5721585ca56ba858b420_hd.png">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-3b116e13f0af2c9b155a2157baf5b557_hd.jpg">
+<meta property="og:updated_time" content="2019-11-19T06:04:37.337Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="条件随机场的原理以及从零实现">
+<meta name="twitter:description" content="条件随机场在概率图模型当中相对比较复杂，因此也比较难理解，随着深度学习在工业界渐渐地后劲不足，传统的概率语言模型渐渐地被程序员青睐，因此深入理解这些统计语言模型对于一个合格的算法岗位来说是非常有必要的。很多人觉得crf很难，包括我也是，但是希望通过阅读这篇文章并且了解CRF的从头实现过程能够帮助您理解条件随机场。 条件随机场（CRF）是给定一组输入随机变量的条件下另一组输出随机变量的条件概率分布模">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-2a8951656433bbafaa116f1fc031d624_hd.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fooSynaptic.com/2019/11/19/crf_from_scratch/">
+
+
+
+
+
+  <title>条件随机场的原理以及从零实现 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fooSynaptic</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Any problem, please Contact me.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/crf_from_scratch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jiaxin hu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">条件随机场的原理以及从零实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T13:53:52+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/19/crf_from_scratch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/11/19/crf_from_scratch/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>条件随机场在概率图模型当中相对比较复杂，因此也比较难理解，随着深度学习在工业界渐渐地后劲不足，传统的概率语言模型渐渐地被程序员青睐，因此深入理解这些统计语言模型对于一个合格的算法岗位来说是非常有必要的。很多人觉得crf很难，包括我也是，但是希望通过阅读这篇文章并且了解CRF的从头实现过程能够帮助您理解条件随机场。</p>
+<p>条件随机场（CRF）是给定一组输入随机变量的条件下另一组输出随机变量的条件概率分布模型，因此广泛用于序列标注任务，例如基于crf的分词，词性标注，命名实体识别，拼写检查纠错和多音字的问题。</p>
+<h1 id="条件随机场中涉及到三个问题"><a href="#条件随机场中涉及到三个问题" class="headerlink" title="条件随机场中涉及到三个问题"></a>条件随机场中涉及到三个问题</h1><ul>
+<li>概率计算问题：给定的条件随机场P(Y|X)和输入序列，计算对应的输出序列的条件概率和期望值。</li>
+<li>条件随机场的预测问题：给定条件随机场和输入序列，计算概率最大的输出序列。</li>
+<li>条件随机场的学习问题：给定训练数据集估计条件随机场模型的参数问题。</li>
+</ul>
+<p>其中概率计算问题可以通过前向后向算法来完成，预测问题可以通过序列预测的标配维特比算法来完成，而条件随机场的学习问题可以有不同的优化方法，优化的目标就是期望最大化，在这里我们使用的是随机初始化每个feature到标签的权重和随机梯度下降来来优化参数来使得期望最大。</p>
+<p>我们选择reference tagging作为我们的目标来完成这次从零开始的CRF学习，本质上是一个命名实体识别的任务，先看一眼数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;NEWREFERENCE&gt;</span><br><span class="line">&lt;author&gt; A. Cau, R. Kuiper, and W.-P. de Roever. &lt;/author&gt; &lt;title&gt; Formalising Dijkstra&apos;s development strategy within Stark&apos;s formalism. &lt;/title&gt; &lt;editor&gt; In C. B. Jones, R. C. Shaw, and T. Denvir, editors, &lt;/editor&gt; &lt;booktitle&gt; Proc. 5th. BCS-FACS Refinement Workshop, &lt;/booktitle&gt; &lt;date&gt; 1992. &lt;/date&gt;</span><br><span class="line">&lt;NEWREFERENCE&gt;</span><br><span class="line">&lt;author&gt; M. Kitsuregawa, H. Tanaka, and T. Moto-oka. &lt;/author&gt; &lt;title&gt; Application of hash to data base machine and its architecture. &lt;/title&gt; &lt;journal&gt; New Generation Computing, &lt;/journal&gt; &lt;volume&gt; 1(1), &lt;/volume&gt; &lt;date&gt; 1983. &lt;/date&gt;</span><br><span class="line">&lt;NEWREFERENCE&gt;</span><br><span class="line">&lt;author&gt; Alexander Vrchoticky. &lt;/author&gt; &lt;title&gt; Modula/R language definition. &lt;/title&gt; &lt;tech&gt; Technical Report TU Wien rr-02-92, version 2.0, &lt;/tech&gt; &lt;institution&gt; Dept. for Real-Time Systems, Technical University of Vienna, &lt;/institution&gt; &lt;date&gt; May 1993. &lt;/date&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如你所见在每个reference中，有标注好的author，title和journal，完整的数据中标注有8到9个，我是通过beautifulSoup来parse token和标签的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def parser(line):</span><br><span class="line">    &quot;&quot;&quot;parse a tagged reference.&quot;&quot;&quot;</span><br><span class="line">    lines = bs(line, features=&quot;lxml&quot;)</span><br><span class="line">    sublines = [_line for _line in lines.body.descendants if isinstance(_line, bs4.element.Tag)]</span><br><span class="line">    res = []</span><br><span class="line">    for p in sublines:</span><br><span class="line">        tag = p.name</span><br><span class="line">        for token in p.string.split():</span><br><span class="line">            res.append((tag, token))</span><br><span class="line">    return res</span><br></pre></td></tr></table></figure>
+
+<p>在完整的条件随机场形式化当中，有两个特征函数，一个是状态特征函数，一个是转移特征函数，通过观察数据我采用了构词学的角度以及前后词的特征作为一个位置的全部特征，可以理解为一个特征的集合，我分别定义了词的特征函数和转移特征函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tokenfeatures</span><span class="params">(word)</span>:</span></span><br><span class="line">    <span class="string">""" Obsevation state features """</span></span><br><span class="line">    features = []</span><br><span class="line"></span><br><span class="line">    <span class="comment">### 1</span></span><br><span class="line">    features.append(<span class="string">"token=="</span> + word)</span><br><span class="line"></span><br><span class="line">    <span class="comment">### 2</span></span><br><span class="line">    mid = len(word)//<span class="number">2</span></span><br><span class="line">    <span class="keyword">if</span> mid &gt; <span class="number">0</span>:</span><br><span class="line">        features.append(<span class="string">'Swith+'</span>+word[:mid])</span><br><span class="line">        features.append(<span class="string">'Ewith+'</span>+word[mid:])</span><br><span class="line">    </span><br><span class="line">    <span class="comment">### 3</span></span><br><span class="line">    features.append(<span class="string">'abbre=='</span> + re.sub(<span class="string">'[0-9]'</span>, <span class="string">'0'</span>, re.sub(<span class="string">'[^a-zA-Z0-9()\.\,]'</span>, <span class="string">''</span>, word.lower())))</span><br><span class="line"></span><br><span class="line">    <span class="comment">### 4</span></span><br><span class="line">    fsymolic = re.findall(<span class="string">'[^a-zA-Z0-9]'</span>, word)</span><br><span class="line">    <span class="keyword">if</span> len(fsymolic) &gt; <span class="number">0</span>:</span><br><span class="line">        features.extend([<span class="string">"contains"</span> + c <span class="keyword">for</span> c <span class="keyword">in</span> fsymolic])</span><br><span class="line">    <span class="keyword">return</span> features</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Transferfeature</span><span class="params">(seq)</span>:</span></span><br><span class="line">    <span class="string">""" Transfer features """</span></span><br><span class="line">    seq.insert(<span class="number">0</span>, [<span class="string">'seq_start'</span>])</span><br><span class="line">    seq.append([<span class="string">'seq_end'</span>])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(seq)):</span><br><span class="line">        seq[i].extend(tokenfeatures(seq[i][<span class="number">0</span>]))</span><br><span class="line">    <span class="keyword">if</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># previous token feature</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(seq)):</span><br><span class="line">            seq[i].extend(<span class="string">'@-1:'</span>+f <span class="keyword">for</span> f <span class="keyword">in</span> seq[i<span class="number">-1</span>][<span class="number">1</span>:] \</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> (f.startswith(<span class="string">'@+1:'</span>) <span class="keyword">or</span> f.startswith(<span class="string">'@-1:'</span>)))</span><br><span class="line">        <span class="comment"># next token feature</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(seq)<span class="number">-1</span>):</span><br><span class="line">            seq[i].extend(<span class="string">'@+1:'</span>+f <span class="keyword">for</span> f <span class="keyword">in</span> seq[i+<span class="number">1</span>][<span class="number">1</span>:] \</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> (f.startswith(<span class="string">'@+1:'</span>) <span class="keyword">or</span> f.startswith(<span class="string">'@-1:'</span>)))</span><br><span class="line">    <span class="keyword">return</span> seq</span><br></pre></td></tr></table></figure>
+
+<p>因为CRF是一个无向图模型，所以可以定义所有观测词到状态（隐藏状态，标注特征）的一个路径。</p>
+<p>观测特征的路径参考<img src="https://pic1.zhimg.com/80/v2-2a8951656433bbafaa116f1fc031d624_hd.jpg" alt="《统计学习方法》"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">linearChainCRF</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, xnode, ynode)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        xnode: the mapping from observation features to int</span></span><br><span class="line"><span class="string">        ynode: the mapping from target label to int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.K = len(ynode)              <span class="comment"># size of target label</span></span><br><span class="line">        self.M = len(xnode)	        <span class="comment"># total feature dimension length</span></span><br><span class="line">        self.featureNodes, self.labelNodes = xnode, ynode</span><br><span class="line">        self.W = np.zeros((self.M, self.K))</span><br><span class="line">        print(<span class="string">"feature dimension: "</span>, self.W.shape)</span><br></pre></td></tr></table></figure>
+
+<p>参考上面的代码，xnode代表着特征集合，ynode代表着状态的集合，他们都会map到一个int方便我们利用数据进行访问从特征到状态的权重（其实这里的思想就是简化的条件随机场的简化形式，将两个特征函数简化成一个）</p>
+<p><img src="https://pic1.zhimg.com/80/v2-f6496848d92f5721585ca56ba858b420_hd.png" alt="简化形式"></p>
+<p>这里面需要披露更多的CRF的细节来帮助我们理解接下来的东西</p>
+<p>1 对于每个输入观测数据的token list，将其完整映射到词属性的list集合，并且在这里我们定义了featureTable这个类的getitem方法来使其支持[]中括号operator（？？）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FeatureTable</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, tokenlist, xnode, ynode)</span>:</span></span><br><span class="line">        self.seq = []</span><br><span class="line">        <span class="keyword">for</span> tokenfeatures <span class="keyword">in</span> tokenlist:</span><br><span class="line">            <span class="comment"># tokenfeatures[0] is the raw token, others are token attributes.</span></span><br><span class="line">            self.seq.append(np.array([xnode[f] <span class="keyword">for</span> f <span class="keyword">in</span> tokenfeatures], dtype=np.int32))</span><br><span class="line"></span><br><span class="line">        self.xdim, self.ydim = len(xnode), len(ynode)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, item)</span>:</span></span><br><span class="line">        t, yp, y = item</span><br><span class="line">        ftoken = self.seq[t]</span><br><span class="line">        <span class="keyword">if</span> yp <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>: </span><br><span class="line">            ftoken = np.append(ftoken, yp)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> [(f, y) <span class="keyword">for</span> f <span class="keyword">in</span> ftoken]</span><br></pre></td></tr></table></figure>
+
+<p>下面的几个内容基本上这篇文章的全部重心，那就是我们考虑CRF之所以不同于多分类问题和多元的逻辑斯特回归问题那就是观测状态和隐藏状态之间的约束（无向图之间的边），那么一个很重要的问题就是给定输入序列和标注序列，我们要得到在完整的图中，输入状态能够企及（可以更新）那些参数，<strong>在约束之内，条件随机场和多元的logistic回归没有差异</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edgefeatures</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    This is important</span></span><br><span class="line"><span class="string">    for our raw input t1, t2, t3, t4 ...</span></span><br><span class="line"><span class="string">    transfer the token sequence information into &#123;f1, ... ft&#125;1, &#123;f1, ... ft&#125;2</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> len(x.seq) == len(y), <span class="string">"seq to label not alignmentted..."</span></span><br><span class="line">    features = list(x[<span class="number">0</span>, <span class="literal">None</span>, y[<span class="number">0</span>]])   <span class="comment">#tuple list</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, x.seq.__len__()):</span><br><span class="line">        <span class="keyword">for</span> idx <span class="keyword">in</span> x[t, y[t<span class="number">-1</span>], y[t]]:</span><br><span class="line">            features.append(idx)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> features</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">currentField</span><span class="params">(self, x)</span>:</span></span><br><span class="line">    <span class="string">"""calculate potential parameter given current obeservation data. """</span></span><br><span class="line">    <span class="string">"""x is a taggedFeatureTable object"""</span></span><br><span class="line">    N, K, W = x.seq.__len__(), self.K, self.W</span><br><span class="line"></span><br><span class="line">    <span class="comment"># estimate</span></span><br><span class="line">    g0 = empty(K)</span><br><span class="line">    g = empty((N<span class="number">-1</span>, K, K))    <span class="comment">#at timestep n, the logit of i-th label transfer to j-th label</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> y <span class="keyword">in</span> range(K):</span><br><span class="line">        <span class="comment"># at step 0, the logit of label k (from time -1)</span></span><br><span class="line">        g0[y] = sum(W[idx[<span class="number">0</span>], idx[<span class="number">1</span>]] <span class="keyword">for</span> idx <span class="keyword">in</span> x[<span class="number">0</span>, <span class="literal">None</span>, y])</span><br><span class="line">        <span class="comment">#g0[y] = W[x[0, None, y]].sum()</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, N):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> range(K):</span><br><span class="line">            <span class="keyword">for</span> yp <span class="keyword">in</span> range(K):</span><br><span class="line">                g[t<span class="number">-1</span>,yp,y] = sum(W[idx[<span class="number">0</span>], idx[<span class="number">1</span>]] <span class="keyword">for</span> idx <span class="keyword">in</span> x[t, yp, y])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> g0, g</span><br></pre></td></tr></table></figure>
+
+<p>在currentField这个方法中，我们需要返回的是参数，其中go是初始状态的权重，而g是在时间步n，从状态i转移到状态j的似然概率（未归一化），得到的每个特征下的归一化概率用以计算完整的期望，参考文末代码中的Exp方法，期望的计算需要前向和后向概率。<br><img src="https://pic4.zhimg.com/80/v2-3b116e13f0af2c9b155a2157baf5b557_hd.jpg" alt="求期望"></p>
+<p>下面来逐一解决crf的三个问题：</p>
+<h2 id="概率计算问题"><a href="#概率计算问题" class="headerlink" title="概率计算问题"></a>概率计算问题</h2><p>给定的条件随机场P(Y|X)和输入序列，计算对应的输出序列的条件概率和期望值。对于给定label的似然估计（未归一化概率），包括了前向和后向算法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logitEstimator</span><span class="params">(self, x, targetLabel)</span>:</span></span><br><span class="line">    <span class="string">"""estimate label likely-hood given W"""</span></span><br><span class="line">    N = x.seq.__len__()</span><br><span class="line">    K = self.K</span><br><span class="line">    W = self.W</span><br><span class="line">    g0, g = self.currentField(x)</span><br><span class="line">    a = self.forward(g0, g, N, K)</span><br><span class="line">    logZ = logsumexp(a[N<span class="number">-1</span>, :])</span><br><span class="line">    <span class="keyword">return</span> sum(W[k] <span class="keyword">for</span> k <span class="keyword">in</span> targetLabel) - logZ</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, g0, g, N, K)</span>:</span></span><br><span class="line">    <span class="string">"""forward stepwise"""</span></span><br><span class="line">    a = zeros((N, K))</span><br><span class="line">    a[<span class="number">0</span>, :] = g0</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, N):</span><br><span class="line">        yp = a[t<span class="number">-1</span>, :]</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> range(K):</span><br><span class="line">            a[t, y] = logsumexp(yp + g[t<span class="number">-1</span>, :, y])</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, g, N, K)</span>:</span></span><br><span class="line">    <span class="string">"""backword stepwise"""</span></span><br><span class="line">    b = zeros((N, K))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(N<span class="number">-2</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        yp = b[t+<span class="number">1</span>, :]</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> range(K):</span><br><span class="line">            b[t, y] = logsumexp(yp + g[t, y, :])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b</span><br></pre></td></tr></table></figure>
+
+<h2 id="序列预测问题"><a href="#序列预测问题" class="headerlink" title="序列预测问题"></a>序列预测问题</h2><p>维特比算法（由代码中可以看出维特比的复杂度是kn方，所以有人告诉你NLG用维特比可以放心大胆的喷他）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vertebi_inference</span><span class="params">(self, x)</span>:</span></span><br><span class="line">    <span class="string">"""sequence labeling, inference the most likely label given x"""</span></span><br><span class="line">    <span class="string">"""x is a taggedFeatureTable object"""</span></span><br><span class="line">    N, K = x.seq.__len__(), self.K</span><br><span class="line">    g0, g = self.currentField(x)</span><br><span class="line">    B = ones((N, K), dtype=int32) * <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># compute max-marginals and backtrace matrix</span></span><br><span class="line">    V = g0</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(<span class="number">1</span>, N):</span><br><span class="line">        U = empty(K)            <span class="comment"># at time step t, only record the maxlogit pre label</span></span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> range(K):</span><br><span class="line">            w = V + g[t<span class="number">-1</span>,:,y]  <span class="comment"># at time t, the logit of all labels in t-1 transfer to label y</span></span><br><span class="line">            B[t,y] = b = w.argmax()     <span class="comment"># recore which label in time t-1 have the max logit</span></span><br><span class="line">            U[y] = w[b]</span><br><span class="line">        V = U</span><br><span class="line"></span><br><span class="line">    <span class="comment"># extract the best path by brack-tracking</span></span><br><span class="line">    y = V.argmax()</span><br><span class="line">    trace = []</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(N<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        trace.append(y)</span><br><span class="line">        y = B[t, y]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> trace[::<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数学习问题"><a href="#参数学习问题" class="headerlink" title="参数学习问题"></a>参数学习问题</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sgd</span><span class="params">(self, data, iters = <span class="number">20</span>, Nwarm_up = <span class="number">10</span>, saveParam = False, modelpath = <span class="string">'linearCRF'</span>)</span>:</span></span><br><span class="line">        W = self.W  <span class="comment">## reference</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(iters):</span><br><span class="line">            print(<span class="string">"Epochs: "</span>, i)</span><br><span class="line">            lr_rate = Nwarm_up/(i+<span class="number">1</span>)**<span class="number">0.501</span></span><br><span class="line">            <span class="keyword">for</span> x, labels <span class="keyword">in</span> tqdm(data):</span><br><span class="line">                ftoken = FeatureTable(x, self.featureNodes, self.labelNodes)</span><br><span class="line">                flabel = self.edgefeatures(ftoken, [self.labelNodes[label] <span class="keyword">for</span> label <span class="keyword">in</span> labels])</span><br><span class="line">                <span class="keyword">for</span> k, explogit <span class="keyword">in</span> self.Exp(ftoken).items():</span><br><span class="line">                    W[k] -= lr_rate * explogit</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> flabel:</span><br><span class="line">                    W[k] += lr_rate</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> saveParam:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(modelpath):</span><br><span class="line">                os.mkdir(modelpath)</span><br><span class="line">            joblib.dump(self.W, os.path.join(modelpath, <span class="string">'crf_W.pkl'</span>))</span><br></pre></td></tr></table></figure>
+
+<p>可以参考我的开源代码，在20个epoch之后的f1（多标签分类）达到了91%以上。测试数据占完整数据的百分之十。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Average estimator logit likelyhood is -80.44978854578937.</span><br><span class="line">Average f1 is 0.9166892806881518.</span><br></pre></td></tr></table></figure>
+
+<p>参考我的开源代码：<br><a href="https://link.zhihu.com/?target=https%3A//github.com/fooSynaptic/NLP_utils/blob/master/ML/PGM/CRF/crf_from_scratch/models.py" target="_blank" rel="noopener">crf from scratch</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CRF/" rel="tag"># CRF</a>
+          
+            <a href="/tags/build-from-scratch/" rel="tag"># build from scratch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/19/MRC_craft/" rel="next" title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
+                <i class="fa fa-chevron-left"></i> 如何教会机器去理解问题和文本并且回答问题（tensorflow实战）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/19/bidaf_sketch/" rel="prev" title="论文梗概：Bi-Directional Attention Flow for Machine Comprehension">
+                论文梗概：Bi-Directional Attention Flow for Machine Comprehension <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2019/11/19/crf_from_scratch/" data-title="条件随机场的原理以及从零实现" data-url="http://fooSynaptic.com/2019/11/19/crf_from_scratch/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">jiaxin hu</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptic.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fooSynaptic" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/jiu-san-gong-ren/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>ZhiHu</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#条件随机场中涉及到三个问题"><span class="nav-number">1.</span> <span class="nav-text">条件随机场中涉及到三个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概率计算问题"><span class="nav-number">1.1.</span> <span class="nav-text">概率计算问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列预测问题"><span class="nav-number">1.2.</span> <span class="nav-text">序列预测问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数学习问题"><span class="nav-number">1.3.</span> <span class="nav-text">参数学习问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jiaxin hu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"your-duoshuo-shortname"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'm3IyaPmV3FOoJuQ9ic9ToH5x-gzGzoHsz',
+        appKey: 'Gu82zvrKj6u6gHD5UN0iL222',
+        placeholder: 'Welecome to share your idea!',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
