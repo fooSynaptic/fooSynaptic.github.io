@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Head first to the Truth as Synaptics.">
+<meta name="description" content="Head first to the Truth as Synaptic.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="fooSynaptic">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://fooSynaptic.com/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="Head first to the Truth as Synaptics.">
+<meta property="og:description" content="Head first to the Truth as Synaptic.">
 <meta property="og:locale" content="zh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fooSynaptic">
-<meta name="twitter:description" content="Head first to the Truth as Synaptics.">
+<meta name="twitter:description" content="Head first to the Truth as Synaptic.">
 
 
 
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://fooSynaptic.com/">
 
 
 
@@ -160,7 +160,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">Any problem, please email me, my address -- ordinar@sjtu.edu.cn</p>
+        <p class="site-subtitle">Any problem, please Contact me.</p>
       
   </div>
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/MRC_craft/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/MRC_craft/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -313,7 +313,8 @@
       
         
           
-            <h2 id="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"><a href="#如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" class="headerlink" title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"></a><em>如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</em></h2><h1 id="这部分主要是为了阐述机器阅读理解的实现"><a href="#这部分主要是为了阐述机器阅读理解的实现" class="headerlink" title="这部分主要是为了阐述机器阅读理解的实现"></a>这部分主要是为了阐述机器阅读理解的实现</h1><p>我们有的输入由这几部分组成：</p>
+            <hr>
+<h1 id="这部分主要是为了阐述机器阅读理解的实现"><a href="#这部分主要是为了阐述机器阅读理解的实现" class="headerlink" title="这部分主要是为了阐述机器阅读理解的实现"></a>这部分主要是为了阐述机器阅读理解的实现</h1><p>我们有的输入由这几部分组成：</p>
 <ul>
 <li>问题q</li>
 <li>和问题q相关的文档集合（利用symbolic matching做初步的召回）</li>
@@ -356,7 +357,7 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use CNN</span></span><br><span class="line">out_dim = <span class="number">64</span></span><br><span class="line">window_len = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">conv_match = tf.layers.conv1d(match_out, out_dim, window_len, strides = window_len)</span><br><span class="line">conv_match_up = tf.squeeze(tf.image.resize_images(tf.expand_dims(conv_match, axis=<span class="number">-1</span>),</span><br><span class="line">	[tf.shape(match_out)[<span class="number">1</span>], out_dim],</span><br><span class="line">	method = ResizeMethod.NEAREST_NEIGHBOR), axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">fuse_out - tf.concat([p_encodes, match_out, conv_match_up], axis=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
 
-<p><strong><em>The upsampling step is required for concatenating the convoluted features with match_out and p_encodes. It can be implemented with resize_images from Tensorflow API. The size of fuse_out is [B,L,D], where B is the batch size; L is the passage length and D is the depth controlled by the convolution filters in the fusing layer.</em></strong></p>
+<p><em>The upsampling step is required for concatenating the convoluted features with match_out and p_encodes. It can be implemented with resize_images from Tensorflow API. The size of fuse_out is [B,L,D], where B is the batch size; L is the passage length and D is the depth controlled by the convolution filters in the fusing layer.</em></p>
 <h1 id="Decoding-Layer-amp-Loss-Function"><a href="#Decoding-Layer-amp-Loss-Function" class="headerlink" title="Decoding Layer &amp; Loss Function"></a>Decoding Layer &amp; Loss Function</h1><p>decode <code>fuse_out</code> as an answer span.<br>A simple way to get such distribution is to reduce the last dimension of <code>fuse_out</code> to 1 using a dense layer, and then put a softmax over its output.<br>利用交叉熵损失来评估损失</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">start_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line">end_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># mask out those padded symbols before softmax</span></span><br><span class="line">start_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line">end_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># compute the loss</span></span><br><span class="line">start_loss = tf.losses.sparse_softmax_cross_entropy(labels = start_label, logit=start_logit)</span><br><span class="line">end_loss = tf.losses.sparse_softmax_cross_entropy(labels=end_label, logit=end_logit)</span><br><span class="line">loss = (start_loss+end_loss)/<span class="number">2</span></span><br></pre></td></tr></table></figure>
 
@@ -413,7 +414,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/31/nlp/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/31/nlp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -501,7 +502,7 @@
 <li>Pattern recognition and Machine learning</li>
 </ul>
 <h2 id="1-了解NLP的最基本的知识"><a href="#1-了解NLP的最基本的知识" class="headerlink" title="1.了解NLP的最基本的知识"></a>1.了解NLP的最基本的知识</h2><h3 id="Ngram"><a href="#Ngram" class="headerlink" title="Ngram"></a>Ngram</h3><p>ngram模型中蕴含了概率语言模型的假设，同时也是一个n-1阶的马尔科夫假设，也就是一个词出现的概率只和它前面n-1个词相关<br>p(w_k|w1…k-1) = count(w(k-n+1…k)) / count(w(k-n+1…k-1))</p>
-<h3 id="Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因："><a href="#Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因：" class="headerlink" title="Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因："></a>Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因：</h3><p>斯坦福的吴恩达组的ziang Xie的Data Noising as Smoothing in Neurala Network Language Models就首次提出了此方法，并且给了理论解释，这种random的替换其实本质上属于language model里面基于interpolation的平滑方式。</p>
+<h3 id="Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因"><a href="#Bert-里面训练LM的随机替换能够使得训练结果变得更好地原因" class="headerlink" title="Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因"></a>Bert 里面训练LM的随机替换能够使得训练结果变得更好地原因</h3><p>斯坦福的吴恩达组的ziang Xie的Data Noising as Smoothing in Neurala Network Language Models就首次提出了此方法，并且给了理论解释，这种random的替换其实本质上属于language model里面基于interpolation的平滑方式。</p>
 <h2 id="了解早点经典的NLP模型以及论文"><a href="#了解早点经典的NLP模型以及论文" class="headerlink" title="了解早点经典的NLP模型以及论文"></a>了解早点经典的NLP模型以及论文</h2><h3 id="机器翻译中的IBM模型大概是干嘛的"><a href="#机器翻译中的IBM模型大概是干嘛的" class="headerlink" title="机器翻译中的IBM模型大概是干嘛的"></a>机器翻译中的IBM模型大概是干嘛的</h3><p>对于每个词有一个alignment的list，目标函数为P(a|src, tgt)，表示以平行翻译语料作为条件，找到它对齐的概率。<br>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。<br>IBMmodel中的隐变量就是句子中词语的对齐信息a；<br>所以<br>P(a|src, tgt)<br>= P(a, src|tgt) / P(src|tgt)<br>P(src|tgt) 重点<br>= P(src, a|tgt)</p>
 <h3 id="神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。"><a href="#神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。" class="headerlink" title="神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。"></a>神经机器翻译中正向翻译和反向翻译预测的target要一致对齐，这个是通过双向attention的约束项来实现的。</h3><h3 id="处理对话系统的无聊回复"><a href="#处理对话系统的无聊回复" class="headerlink" title="处理对话系统的无聊回复"></a>处理对话系统的无聊回复</h3><p>用反向概率做rerank可以进一步提高检索的结果。在早期的统计机器翻译中（phrase-base MT）需要对一个大的N-best list用MERT做reranking，反向概率（given target， the p of source）是reranking中feature的重要标志。</p>
 <h3 id="诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。"><a href="#诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。" class="headerlink" title="诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。"></a>诞生于神经网络机器翻译的attention，其实就是IBM模型的神经网络版本。</h3><h2 id="了解机器学习的基本模型"><a href="#了解机器学习的基本模型" class="headerlink" title="了解机器学习的基本模型"></a>了解机器学习的基本模型</h2><h3 id="EM算法是什么"><a href="#EM算法是什么" class="headerlink" title="EM算法是什么"></a>EM算法是什么</h3><p>参数估计的方法就是EM算法，通过概率模型中寻找最大似然估计或者最大后验估计的算法。概率模型中有无法观测的隐形变量，em算法经过两个步骤交替进行计算，第一步是计算期望，利用对隐藏变量的现有估计值（起始位随机初始化），计算其最大似然估计值；第二步是最大后验概率，最大后验概率通过求得最大似然的目标来估计参数，然后新股寄出来的参数用于下一个计算期望的步骤，不断迭代进行。</p>
@@ -558,7 +559,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/当我们把目光放在机器阅读理解，我们的期望到底是什么？/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/当我们把目光放在机器阅读理解，我们的期望到底是什么？/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -722,7 +723,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/因果关系推断介绍/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/因果关系推断介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -808,7 +809,8 @@
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>在很多学科当中，去理解变量之间的cause-effect关系都是一个非常让人感兴趣的话题。一般的，实验科学都会通过在实验中干预特殊的因素来观察这种关系。但是在现实生活中，存在因为时间，费用以及伦理等限制是没有办法做实验来发现这一关系的。<br>所以数据科学家们对于从观测数据中推断出因果的信息这个问题很感兴趣，也产生了非常多有意义的研究结果。通过合理的假设（这个以后补充），类似像PC算法这种可以通过观测的数据来推断出因果的结构。这些结果能够告诉我们-我们感兴趣的一部分变量能不能够成为另外一部分变量的cause（forgive me）。但是他并不像结构方程那样能够告诉我们这个影响的效应有多强（除非部分funcitonal causal model）。因此有了IDA算法的出现，它能够在没有隐变量和选择变量的存在下通过观测数据来推断出因果效应的边界，它综合了PC算法和Judea pear的后门准则。并且IDA算法在大规模的生物系统中得到了证实。然而，让观测系统中不存在隐变量是一个非常强的假设，现实的情况往往没法满足这种情况，因此，作者将后门准则衍化成一些其他类型的图结构来描述满足马尔可夫等价类的DAGs（有向无环图）。<br>R package pcalg整合了这诸多算法，包括了PC，FCI，RFCI，GES和GIES以及IDA。这篇文章也是通过一些模拟数据来应用这些方法的调用。<br>先简单看一个例子来理解因果推断</p>
 <p>在图中，左边是真实的因果结构，右边是PC算法计算推断出来的因果结构，他的变现形式是一个马尔可夫等价类的DAG，主要蕴含了条件独立性的信息。<br>如图中所示，在算法推断出来的因果结构中有单向和双向的箭头。单向的箭头代表着直接的有向因果效应。双向的箭头意味着对于PC算法来说无法去判断这个因果效应的方向应该是⬅️还是➡️。因此，在推断的结果当中，双向的箭头代表这因果关系的不确定性。这其中有一个非常重要的事实：普遍的，PC算法类似的算法无法从观测数据中得到一个单一的DAG，即便说这个数据量非常有限，因为存在的事实是多个DAGs可以描述相同的条件独立性信息。<br>然后我们重点介绍一下马尔可夫等价类：为什么是类其实也就是因为多个结构可以描述相同的条件概率（贝叶斯概率），举个例子——</p>
 <p>花了15分钟做的图，office online真辣鸡<br>对于： a. A&lt;—— C ——&gt;B 和b. A——&gt; C ——&gt; B是一对马尔可夫等价类，因为对于<br>a:   有- P(C)P(A|C)P(B|C) 。<br>b：有- P(A)P(C|A)P(B|C) = P(C)P(A|C)P(B|C) 。<br>所以a等价于b。<br>马尔科夫等价类在贝叶斯概率的计算上是等价的，却有着完全不同的结构。对于如上的链式图有两种贝叶斯概率。</p>
-<h2 id="研究方法背景介绍："><a href="#研究方法背景介绍：" class="headerlink" title="研究方法背景介绍："></a>研究方法背景介绍：</h2><p>一般的，贝叶斯网络图、模型常用来进行因果结构的推断，图模型可以被理解为从联合概率到有依赖关系的结构的一种映射关系。就好像是地图一样，如果你想要使用地图，那么你需要两个要素，第一，你需要一个物理位置的图包含了点和线的符号，第二，你需要合理的规则来对图上的符号来作出解释。从这个观点考虑就能够理解，虽然高速公路地图和电车轨道地图看起来非常相像，不过他们对于符号的解释规则会存在较大的差别，所以图模型可以被理解为一张地图。图模型中都包含了一张具备了点，线以及潜在的mark，比如说箭头或者环，并且，图模型都有一套解释自己的的规则。一般的，在统计学习中，图中的节点代表着随机变量，而边代表了某种依赖关系。<br>我们先考虑不存在隐变量的情况<br>一个例子，有向无环图-DAG模型，无环意味着从图中任何一个节点出发沿着边延伸都无法回到起始节点。先考虑一种简单的解释规则- d-separation。<br>Define D-separation：<br>如果在模型图中存在两个节点x和y，他们被一个node集合S所分隔-d-separated，那么相应的在集合S的存在下，两个随机变量Vx和Vy条件性相互独立。<br>denote： Vx \bot Vy  | S .<br>相应的，满足d-separation的变量分布被称之为faithful，并且在统计上也被证明了大部分的变量分布都是faithful的。所以in practice这个假设并不strong。<br>因为DAG模型可以编码条件独立性关系，PC算法利用这一关系来推断我们前面提到的因果关系。PC算法被证明能够重构潜在的DAG模型结构，这个算法依赖于马尔可夫等价类（some variable with some 联合分布）中的条件独立性关系。实际在算法中，条件独立性骨架通过一个条件独立性的统计检验来完成。在某些不存在隐变量的情况下，即便存在非常高纬度的随机变量（意味着可能会有非常稀疏的众多DAG模型）PC算法利用统计检验来进行条件独立性分析是有较好的计算效率。<br>PC算法伪代码<br>输入：一个代表图模型节点的随机变量集合V；条件独立性信息；统计检验显著性水平 \alpha 。<br>输出：部分的完备有向无环图CPDAG \tilde{G} ，分隔变量集合 \tilde{S} ，以及边的方向👈还是👉。<br>构造随机变量集合V的完全的联通图（所有节点相连接）。<br>利用显著性水平\alpha对相邻的统计变量集合进行条件独立性检验，如果存在条件性独立，就将两个变量之间的边去除掉。<br>确定V结构（确定方向）。<br>树立剩余的边。</p>
+<h2 id="研究方法背景介绍"><a href="#研究方法背景介绍" class="headerlink" title="研究方法背景介绍"></a>研究方法背景介绍</h2><p>一般的，贝叶斯网络图、模型常用来进行因果结构的推断，图模型可以被理解为从联合概率到有依赖关系的结构的一种映射关系。就好像是地图一样，如果你想要使用地图，那么你需要两个要素，第一，你需要一个物理位置的图包含了点和线的符号，第二，你需要合理的规则来对图上的符号来作出解释。从这个观点考虑就能够理解，虽然高速公路地图和电车轨道地图看起来非常相像，不过他们对于符号的解释规则会存在较大的差别，所以图模型可以被理解为一张地图。图模型中都包含了一张具备了点，线以及潜在的mark，比如说箭头或者环，并且，图模型都有一套解释自己的的规则。一般的，在统计学习中，图中的节点代表着随机变量，而边代表了某种依赖关系。<br>我们先考虑不存在隐变量的情况</p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>有向无环图-DAG模型，无环意味着从图中任何一个节点出发沿着边延伸都无法回到起始节点。先考虑一种简单的解释规则- d-separation。<br>Define D-separation：<br>如果在模型图中存在两个节点x和y，他们被一个node集合S所分隔-d-separated，那么相应的在集合S的存在下，两个随机变量Vx和Vy条件性相互独立。<br>denote： Vx \bot Vy  | S .<br>相应的，满足d-separation的变量分布被称之为faithful，并且在统计上也被证明了大部分的变量分布都是faithful的。所以in practice这个假设并不strong。<br>因为DAG模型可以编码条件独立性关系，PC算法利用这一关系来推断我们前面提到的因果关系。PC算法被证明能够重构潜在的DAG模型结构，这个算法依赖于马尔可夫等价类（some variable with some 联合分布）中的条件独立性关系。实际在算法中，条件独立性骨架通过一个条件独立性的统计检验来完成。在某些不存在隐变量的情况下，即便存在非常高纬度的随机变量（意味着可能会有非常稀疏的众多DAG模型）PC算法利用统计检验来进行条件独立性分析是有较好的计算效率。<br>PC算法伪代码<br>输入：一个代表图模型节点的随机变量集合V；条件独立性信息；统计检验显著性水平 \alpha 。<br>输出：部分的完备有向无环图CPDAG \tilde{G} ，分隔变量集合 \tilde{S} ，以及边的方向👈还是👉。<br>构造随机变量集合V的完全的联通图（所有节点相连接）。<br>利用显著性水平\alpha对相邻的统计变量集合进行条件独立性检验，如果存在条件性独立，就将两个变量之间的边去除掉。<br>确定V结构（确定方向）。<br>树立剩余的边。</p>
 <p>=========<br>转载请注明出处<br>=========</p>
 
           
@@ -858,7 +860,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/矩阵分解之一：Truncate-SVD-和random-SVD/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/矩阵分解之一：Truncate-SVD-和random-SVD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -939,7 +941,7 @@
       
         
           
-            <p>最近看了一点矩阵分解的论文发现了一些好玩的东西，所以会准备总结几篇矩阵分解的文章，标题图来自facebook research。</p>
+            <p>最近看了一点矩阵分解的论文发现了一些好玩的东西，所以会准备总结几篇矩阵分解的文章</p>
 <h2 id="奇异值分解相对于矩阵分解的问题"><a href="#奇异值分解相对于矩阵分解的问题" class="headerlink" title="奇异值分解相对于矩阵分解的问题"></a>奇异值分解相对于矩阵分解的问题</h2><p>每个学过线性代数的人都不会对奇异值分解感到陌生，因为SVD广泛地应用于统计学，信号处理以及机器学习当中。形式上来看，一个维度为 m × n的实数矩阵的奇异值分列可以表示为A = U Σ Vᵀ；其中U代表的是一个维度为m × m的正交奇异向量矩阵，∑代表着奇异值的对角矩阵，最后一项是一个n × n的正交奇异向量矩阵。<br>在矩阵分解这个问题上，奇异值分解提供的策略是计算一个相对于A更低秩的近似矩阵Aᵣ，意味着<code>r&lt;m, n</code>， 并且要使得<code>||Aᵣ – A||</code>最小。那么对于A = U Σ Vᵀtruncate SVD的策略是：<br>对于对角矩阵上面的奇异值进行降序排序；<br>在对角矩阵∑上面取前r个奇异值，相对应的在左右两边的奇异向量矩阵上面也取相对于的r列，最后分别得到了Σᵣ，Uᵣ， Vᵣ。<br>将Aᵣ = Uᵣ Σᵣ Vᵣᵀ作为最终矩阵分解的产物。<br>上述过程可以用如下的示意图来表示：</p>
 <p>这样，通过SVD就可以成功的完成矩阵降维的过程。我们从矩阵分解来到了很相近的另外一个主题——降维，作为降维届的代表技术——PCA，而矩阵的奇异值分解能够直接得到矩阵通过PCA的投影空间。对于一个协变量矩阵X为 m × p（m为观测）的观测特征矩阵，计算一个p × l 的矩阵W和一个 l × l 的对角矩阵Λ，能够使得 Xᵀ X ≈ W Λ Wᵀ。这样地近似可以将原先的观测矩阵投影到一个维度为l的空间从而达到降维。有一种精简的PCA算法计算的形式是通过直接近似一个低秩的协变量矩阵X ≈ Uᵣ Σᵣ Vᵣᵀ，然后乘上转置，最终因为左奇异向量矩阵正交而直接得到投影的向量空间。<br> Xᵀ X ≈ (Uᵣ Σᵣ Vᵣᵀ)ᵀ (Uᵣ Σᵣ Vᵣᵀ) = Vᵣ Σᵣ² Vᵣᵀ<br>如上最终的对角矩阵就是新的投影空间。<br>但是truncate SVD有一些缺点（通过上述和PCA的论述其实可以得到这个缺点是传统降维技术共有的）：<br>实际的工业环境中，矩阵的维度是巨大的，并且数据往往是缺失，不准确的；当不准确的输入限制了输出的精确性时，仅仅依靠这些实际的数据只会白白浪费计算资源。<br>传统的降维技术是不支持并行计算的，如果你熟悉工业数据你就应该知道这一点有多么可怕。</p>
 <p>到这里我们就要进入这篇文章的转折点引出我们的主角了——</p>
@@ -950,7 +952,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">randomized_svd</span><span class="params">(M, n_components, n_oversamples=<span class="number">10</span>, n_iter=<span class="number">4</span>)</span>:</span></span><br><span class="line">    <span class="comment">#这里n_random就是truncate SVD中的r</span></span><br><span class="line">    n_random = n_components + n_oversamples</span><br><span class="line">    </span><br><span class="line">    Q = randomized_range_finder(M, n_random, n_iter)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#把原始观测投影到(k + p)维度空间</span></span><br><span class="line">    B = Q.T @ M</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 对B进行奇异值分解</span></span><br><span class="line">    Uhat, s, V = linalg.svd(B, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">del</span> B</span><br><span class="line">    U = Q @ Uhat</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> U[:, :n_components], s[:n_components], V[:n_components, :]</span><br></pre></td></tr></table></figure>
 
 <p>没有看懂？好吧让我们来讲讲这个原理，randomize SVD对于矩阵分解能够作为一种通用的算法，简单讲分成两步，<br>第一步是求原始矩阵范围的近似Q，这个过程中通过对一个随机初始化的小维度矩阵Q不断地进行和原矩阵相乘然后分解，最终得到一个稳定的向量矩阵，为什么不取对角矩阵，因为对角矩阵是特征基矩阵，而左边的向量矩阵可以作为量纲矩阵。最终我们的目标是得到A ≈ Q Qᵀ A。<br>第二步很简单，有了A ≈ Q Qᵀ A，我们构造一个矩阵B = Qᵀ A，因为Q是低秩的，所以矩阵B很小。我们可以用传统SVD的方法来对矩阵B进行分解B = S Σ Vᵀ，得到左奇异，奇异值矩阵，右奇异向量矩阵。到这里A ≈ Q Qᵀ A = Q (S Σ Vᵀ)，最右边所有量都已知，成功地对A求到了一个低秩的近似U Σ Vᵀ。<br>（通过上面的代码，可以很直接得理解这两步原理。）</p>
-<h2 id="Tricks-and-intuition"><a href="#Tricks-and-intuition" class="headerlink" title="Tricks and intuition:"></a>Tricks and intuition:</h2><p>randomized SVD的trick就是能够非常高效得求得范围近似矩阵Q，从直觉上来思考，为了估计原始矩阵的范围，我们可以用一些随机的向量，通过原始矩阵A和这些随机向量的相乘所作出的变动的近似来得到A的波动范围。<br>Specific：假设我们使用一个高斯向量矩阵M来和原矩阵相乘，计算Y = A M，然后对Y进行QR分解Q R = Y，这样得到的矩阵Q，它的没一列就是Y的范围的正交基，所以可以作为A的范围近似。</p>
+<h2 id="Tricks-and-intuition"><a href="#Tricks-and-intuition" class="headerlink" title="Tricks and intuition"></a>Tricks and intuition</h2><p>randomized SVD的trick就是能够非常高效得求得范围近似矩阵Q，从直觉上来思考，为了估计原始矩阵的范围，我们可以用一些随机的向量，通过原始矩阵A和这些随机向量的相乘所作出的变动的近似来得到A的波动范围。<br>Specific：假设我们使用一个高斯向量矩阵M来和原矩阵相乘，计算Y = A M，然后对Y进行QR分解Q R = Y，这样得到的矩阵Q，它的没一列就是Y的范围的正交基，所以可以作为A的范围近似。</p>
 <p>=========<br>转载请注明出处<br>=========</p>
 
           
@@ -1000,7 +1002,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/开篇/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/开篇/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -1082,7 +1084,7 @@
         
           
             <p>各位同学们大家好，我是fooSynaptic，本来买好了机器打算做一个个人网站，但是没有想到的是hexo居然这么好用，而且markdown对于我来说用的还算比较熟，总体体验还算是可以的。</p>
-<h1 id="关于这个website"><a href="#关于这个website" class="headerlink" title="关于这个website"></a>关于这个website</h1><p>这个博客主要会用来记录包括但不限于如下的一些内容：</p>
+<h1 id="关于这个Blog"><a href="#关于这个Blog" class="headerlink" title="关于这个Blog"></a>关于这个Blog</h1><p>这个博客主要会用来记录包括但不限于如下的一些内容：</p>
 <ul>
 <li>NLP技术</li>
 <li>机器学习算法的实现细节</li>
@@ -1142,7 +1144,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/04/article/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/10/04/article/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -1209,6 +1211,39 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/demo/Let-s-begin/" itemprop="url" rel="index">
                     <span itemprop="name">Let's begin</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/demo/Let-s-begin/MRC/" itemprop="url" rel="index">
+                    <span itemprop="name">MRC</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/demo/Let-s-begin/MRC/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/demo/Let-s-begin/MRC/tensorflow/Matrix-factorization/" itemprop="url" rel="index">
+                    <span itemprop="name">Matrix factorization</span>
                   </a>
                 </span>
 
@@ -1327,7 +1362,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">jiaxin hu</p>
-              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptics.</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptic.</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -1348,7 +1383,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>

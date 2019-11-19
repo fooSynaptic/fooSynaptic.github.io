@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+<meta name="description" content="这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron network） 如何在向量空间中表示问题和文档？ 什么样的损失">
 <meta name="keywords" content="Machine reading comprehension,tensorflow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
-<meta property="og:url" content="http://yoursite.com/2019/11/19/MRC_craft/index.html">
+<meta property="og:url" content="http://fooSynaptic.com/2019/11/19/MRC_craft/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+<meta property="og:description" content="这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron network） 如何在向量空间中表示问题和文档？ 什么样的损失">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-11-19T05:19:06.565Z">
+<meta property="og:updated_time" content="2019-11-19T05:30:47.286Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）">
-<meta name="twitter:description" content="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron">
+<meta name="twitter:description" content="这部分主要是为了阐述机器阅读理解的实现我们有的输入由这几部分组成：  问题q 和问题q相关的文档集合（利用symbolic matching做初步的召回） 标注好的文档中的起始和结束位点  现在需要解决的问题有：  我们需要找到一个映射来讲文档和问题从他们自己的空间映射到二维的整数空间；那么这个函数的具体形式是什么？（neuron network） 如何在向量空间中表示问题和文档？ 什么样的损失">
 
 
 
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/19/MRC_craft/">
+  <link rel="canonical" href="http://fooSynaptic.com/2019/11/19/MRC_craft/">
 
 
 
@@ -161,7 +161,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">Any problem, please email me, my address -- ordinar@sjtu.edu.cn</p>
+        <p class="site-subtitle">Any problem, please Contact me.</p>
       
   </div>
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/MRC_craft/">
+    <link itemprop="mainEntityOfPage" href="http://fooSynaptic.com/2019/11/19/MRC_craft/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="jiaxin hu">
@@ -310,7 +310,8 @@
       
 
       
-        <h2 id="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"><a href="#如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" class="headerlink" title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"></a><em>如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</em></h2><h1 id="这部分主要是为了阐述机器阅读理解的实现"><a href="#这部分主要是为了阐述机器阅读理解的实现" class="headerlink" title="这部分主要是为了阐述机器阅读理解的实现"></a>这部分主要是为了阐述机器阅读理解的实现</h1><p>我们有的输入由这几部分组成：</p>
+        <hr>
+<h1 id="这部分主要是为了阐述机器阅读理解的实现"><a href="#这部分主要是为了阐述机器阅读理解的实现" class="headerlink" title="这部分主要是为了阐述机器阅读理解的实现"></a>这部分主要是为了阐述机器阅读理解的实现</h1><p>我们有的输入由这几部分组成：</p>
 <ul>
 <li>问题q</li>
 <li>和问题q相关的文档集合（利用symbolic matching做初步的召回）</li>
@@ -353,7 +354,7 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use CNN</span></span><br><span class="line">out_dim = <span class="number">64</span></span><br><span class="line">window_len = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">conv_match = tf.layers.conv1d(match_out, out_dim, window_len, strides = window_len)</span><br><span class="line">conv_match_up = tf.squeeze(tf.image.resize_images(tf.expand_dims(conv_match, axis=<span class="number">-1</span>),</span><br><span class="line">	[tf.shape(match_out)[<span class="number">1</span>], out_dim],</span><br><span class="line">	method = ResizeMethod.NEAREST_NEIGHBOR), axis=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">fuse_out - tf.concat([p_encodes, match_out, conv_match_up], axis=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
 
-<p><strong><em>The upsampling step is required for concatenating the convoluted features with match_out and p_encodes. It can be implemented with resize_images from Tensorflow API. The size of fuse_out is [B,L,D], where B is the batch size; L is the passage length and D is the depth controlled by the convolution filters in the fusing layer.</em></strong></p>
+<p><em>The upsampling step is required for concatenating the convoluted features with match_out and p_encodes. It can be implemented with resize_images from Tensorflow API. The size of fuse_out is [B,L,D], where B is the batch size; L is the passage length and D is the depth controlled by the convolution filters in the fusing layer.</em></p>
 <h1 id="Decoding-Layer-amp-Loss-Function"><a href="#Decoding-Layer-amp-Loss-Function" class="headerlink" title="Decoding Layer &amp; Loss Function"></a>Decoding Layer &amp; Loss Function</h1><p>decode <code>fuse_out</code> as an answer span.<br>A simple way to get such distribution is to reduce the last dimension of <code>fuse_out</code> to 1 using a dense layer, and then put a softmax over its output.<br>利用交叉熵损失来评估损失</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">start_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line">end_logit = tf.layers.dense(fuse_out, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># mask out those padded symbols before softmax</span></span><br><span class="line">start_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line">end_logit -= (<span class="number">1</span>-p_mask)*<span class="number">1E30</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># compute the loss</span></span><br><span class="line">start_loss = tf.losses.sparse_softmax_cross_entropy(labels = start_label, logit=start_logit)</span><br><span class="line">end_loss = tf.losses.sparse_softmax_cross_entropy(labels=end_label, logit=end_logit)</span><br><span class="line">loss = (start_loss+end_loss)/<span class="number">2</span></span><br></pre></td></tr></table></figure>
 
@@ -433,7 +434,7 @@
 
   
     <div class="comments" id="comments">
-      <div class="ds-thread" data-thread-key="2019/11/19/MRC_craft/" data-title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" data-url="http://yoursite.com/2019/11/19/MRC_craft/">
+      <div class="ds-thread" data-thread-key="2019/11/19/MRC_craft/" data-title="如何教会机器去理解问题和文本并且回答问题（tensorflow实战）" data-url="http://fooSynaptic.com/2019/11/19/MRC_craft/">
       </div>
     </div>
 
@@ -475,7 +476,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">jiaxin hu</p>
-              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptics.</p>
+              <p class="site-description motion-element" itemprop="description">Head first to the Truth as Synaptic.</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -496,7 +497,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -556,7 +557,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何教会机器去理解问题和文本并且回答问题（tensorflow实战）"><span class="nav-number">1.</span> <span class="nav-text">如何教会机器去理解问题和文本并且回答问题（tensorflow实战）</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#这部分主要是为了阐述机器阅读理解的实现"><span class="nav-number"></span> <span class="nav-text">这部分主要是为了阐述机器阅读理解的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Network-Architecture"><span class="nav-number"></span> <span class="nav-text">Network Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Embedding-and-Encoding-Layers"><span class="nav-number"></span> <span class="nav-text">Embedding and Encoding Layers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Match-Layer"><span class="nav-number"></span> <span class="nav-text">Match Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fusing-Layer"><span class="nav-number"></span> <span class="nav-text">Fusing Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Decoding-Layer-amp-Loss-Function"><span class="nav-number"></span> <span class="nav-text">Decoding Layer &amp; Loss Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#generate-final-answer"><span class="nav-number"></span> <span class="nav-text">generate final answer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number"></span> <span class="nav-text">reference</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#这部分主要是为了阐述机器阅读理解的实现"><span class="nav-number">1.</span> <span class="nav-text">这部分主要是为了阐述机器阅读理解的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Network-Architecture"><span class="nav-number">2.</span> <span class="nav-text">Network Architecture</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Embedding-and-Encoding-Layers"><span class="nav-number">3.</span> <span class="nav-text">Embedding and Encoding Layers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Match-Layer"><span class="nav-number">4.</span> <span class="nav-text">Match Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fusing-Layer"><span class="nav-number">5.</span> <span class="nav-text">Fusing Layer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Decoding-Layer-amp-Loss-Function"><span class="nav-number">6.</span> <span class="nav-text">Decoding Layer &amp; Loss Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#generate-final-answer"><span class="nav-number">7.</span> <span class="nav-text">generate final answer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">8.</span> <span class="nav-text">reference</span></a></li></ol></div>
             
 
           </div>
