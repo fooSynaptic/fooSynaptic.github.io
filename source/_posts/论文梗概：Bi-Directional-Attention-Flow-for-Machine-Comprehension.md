@@ -1,80 +1,184 @@
 ---
-title: "论文梗概：Bi-Directional Attention Flow for Machine Comprehension"
+title: "BiDAF 论文解读：双向注意力流机制"
 date: 2019-11-19T16:47:58+08:00
 tags:
   - MRC
-  - bidaf
   - attention
+  - deep learning
 ---
 
-## Abstract 要点
+BiDAF (Bi-Directional Attention Flow) 是机器阅读理解领域的经典模型，其双向注意力机制对后续 Transformer 架构产生了深远影响。
 
-- 需要对 context 和 query 之间的复杂交互进行建模
-- 使用 attention 关注 context 的小部分并用固定大小的向量进行概括
-- 多阶段分层过程：在不同粒度级别表示 context，使用双向 attention flow 机制获取 query-aware 的 context 表示，避免过早概括
+## 核心创新
 
-## Introduction 要点
+### 1. Memory-less Attention
 
-### Bi-directional Attention Flow 的三个创新点
+传统动态注意力 vs BiDAF 的无记忆注意力：
 
-**第一：不用 attention 概括 context 为固定大小向量**
+| 特性 | Dynamic Attention | Memory-less Attention |
+|------|------------------|----------------------|
+| 依赖 | 前一时间步的 attended vector | 仅当前 query 和 context |
+| 优势 | 可建模时序依赖 | 避免错误累积 |
+| 缺点 | 错误会传播 | 无法建模长程依赖 |
 
-Attention 在每个时间步计算，attended vector 连同之前层的表示一起流向后续的 modeling layer（这与 self-attention 类似），避免了过早概括造成的信息损失。
+### 2. 双向注意力
 
-**第二：Memory-less Attention 机制**
+同时计算：
+- **Context-to-Query (C2Q)**：每个 context 词最相关的 query 词
+- **Query-to-Context (Q2C)**：对回答问题最关键的 context 词
 
-虽然我们迭代地计算 attention，但每个时间步的 attention 只是当前 query 和 context 的函数，不直接依赖于前一时间步的 attention。
-
-这迫使 attention layer 专注于学习 query 和 context 之间的 attention，使 modeling layer 专注于学习 query-aware context 表示内部的交互。同时避免了前一时间步错误 attention 对当前时间步的影响。
-
-**关键对比：**
-
-| 类型 | 描述 |
-|------|------|
-| **Dynamic Attention** | 当前时间步的 attention 权重是前一时间步 attended vector 的函数 |
-| **Memory-less Attention** | 当前时间步的 attention 只依赖于当前的 query 和 context |
-
-> 作者声称 memory-less attention 比 dynamic attention 有明显优势。
-
-**第三：双向信息互补**
-
-双向的 attention 提供了互补的信息。
-
-## BiDAF 网络架构
-
-前三层在不同粒度级别计算 query 和 context 的特征，类似于 CV 中 CNN 的多阶段特征计算。
-
-### 1. Character-level Embedding
-
-字符级别的嵌入表示。
-
-### 2. Word-level Embedding
-
-词级别的嵌入表示。
-
-### 3. Contextual Embedding
-
-利用上下文线索来精炼词的嵌入：
-
-> 在前面层提供的 embeddings 之上使用 LSTM 来建模词之间的时序交互。双向放置 LSTM 并拼接两个方向的输出。
-
-### 4. Attention Flow Layer
-
-耦合 query 和 context 向量，为 context 中的每个词生成 query-aware 的特征向量。
+## 模型架构
 
 ```
-α(h, u) = W[h; u; h ⊙ u]
+Input → Embedding → Encoding → Attention → Modeling → Output
+  │         │           │          │           │         │
+ 词向量    字符CNN     BiLSTM    双向注意力   BiLSTM   Span预测
 ```
 
-**两种 Attention 方向：**
+### 数学表达
 
-- **Context-to-Query (C2Q)**：表示每个 context 词最相关的 query 词
-- **Query-to-Context (Q2C)**：表示哪些 context 词与某个 query 词最相似，对回答问题最关键
+**相似度矩阵**：
 
-### 5. Modeling Layer
+$$
+S_{ij} = \alpha(H_i, U_j) = w^T[H_i; U_j; H_i \odot U_j]
+$$
 
-使用 RNN 扫描 context，捕获长距离依赖。
+其中 $H \in \mathbb{R}^{T \times d}$ 是 context 表示，$U \in \mathbb{R}^{J \times d}$ 是 query 表示。
 
-### 6. Output Layer
+**C2Q Attention**：
 
-提供问题的答案（面向任务的具体实现）。
+$$
+\tilde{U}_i = \sum_j a_{ij} U_j, \quad a_i = \text{softmax}(S_i)
+$$
+
+**Q2C Attention**：
+
+$$
+\tilde{H} = \sum_i b_i H_i, \quad b = \text{softmax}(\max_j S_{:j})
+$$
+
+**融合表示**：
+
+$$
+G_i = [H_i; \tilde{U}_i; H_i \odot \tilde{U}_i; H_i \odot \tilde{H}]
+$$
+
+## PyTorch 实现
+
+```python
+import torch
+import torch.nn as nn
+
+class BiDAFAttention(nn.Module):
+    def __init__(self, hidden_size):
+        super().__init__()
+        self.W = nn.Linear(hidden_size * 3, 1, bias=False)
+    
+    def forward(self, context, query, c_mask, q_mask):
+        """
+        Args:
+            context: (batch, c_len, hidden)
+            query: (batch, q_len, hidden)
+            c_mask: (batch, c_len)
+            q_mask: (batch, q_len)
+        """
+        batch, c_len, hidden = context.size()
+        q_len = query.size(1)
+        
+        # 扩展维度以计算所有 (i, j) 对
+        c_expand = context.unsqueeze(2).expand(-1, -1, q_len, -1)
+        q_expand = query.unsqueeze(1).expand(-1, c_len, -1, -1)
+        
+        # 计算相似度矩阵 S
+        cq = torch.cat([c_expand, q_expand, c_expand * q_expand], dim=-1)
+        S = self.W(cq).squeeze(-1)  # (batch, c_len, q_len)
+        
+        # Mask
+        q_mask_expand = q_mask.unsqueeze(1).expand(-1, c_len, -1)
+        S = S.masked_fill(~q_mask_expand, -1e9)
+        
+        # C2Q attention
+        a = torch.softmax(S, dim=-1)
+        c2q = torch.bmm(a, query)  # (batch, c_len, hidden)
+        
+        # Q2C attention
+        b = torch.softmax(S.max(dim=-1)[0], dim=-1)
+        q2c = torch.bmm(b.unsqueeze(1), context)  # (batch, 1, hidden)
+        q2c = q2c.expand(-1, c_len, -1)
+        
+        # 融合
+        G = torch.cat([context, c2q, context * c2q, context * q2c], dim=-1)
+        
+        return G
+```
+
+## 与 Transformer 的对比
+
+| 特性 | BiDAF | Transformer |
+|------|-------|-------------|
+| 注意力方向 | 双向（C2Q, Q2C） | 全方向自注意力 |
+| 位置编码 | BiLSTM 隐式编码 | 显式位置编码 |
+| 并行化 | 受限于 RNN | 完全并行 |
+| 长距离依赖 | 受限 | 理论上无限 |
+| 参数量 | 较少 | 较多 |
+
+## 现代演进
+
+BiDAF 的思想在现代模型中的体现：
+
+### 1. Cross-Attention in Transformer
+
+```python
+class CrossAttention(nn.Module):
+    def __init__(self, d_model, n_heads):
+        super().__init__()
+        self.mha = nn.MultiheadAttention(d_model, n_heads)
+    
+    def forward(self, query, key_value):
+        # query 来自一个序列，key/value 来自另一个序列
+        return self.mha(query, key_value, key_value)
+```
+
+### 2. FiD (Fusion-in-Decoder)
+
+用于 RAG 的架构，类似 BiDAF 的融合思想：
+
+```python
+class FiD(nn.Module):
+    def __init__(self, encoder, decoder):
+        super().__init__()
+        self.encoder = encoder
+        self.decoder = decoder
+    
+    def forward(self, question, passages):
+        # 独立编码每个 passage
+        encoded = []
+        for passage in passages:
+            enc = self.encoder(question + passage)
+            encoded.append(enc)
+        
+        # 融合解码
+        fused = torch.cat(encoded, dim=1)
+        return self.decoder(fused)
+```
+
+## 实验结果（原论文）
+
+在 SQuAD 1.1 上的表现：
+
+| 模型 | EM | F1 |
+|------|----|----|
+| BiDAF | 67.7 | 77.3 |
+| BiDAF + Self Attention | 72.1 | 81.1 |
+| BERT-base | 80.8 | 88.5 |
+| GPT-4 (few-shot) | ~90 | ~95 |
+
+## 延伸阅读
+
+- [BiDAF Paper](https://arxiv.org/abs/1611.01603)
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+- [BERT for QA](https://arxiv.org/abs/1810.04805)
+
+---
+
+> 转载请注明出处

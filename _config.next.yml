@@ -79,8 +79,8 @@ footer:
     name: fa fa-heart
     animated: true
     color: "#ff0000"
-  copyright:
-  powered: true
+  copyright: fooSynaptic's Blog
+  powered: false
   beian:
     enable: false
 

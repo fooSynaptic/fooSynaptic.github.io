@@ -1,119 +1,226 @@
 ---
-title: "矩阵分解之一：Truncate SVD 和 Randomized SVD"
+title: "矩阵分解：从 SVD 到现代 AI 应用"
 date: 2019-10-04T07:32:18+08:00
 tags:
   - machine learning
   - linear algebra
+  - LLM
 ---
 
-最近看了一些矩阵分解的论文，发现了一些有趣的内容，准备总结几篇矩阵分解的文章。
+矩阵分解是机器学习的基石技术，从传统的推荐系统到现代大语言模型的参数高效微调（LoRA），都离不开矩阵分解的思想。
 
-## 奇异值分解基础
+## 奇异值分解 (SVD)
 
-每个学过线性代数的人都不会对奇异值分解感到陌生，SVD 广泛应用于统计学、信号处理以及机器学习中。
+### 基本形式
 
-形式上，一个维度为 m × n 的实数矩阵的奇异值分解可以表示为：
+任意矩阵 $A \in \mathbb{R}^{m \times n}$ 可以分解为：
 
-**A = U Σ Vᵀ**
+$$
+A = U \Sigma V^T
+$$
 
 其中：
-- **U**：m × m 的正交左奇异向量矩阵
-- **Σ**：奇异值对角矩阵
-- **V**：n × n 的正交右奇异向量矩阵
+- $U \in \mathbb{R}^{m \times m}$：左奇异向量（正交矩阵）
+- $\Sigma \in \mathbb{R}^{m \times n}$：奇异值对角矩阵
+- $V \in \mathbb{R}^{n \times n}$：右奇异向量（正交矩阵）
 
-## Truncate SVD
+### Truncated SVD
 
-在矩阵分解问题上，SVD 提供的策略是计算一个相对于 A 更低秩的近似矩阵 Aᵣ（r < m, n），使得 ‖Aᵣ - A‖ 最小。
+保留前 $r$ 个最大奇异值：
 
-**Truncate SVD 策略：**
+$$
+A \approx A_r = U_r \Sigma_r V_r^T
+$$
 
-1. 对奇异值进行降序排序
-2. 在对角矩阵 Σ 上取前 r 个奇异值
-3. 在左右两边的奇异向量矩阵上取相应的 r 列
-4. 得到 Aᵣ = Uᵣ Σᵣ Vᵣᵀ
+这是**最优**的秩 $r$ 近似（Eckart-Young 定理）：
 
-### 与 PCA 的关系
-
-矩阵的奇异值分解能够直接得到矩阵通过 PCA 的投影空间。
-
-对于协变量矩阵 X（m × p，m 为观测数），计算一个 p × l 的矩阵 W 和 l × l 的对角矩阵 Λ，使得：
-
-**Xᵀ X ≈ W Λ Wᵀ**
-
-通过低秩近似 X ≈ Uᵣ Σᵣ Vᵣᵀ：
-
-**Xᵀ X ≈ Vᵣ Σᵣ² Vᵣᵀ**
-
-### Truncate SVD 的缺点
-
-1. **计算效率**：实际工业环境中，矩阵维度巨大，数据往往缺失、不准确
-2. **不支持并行计算**：对于工业级数据来说是致命缺陷
+$$
+A_r = \arg\min_{\text{rank}(B) = r} \|A - B\|_F
+$$
 
 ## Randomized SVD
 
-Randomized SVD 相对于 Truncate SVD 的优势：
-
-- 非常稳定
-- 性能不依赖于局部特征
-- 大量矩阵乘法可利用 GPU 并行计算，比 Truncate SVD 更快
+当矩阵规模巨大时，精确 SVD 计算代价过高。Randomized SVD 提供了高效的近似方法。
 
 ### 算法实现
 
-**第一步：找到正交矩阵 Q**
-
 ```python
-def randomized_range_finder(A, size, n_iter=5):
-    Q = np.random.normal(size=(A.shape[1], size))
+import numpy as np
+from scipy import linalg
+
+def randomized_svd(A, n_components, n_oversamples=10, n_iter=4):
+    """
+    Randomized SVD for large matrices.
     
-    for i in range(n_iter):
-        Q, _ = linalg.lu(A @ Q, permute_l=True)
-        Q, _ = linalg.lu(A.T @ Q, permute_l=True)
-        
-    Q, _ = linalg.qr(A @ Q, mode='economic')
-    return Q
-```
-
-> LU 和 QR 分解起规范子的作用，QR 相对 LU 更慢但更准确，所以 QR 规范放在最后一层。
-
-**第二步：利用 Q 得到最终的近似结果**
-
-```python
-def randomized_svd(M, n_components, n_oversamples=10, n_iter=4):
-    # n_random 就是 truncate SVD 中的 r
+    Args:
+        A: Input matrix (m x n)
+        n_components: Number of singular values to compute
+        n_oversamples: Additional random vectors for accuracy
+        n_iter: Number of power iterations
+    
+    Returns:
+        U, s, Vt: Truncated SVD components
+    """
+    m, n = A.shape
     n_random = n_components + n_oversamples
     
-    Q = randomized_range_finder(M, n_random, n_iter)
+    # Step 1: Random projection
+    Q = np.random.randn(n, n_random)
     
-    # 把原始观测投影到 (k + p) 维度空间
-    B = Q.T @ M
+    # Step 2: Power iteration for accuracy
+    for _ in range(n_iter):
+        Q, _ = linalg.lu(A @ Q, permute_l=True)
+        Q, _ = linalg.lu(A.T @ Q, permute_l=True)
     
-    # 对 B 进行奇异值分解
-    Uhat, s, V = linalg.svd(B, full_matrices=False)
-    del B
+    Q, _ = linalg.qr(A @ Q, mode='economic')
+    
+    # Step 3: Project and compute SVD
+    B = Q.T @ A
+    Uhat, s, Vt = linalg.svd(B, full_matrices=False)
     U = Q @ Uhat
     
-    return U[:, :n_components], s[:n_components], V[:n_components, :]
+    return U[:, :n_components], s[:n_components], Vt[:n_components, :]
 ```
 
-### 算法原理
+### 复杂度对比
 
-Randomized SVD 分成两步：
+| 方法 | 时间复杂度 | 空间复杂度 |
+|------|-----------|-----------|
+| 精确 SVD | $O(mn \cdot \min(m,n))$ | $O(mn)$ |
+| Randomized SVD | $O(mn \cdot r)$ | $O((m+n) \cdot r)$ |
+| Truncated SVD (Lanczos) | $O(mn \cdot r)$ | $O((m+n) \cdot r)$ |
 
-**第一步：求原始矩阵范围的近似 Q**
+## 现代应用：LoRA
 
-通过对随机初始化的小维度矩阵 Q 不断与原矩阵相乘然后分解，得到稳定的向量矩阵。目标是得到 A ≈ Q Qᵀ A。
+LoRA (Low-Rank Adaptation) 是大语言模型参数高效微调的核心技术，直接利用了低秩分解的思想。
 
-**第二步：构造并分解小矩阵 B**
+### LoRA 原理
 
-构造矩阵 B = Qᵀ A，因为 Q 是低秩的，所以矩阵 B 很小。用传统 SVD 对 B 进行分解：B = S Σ Vᵀ。
+预训练权重 $W_0$ 固定，只训练低秩增量：
 
-最终：A ≈ Q Qᵀ A = Q (S Σ Vᵀ) = U Σ Vᵀ
+$$
+W = W_0 + \Delta W = W_0 + BA
+$$
 
-## 直觉理解
+其中 $B \in \mathbb{R}^{d \times r}$，$A \in \mathbb{R}^{r \times k}$，$r \ll \min(d, k)$。
 
-为了估计原始矩阵的范围，我们用一些随机向量，通过原始矩阵 A 和这些随机向量的相乘所产生的变动来近似 A 的波动范围。
+### 实现示例
 
-假设使用高斯向量矩阵 M 与原矩阵相乘，计算 Y = A M，然后对 Y 进行 QR 分解得到 Q R = Y。矩阵 Q 的每一列就是 Y 范围的正交基，因此可以作为 A 的范围近似。
+```python
+import torch
+import torch.nn as nn
+
+class LoRALayer(nn.Module):
+    def __init__(self, in_features, out_features, rank=4, alpha=1.0):
+        super().__init__()
+        self.rank = rank
+        self.alpha = alpha
+        
+        # 原始权重（冻结）
+        self.W = nn.Linear(in_features, out_features, bias=False)
+        self.W.weight.requires_grad = False
+        
+        # 低秩分解
+        self.A = nn.Linear(in_features, rank, bias=False)
+        self.B = nn.Linear(rank, out_features, bias=False)
+        
+        # 初始化
+        nn.init.kaiming_uniform_(self.A.weight)
+        nn.init.zeros_(self.B.weight)
+        
+        self.scaling = alpha / rank
+    
+    def forward(self, x):
+        # W(x) + scaling * B(A(x))
+        return self.W(x) + self.scaling * self.B(self.A(x))
+```
+
+### 参数效率
+
+对于 LLaMA-7B：
+
+| 方法 | 可训练参数 | 显存占用 |
+|------|-----------|----------|
+| 全量微调 | 7B (100%) | ~140GB |
+| LoRA (r=8) | 4.7M (0.07%) | ~14GB |
+| LoRA (r=16) | 9.4M (0.13%) | ~16GB |
+
+## 其他应用
+
+### 1. 推荐系统
+
+矩阵分解用于协同过滤：
+
+$$
+R \approx U V^T
+$$
+
+```python
+# 使用 surprise 库
+from surprise import SVD, Dataset, Reader
+
+reader = Reader(rating_scale=(1, 5))
+data = Dataset.load_from_df(df[['user', 'item', 'rating']], reader)
+model = SVD(n_factors=100)
+model.fit(trainset)
+```
+
+### 2. 文本表示 (LSA)
+
+潜在语义分析：
+
+```python
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer(max_features=10000)
+X = vectorizer.fit_transform(documents)
+
+svd = TruncatedSVD(n_components=100)
+X_reduced = svd.fit_transform(X)
+```
+
+### 3. 图像压缩
+
+```python
+from PIL import Image
+import numpy as np
+
+def compress_image(image_path, n_components=50):
+    img = np.array(Image.open(image_path).convert('L'))
+    U, s, Vt = np.linalg.svd(img, full_matrices=False)
+    
+    # 保留前 n_components 个奇异值
+    compressed = U[:, :n_components] @ np.diag(s[:n_components]) @ Vt[:n_components, :]
+    
+    return compressed.astype(np.uint8)
+```
+
+## 数值稳定性
+
+### 条件数
+
+$$
+\kappa(A) = \frac{\sigma_{\max}}{\sigma_{\min}}
+$$
+
+条件数过大会导致数值不稳定。
+
+### 正则化 SVD
+
+```python
+def regularized_svd(A, lambda_reg=0.01):
+    """Add regularization for numerical stability."""
+    U, s, Vt = np.linalg.svd(A, full_matrices=False)
+    s_reg = s / (s**2 + lambda_reg)
+    return U, s_reg, Vt
+```
+
+## 延伸阅读
+
+- Halko et al., *Finding Structure with Randomness* (2011)
+- Hu et al., *LoRA: Low-Rank Adaptation of Large Language Models* (2021)
+- [NumPy SVD Documentation](https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html)
 
 ---
 
