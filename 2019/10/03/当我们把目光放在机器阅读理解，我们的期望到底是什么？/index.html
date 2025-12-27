@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="核心问题：当我们期望机器”理解”文本时，我们的期望到底是什么？  机器阅读理解的演进传统 MRC (2015-2019)基于 span extraction 的方法： 12输入: Context + Question输出: (start_idx, end_idx)  代表模型：BiDAF, R-Net, QANet, BERT LLM 时代的 MRC (2020-至今)从”抽取”到”生成”的范式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器阅读理解：从传统方法到大语言模型">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/10/03/%E5%BD%93%E6%88%91%E4%BB%AC%E6%8A%8A%E7%9B%AE%E5%85%89%E6%94%BE%E5%9C%A8%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="核心问题：当我们期望机器”理解”文本时，我们的期望到底是什么？  机器阅读理解的演进传统 MRC (2015-2019)基于 span extraction 的方法： 12输入: Context + Question输出: (start_idx, end_idx)  代表模型：BiDAF, R-Net, QANet, BERT LLM 时代的 MRC (2020-至今)从”抽取”到”生成”的范式">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-03T15:41:50.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:43:05.173Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="Deep learning">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="MRC">
+<meta property="article:tag" content="RAG">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/10/03/%E5%BD%93%E6%88%91%E4%BB%AC%E6%8A%8A%E7%9B%AE%E5%85%89%E6%94%BE%E5%9C%A8%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/10/03/%E5%BD%93%E6%88%91%E4%BB%AC%E6%8A%8A%E7%9B%AE%E5%85%89%E6%94%BE%E5%9C%A8%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/","path":"2019/10/03/当我们把目光放在机器阅读理解，我们的期望到底是什么？/","title":"机器阅读理解：从传统方法到大语言模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器阅读理解：从传统方法到大语言模型 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="nav-number">1.</span> <span class="nav-text">机器阅读理解的演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F-MRC-2015-2019"><span class="nav-number">1.1.</span> <span class="nav-text">传统 MRC (2015-2019)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-%E6%97%B6%E4%BB%A3%E7%9A%84-MRC-2020-%E8%87%B3%E4%BB%8A"><span class="nav-number">1.2.</span> <span class="nav-text">LLM 时代的 MRC (2020-至今)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%88%86%E7%B1%BB%E4%B8%8E%E9%9A%BE%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">任务分类与难度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%96%B9%E6%B3%95%EF%BC%9ARAG"><span class="nav-number">3.</span> <span class="nav-text">现代方法：RAG</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%99%A8%E9%80%89%E6%8B%A9"><span class="nav-number">3.1.</span> <span class="nav-text">检索器选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chain-of-Thought-%E6%8E%A8%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">Chain-of-Thought 推理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">5.</span> <span class="nav-text">评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%8C%87%E6%A0%87"><span class="nav-number">5.1.</span> <span class="nav-text">传统指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-%E6%97%B6%E4%BB%A3%E7%9A%84%E6%8C%87%E6%A0%87"><span class="nav-number">5.2.</span> <span class="nav-text">LLM 时代的指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="nav-number">6.</span> <span class="nav-text">实践建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E6%97%B6%E7%94%A8%E4%BC%A0%E7%BB%9F-MRC"><span class="nav-number">6.1.</span> <span class="nav-text">何时用传统 MRC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E6%97%B6%E7%94%A8-RAG-LLM"><span class="nav-number">6.2.</span> <span class="nav-text">何时用 RAG + LLM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B%EF%BC%9A%E7%8E%B0%E4%BB%A3-RAG-%E7%B3%BB%E7%BB%9F"><span class="nav-number">7.</span> <span class="nav-text">代码示例：现代 RAG 系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">8.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/10/03/%E5%BD%93%E6%88%91%E4%BB%AC%E6%8A%8A%E7%9B%AE%E5%85%89%E6%94%BE%E5%9C%A8%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器阅读理解：从传统方法到大语言模型 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器阅读理解：从传统方法到大语言模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-03 23:41:50" itemprop="dateCreated datePublished" datetime="2019-10-03T23:41:50+08:00">2019-10-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><strong>核心问题</strong>：当我们期望机器”理解”文本时，我们的期望到底是什么？</p>
+</blockquote>
+<h2 id="机器阅读理解的演进"><a href="#机器阅读理解的演进" class="headerlink" title="机器阅读理解的演进"></a>机器阅读理解的演进</h2><h3 id="传统-MRC-2015-2019"><a href="#传统-MRC-2015-2019" class="headerlink" title="传统 MRC (2015-2019)"></a>传统 MRC (2015-2019)</h3><p>基于 span extraction 的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: Context + Question</span><br><span class="line">输出: (start_idx, end_idx)</span><br></pre></td></tr></table></figure>
+
+<p>代表模型：BiDAF, R-Net, QANet, BERT</p>
+<h3 id="LLM-时代的-MRC-2020-至今"><a href="#LLM-时代的-MRC-2020-至今" class="headerlink" title="LLM 时代的 MRC (2020-至今)"></a>LLM 时代的 MRC (2020-至今)</h3><p>从”抽取”到”生成”的范式转变：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: Context + Question + Instruction</span><br><span class="line">输出: 自由形式的答案</span><br></pre></td></tr></table></figure>
+
+<h2 id="任务分类与难度"><a href="#任务分类与难度" class="headerlink" title="任务分类与难度"></a>任务分类与难度</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>传统方法</th>
+<th>LLM 方法</th>
+<th>难度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>抽取式</strong></td>
+<td>✅ 擅长</td>
+<td>✅ 擅长</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>多跳推理</strong></td>
+<td>❌ 困难</td>
+<td>⚠️ 有限</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>数值推理</strong></td>
+<td>❌ 几乎不能</td>
+<td>⚠️ 需要 CoT</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>常识推理</strong></td>
+<td>❌ 不能</td>
+<td>✅ 较好</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>开放生成</strong></td>
+<td>❌ 不能</td>
+<td>✅ 擅长</td>
+<td>⭐⭐</td>
+</tr>
+</tbody></table>
+<h2 id="现代方法：RAG"><a href="#现代方法：RAG" class="headerlink" title="现代方法：RAG"></a>现代方法：RAG</h2><p>检索增强生成 (Retrieval-Augmented Generation) 结合了检索和生成的优势：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RAGSystem</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, retriever, generator</span>):</span><br><span class="line">        <span class="variable language_">self</span>.retriever = retriever  <span class="comment"># e.g., Dense Retriever</span></span><br><span class="line">        <span class="variable language_">self</span>.generator = generator  <span class="comment"># e.g., LLM</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">answer</span>(<span class="params">self, question: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="comment"># 1. 检索相关文档</span></span><br><span class="line">        docs = <span class="variable language_">self</span>.retriever.retrieve(question, top_k=<span class="number">5</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. 构建上下文</span></span><br><span class="line">        context = <span class="string">&quot;\n\n&quot;</span>.join([d.text <span class="keyword">for</span> d <span class="keyword">in</span> docs])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 3. 生成答案</span></span><br><span class="line">        prompt = <span class="string">f&quot;&quot;&quot;基于以下文档回答问题：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"><span class="subst">&#123;context&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">问题：<span class="subst">&#123;question&#125;</span></span></span><br><span class="line"><span class="string">答案：&quot;&quot;&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.generator.generate(prompt)</span><br></pre></td></tr></table></figure>
+
+<h3 id="检索器选择"><a href="#检索器选择" class="headerlink" title="检索器选择"></a>检索器选择</h3><table>
+<thead>
+<tr>
+<th>检索器</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>BM25</strong></td>
+<td>关键词匹配，快速</td>
+<td>短查询，精确匹配</td>
+</tr>
+<tr>
+<td><strong>Dense Retriever</strong></td>
+<td>语义匹配</td>
+<td>语义相似查询</td>
+</tr>
+<tr>
+<td><strong>ColBERT</strong></td>
+<td>延迟交互</td>
+<td>平衡效率与效果</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>结合稀疏+稠密</td>
+<td>生产环境</td>
+</tr>
+</tbody></table>
+<h2 id="Chain-of-Thought-推理"><a href="#Chain-of-Thought-推理" class="headerlink" title="Chain-of-Thought 推理"></a>Chain-of-Thought 推理</h2><p>对于需要推理的问题，CoT prompting 显著提升效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 标准 Prompting</span></span><br><span class="line">prompt_standard = <span class="string">&quot;Q: 小明有5个苹果，给了小红2个，还剩几个？\nA:&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Chain-of-Thought Prompting  </span></span><br><span class="line">prompt_cot = <span class="string">&quot;&quot;&quot;Q: 小明有5个苹果，给了小红2个，还剩几个？</span></span><br><span class="line"><span class="string">A: 让我们一步步思考：</span></span><br><span class="line"><span class="string">1. 小明最初有 5 个苹果</span></span><br><span class="line"><span class="string">2. 他给了小红 2 个苹果</span></span><br><span class="line"><span class="string">3. 剩余苹果数 = 5 - 2 = 3</span></span><br><span class="line"><span class="string">答案是 3 个苹果。&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h2><h3 id="传统指标"><a href="#传统指标" class="headerlink" title="传统指标"></a>传统指标</h3><p>$$<br>\text{F1} &#x3D; 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}<br>$$</p>
+<p>$$<br>\text{EM (Exact Match)} &#x3D; \mathbb{1}[\text{pred} &#x3D; \text{gold}]<br>$$</p>
+<h3 id="LLM-时代的指标"><a href="#LLM-时代的指标" class="headerlink" title="LLM 时代的指标"></a>LLM 时代的指标</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 LLM 作为评估器</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">llm_evaluate</span>(<span class="params">question, gold_answer, pred_answer</span>):</span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;评估预测答案的质量（1-5分）：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">问题：<span class="subst">&#123;question&#125;</span></span></span><br><span class="line"><span class="string">标准答案：<span class="subst">&#123;gold_answer&#125;</span></span></span><br><span class="line"><span class="string">预测答案：<span class="subst">&#123;pred_answer&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">评分标准：</span></span><br><span class="line"><span class="string">5分 - 完全正确且信息完整</span></span><br><span class="line"><span class="string">4分 - 基本正确，略有遗漏</span></span><br><span class="line"><span class="string">3分 - 部分正确</span></span><br><span class="line"><span class="string">2分 - 有相关信息但不正确</span></span><br><span class="line"><span class="string">1分 - 完全错误</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">分数：&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> llm.generate(prompt)</span><br></pre></td></tr></table></figure>
+
+<h2 id="实践建议"><a href="#实践建议" class="headerlink" title="实践建议"></a>实践建议</h2><h3 id="何时用传统-MRC"><a href="#何时用传统-MRC" class="headerlink" title="何时用传统 MRC"></a>何时用传统 MRC</h3><ul>
+<li>答案明确在文档中</li>
+<li>需要精确的位置标注</li>
+<li>低延迟要求</li>
+<li>资源受限</li>
+</ul>
+<h3 id="何时用-RAG-LLM"><a href="#何时用-RAG-LLM" class="headerlink" title="何时用 RAG + LLM"></a>何时用 RAG + LLM</h3><ul>
+<li>需要整合多个文档</li>
+<li>答案需要推理或总结</li>
+<li>开放域问答</li>
+<li>用户期望自然语言回答</li>
+</ul>
+<h2 id="代码示例：现代-RAG-系统"><a href="#代码示例：现代-RAG-系统" class="headerlink" title="代码示例：现代 RAG 系统"></a>代码示例：现代 RAG 系统</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> FAISS</span><br><span class="line"><span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化组件</span></span><br><span class="line">embeddings = OpenAIEmbeddings()</span><br><span class="line">vectorstore = FAISS.load_local(<span class="string">&quot;my_index&quot;</span>, embeddings)</span><br><span class="line">llm = ChatOpenAI(model=<span class="string">&quot;gpt-4&quot;</span>, temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 RAG 链</span></span><br><span class="line">qa_chain = RetrievalQA.from_chain_type(</span><br><span class="line">    llm=llm,</span><br><span class="line">    chain_type=<span class="string">&quot;stuff&quot;</span>,  <span class="comment"># 或 &quot;map_reduce&quot;, &quot;refine&quot;</span></span><br><span class="line">    retriever=vectorstore.as_retriever(search_kwargs=&#123;<span class="string">&quot;k&quot;</span>: <span class="number">5</span>&#125;),</span><br><span class="line">    return_source_documents=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">result = qa_chain(&#123;<span class="string">&quot;query&quot;</span>: <span class="string">&quot;什么是机器阅读理解？&quot;</span>&#125;)</span><br><span class="line"><span class="built_in">print</span>(result[<span class="string">&quot;result&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD 2.0</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.google.com/research/NaturalQuestions">Natural Questions</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2005.11401">RAG Paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.langchain.com/">LangChain Documentation</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/MRC/" rel="tag"><i class="fa fa-tag"></i> MRC</a>
+              <a href="/tags/Deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep learning</a>
+              <a href="/tags/RAG/" rel="tag"><i class="fa fa-tag"></i> RAG</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/" rel="prev" title="因果关系推断介绍">
+                  <i class="fa fa-angle-left"></i> 因果关系推断介绍
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/31/NLP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E2%80%94%E2%80%94%E8%AF%BB%E9%A6%99%E4%BE%AC%E7%A7%91%E6%8A%80%E6%9D%8E%E7%BA%A7%E4%B8%BA%E3%80%8A%E5%87%BA%E5%85%A5NLP%E9%A2%86%E5%9F%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%BB%BA%E8%AE%AE%E3%80%8B%E6%96%87%E7%AB%A0/" rel="next" title="NLP 学习路线：从基础到大语言模型">
+                  NLP 学习路线：从基础到大语言模型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

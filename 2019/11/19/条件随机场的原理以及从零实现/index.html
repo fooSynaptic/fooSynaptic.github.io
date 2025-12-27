@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="条件随机场 (CRF) 是序列标注的经典模型，尽管深度学习时代 BERT 等模型大放异彩，CRF 层仍然在 NER、词性标注等任务中发挥关键作用。 为什么需要 CRF？独立分类的问题如果对每个位置独立分类： $$\hat{y}_i &#x3D; \arg\max_y P(y | x_i)$$ 会导致标签不一致，例如： 123输入: &quot;北 京 是 中 国 首 都&quot;错误: B-LO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="条件随机场：原理与实现">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="条件随机场 (CRF) 是序列标注的经典模型，尽管深度学习时代 BERT 等模型大放异彩，CRF 层仍然在 NER、词性标注等任务中发挥关键作用。 为什么需要 CRF？独立分类的问题如果对每个位置独立分类： $$\hat{y}_i &#x3D; \arg\max_y P(y | x_i)$$ 会导致标签不一致，例如： 123输入: &quot;北 京 是 中 国 首 都&quot;错误: B-LO">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-19T00:51:23.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:46:20.433Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="CRF">
+<meta property="article:tag" content="NLP">
+<meta property="article:tag" content="machine learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/","path":"2019/11/19/条件随机场的原理以及从零实现/","title":"条件随机场：原理与实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>条件随机场：原理与实现 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-CRF%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么需要 CRF？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E5%88%86%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">独立分类的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CRF-%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">CRF 的解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">数学原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">条件概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E5%88%86%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">配分函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyTorch-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">PyTorch 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CRF-Layer"><span class="nav-number">3.1.</span> <span class="nav-text">CRF Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-BiLSTM-%E7%BB%93%E5%90%88"><span class="nav-number">3.2.</span> <span class="nav-text">与 BiLSTM 结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E5%BA%94%E7%94%A8%EF%BC%9ABERT-CRF"><span class="nav-number">4.</span> <span class="nav-text">现代应用：BERT + CRF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94%EF%BC%88CoNLL-2003-NER%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">性能对比（CoNLL-2003 NER）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="nav-number">5.</span> <span class="nav-text">训练技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%87%E7%AD%BE%E5%B9%B3%E6%BB%91"><span class="nav-number">5.1.</span> <span class="nav-text">1. 标签平滑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BA%A6%E6%9D%9F%E8%A7%A3%E7%A0%81"><span class="nav-number">5.2.</span> <span class="nav-text">2. 约束解码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">6.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="条件随机场：原理与实现 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          条件随机场：原理与实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-19 08:51:23" itemprop="dateCreated datePublished" datetime="2019-11-19T08:51:23+08:00">2019-11-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>条件随机场 (CRF) 是序列标注的经典模型，尽管深度学习时代 BERT 等模型大放异彩，CRF 层仍然在 NER、词性标注等任务中发挥关键作用。</p>
+<h2 id="为什么需要-CRF？"><a href="#为什么需要-CRF？" class="headerlink" title="为什么需要 CRF？"></a>为什么需要 CRF？</h2><h3 id="独立分类的问题"><a href="#独立分类的问题" class="headerlink" title="独立分类的问题"></a>独立分类的问题</h3><p>如果对每个位置独立分类：</p>
+<p>$$<br>\hat{y}_i &#x3D; \arg\max_y P(y | x_i)<br>$$</p>
+<p>会导致<strong>标签不一致</strong>，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;北 京 是 中 国 首 都&quot;</span><br><span class="line">错误: B-LOC I-PER O B-LOC I-LOC I-LOC I-LOC</span><br><span class="line">正确: B-LOC I-LOC O B-LOC I-LOC I-LOC I-LOC</span><br></pre></td></tr></table></figure>
+
+<h3 id="CRF-的解决方案"><a href="#CRF-的解决方案" class="headerlink" title="CRF 的解决方案"></a>CRF 的解决方案</h3><p>CRF 建模整个序列的联合概率，考虑<strong>标签之间的转移约束</strong>。</p>
+<h2 id="数学原理"><a href="#数学原理" class="headerlink" title="数学原理"></a>数学原理</h2><h3 id="条件概率"><a href="#条件概率" class="headerlink" title="条件概率"></a>条件概率</h3><p>$$<br>P(Y|X) &#x3D; \frac{1}{Z(X)} \exp\left(\sum_{t&#x3D;1}^{T} \left(\phi(y_t, x, t) + \psi(y_{t-1}, y_t)\right)\right)<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$\phi(y_t, x, t)$：发射分数（emission score）</li>
+<li>$\psi(y_{t-1}, y_t)$：转移分数（transition score）</li>
+<li>$Z(X)$：配分函数（归一化项）</li>
+</ul>
+<h3 id="配分函数"><a href="#配分函数" class="headerlink" title="配分函数"></a>配分函数</h3><p>$$<br>Z(X) &#x3D; \sum_{y \in \mathcal{Y}^T} \exp\left(\sum_{t&#x3D;1}^{T} \left(\phi(y_t, x, t) + \psi(y_{t-1}, y_t)\right)\right)<br>$$</p>
+<p>直接计算复杂度为 $O(|\mathcal{Y}|^T)$，使用<strong>前向算法</strong>可降至 $O(T \cdot |\mathcal{Y}|^2)$。</p>
+<h2 id="PyTorch-实现"><a href="#PyTorch-实现" class="headerlink" title="PyTorch 实现"></a>PyTorch 实现</h2><h3 id="CRF-Layer"><a href="#CRF-Layer" class="headerlink" title="CRF Layer"></a>CRF Layer</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CRF</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_tags, batch_first=<span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.num_tags = num_tags</span><br><span class="line">        <span class="variable language_">self</span>.batch_first = batch_first</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 转移矩阵: transitions[i, j] = 从标签 j 转移到标签 i 的分数</span></span><br><span class="line">        <span class="variable language_">self</span>.transitions = nn.Parameter(torch.randn(num_tags, num_tags))</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 起始和结束转移</span></span><br><span class="line">        <span class="variable language_">self</span>.start_transitions = nn.Parameter(torch.randn(num_tags))</span><br><span class="line">        <span class="variable language_">self</span>.end_transitions = nn.Parameter(torch.randn(num_tags))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, emissions, tags, mask=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;计算负对数似然损失&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            mask = torch.ones_like(tags, dtype=torch.<span class="built_in">bool</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.batch_first:</span><br><span class="line">            emissions = emissions.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">            tags = tags.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">            mask = mask.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算分子（正确路径的分数）</span></span><br><span class="line">        numerator = <span class="variable language_">self</span>._compute_score(emissions, tags, mask)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算分母（配分函数）</span></span><br><span class="line">        denominator = <span class="variable language_">self</span>._compute_normalizer(emissions, mask)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 负对数似然</span></span><br><span class="line">        <span class="keyword">return</span> (denominator - numerator).mean()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_compute_score</span>(<span class="params">self, emissions, tags, mask</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;计算给定标签序列的分数&quot;&quot;&quot;</span></span><br><span class="line">        seq_len, batch_size = tags.shape</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 起始分数</span></span><br><span class="line">        score = <span class="variable language_">self</span>.start_transitions[tags[<span class="number">0</span>]]</span><br><span class="line">        score += emissions[<span class="number">0</span>, torch.arange(batch_size), tags[<span class="number">0</span>]]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, seq_len):</span><br><span class="line">            <span class="comment"># 转移分数 + 发射分数</span></span><br><span class="line">            score += <span class="variable language_">self</span>.transitions[tags[i], tags[i-<span class="number">1</span>]] * mask[i]</span><br><span class="line">            score += emissions[i, torch.arange(batch_size), tags[i]] * mask[i]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 结束分数</span></span><br><span class="line">        last_tag_idx = mask.<span class="built_in">sum</span>(dim=<span class="number">0</span>) - <span class="number">1</span></span><br><span class="line">        last_tags = tags.gather(<span class="number">0</span>, last_tag_idx.unsqueeze(<span class="number">0</span>)).squeeze(<span class="number">0</span>)</span><br><span class="line">        score += <span class="variable language_">self</span>.end_transitions[last_tags]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> score</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_compute_normalizer</span>(<span class="params">self, emissions, mask</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;前向算法计算配分函数&quot;&quot;&quot;</span></span><br><span class="line">        seq_len, batch_size, num_tags = emissions.shape</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        score = <span class="variable language_">self</span>.start_transitions + emissions[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, seq_len):</span><br><span class="line">            <span class="comment"># broadcast: (batch, num_tags, 1) + (num_tags, num_tags) + (batch, 1, num_tags)</span></span><br><span class="line">            broadcast_score = score.unsqueeze(<span class="number">2</span>)</span><br><span class="line">            broadcast_emissions = emissions[i].unsqueeze(<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            next_score = broadcast_score + <span class="variable language_">self</span>.transitions + broadcast_emissions</span><br><span class="line">            next_score = torch.logsumexp(next_score, dim=<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 应用 mask</span></span><br><span class="line">            score = torch.where(mask[i].unsqueeze(<span class="number">1</span>), next_score, score)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 添加结束分数</span></span><br><span class="line">        score += <span class="variable language_">self</span>.end_transitions</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> torch.logsumexp(score, dim=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">self, emissions, mask=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Viterbi 解码&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            mask = torch.ones(emissions.shape[:<span class="number">2</span>], dtype=torch.<span class="built_in">bool</span>, device=emissions.device)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.batch_first:</span><br><span class="line">            emissions = emissions.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">            mask = mask.transpose(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>._viterbi_decode(emissions, mask)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_viterbi_decode</span>(<span class="params">self, emissions, mask</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Viterbi 算法&quot;&quot;&quot;</span></span><br><span class="line">        seq_len, batch_size, num_tags = emissions.shape</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        score = <span class="variable language_">self</span>.start_transitions + emissions[<span class="number">0</span>]</span><br><span class="line">        history = []</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, seq_len):</span><br><span class="line">            broadcast_score = score.unsqueeze(<span class="number">2</span>)</span><br><span class="line">            broadcast_emissions = emissions[i].unsqueeze(<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            next_score = broadcast_score + <span class="variable language_">self</span>.transitions + broadcast_emissions</span><br><span class="line">            next_score, indices = next_score.<span class="built_in">max</span>(dim=<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            score = torch.where(mask[i].unsqueeze(<span class="number">1</span>), next_score, score)</span><br><span class="line">            history.append(indices)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 添加结束分数</span></span><br><span class="line">        score += <span class="variable language_">self</span>.end_transitions</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 回溯</span></span><br><span class="line">        best_tags_list = []</span><br><span class="line">        _, best_last_tag = score.<span class="built_in">max</span>(dim=<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> idx <span class="keyword">in</span> <span class="built_in">range</span>(batch_size):</span><br><span class="line">            best_tags = [best_last_tag[idx].item()]</span><br><span class="line">            seq_length = <span class="built_in">int</span>(mask[:, idx].<span class="built_in">sum</span>().item())</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> hist <span class="keyword">in</span> <span class="built_in">reversed</span>(history[:seq_length-<span class="number">1</span>]):</span><br><span class="line">                best_last_tag_idx = best_tags[-<span class="number">1</span>]</span><br><span class="line">                best_tags.append(hist[idx, best_last_tag_idx].item())</span><br><span class="line">            </span><br><span class="line">            best_tags.reverse()</span><br><span class="line">            best_tags_list.append(best_tags)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> best_tags_list</span><br></pre></td></tr></table></figure>
+
+<h3 id="与-BiLSTM-结合"><a href="#与-BiLSTM-结合" class="headerlink" title="与 BiLSTM 结合"></a>与 BiLSTM 结合</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BiLSTM_CRF</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vocab_size, embed_dim, hidden_dim, num_tags</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.embedding = nn.Embedding(vocab_size, embed_dim)</span><br><span class="line">        <span class="variable language_">self</span>.lstm = nn.LSTM(embed_dim, hidden_dim // <span class="number">2</span>, </span><br><span class="line">                           num_layers=<span class="number">2</span>, bidirectional=<span class="literal">True</span>, batch_first=<span class="literal">True</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc = nn.Linear(hidden_dim, num_tags)</span><br><span class="line">        <span class="variable language_">self</span>.crf = CRF(num_tags)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, tags, mask=<span class="literal">None</span></span>):</span><br><span class="line">        embeddings = <span class="variable language_">self</span>.embedding(x)</span><br><span class="line">        lstm_out, _ = <span class="variable language_">self</span>.lstm(embeddings)</span><br><span class="line">        emissions = <span class="variable language_">self</span>.fc(lstm_out)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.crf(emissions, tags, mask)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">self, x, mask=<span class="literal">None</span></span>):</span><br><span class="line">        embeddings = <span class="variable language_">self</span>.embedding(x)</span><br><span class="line">        lstm_out, _ = <span class="variable language_">self</span>.lstm(embeddings)</span><br><span class="line">        emissions = <span class="variable language_">self</span>.fc(lstm_out)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.crf.decode(emissions, mask)</span><br></pre></td></tr></table></figure>
+
+<h2 id="现代应用：BERT-CRF"><a href="#现代应用：BERT-CRF" class="headerlink" title="现代应用：BERT + CRF"></a>现代应用：BERT + CRF</h2><p>尽管 BERT 已经很强大，但 CRF 层仍能带来一致性提升：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertModel</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BERT_CRF</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, bert_name, num_tags</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.bert = BertModel.from_pretrained(bert_name)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(<span class="number">0.1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc = nn.Linear(<span class="variable language_">self</span>.bert.config.hidden_size, num_tags)</span><br><span class="line">        <span class="variable language_">self</span>.crf = CRF(num_tags)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, input_ids, attention_mask, tags=<span class="literal">None</span></span>):</span><br><span class="line">        outputs = <span class="variable language_">self</span>.bert(input_ids, attention_mask=attention_mask)</span><br><span class="line">        sequence_output = <span class="variable language_">self</span>.dropout(outputs.last_hidden_state)</span><br><span class="line">        emissions = <span class="variable language_">self</span>.fc(sequence_output)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> tags <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.crf(emissions, tags, attention_mask.<span class="built_in">bool</span>())</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.crf.decode(emissions, attention_mask.<span class="built_in">bool</span>())</span><br></pre></td></tr></table></figure>
+
+<h3 id="性能对比（CoNLL-2003-NER）"><a href="#性能对比（CoNLL-2003-NER）" class="headerlink" title="性能对比（CoNLL-2003 NER）"></a>性能对比（CoNLL-2003 NER）</h3><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BiLSTM</td>
+<td>88.2</td>
+</tr>
+<tr>
+<td>BiLSTM + CRF</td>
+<td>90.1</td>
+</tr>
+<tr>
+<td>BERT</td>
+<td>92.4</td>
+</tr>
+<tr>
+<td>BERT + CRF</td>
+<td>92.8</td>
+</tr>
+<tr>
+<td>RoBERTa + CRF</td>
+<td>93.2</td>
+</tr>
+</tbody></table>
+<h2 id="训练技巧"><a href="#训练技巧" class="headerlink" title="训练技巧"></a>训练技巧</h2><h3 id="1-标签平滑"><a href="#1-标签平滑" class="headerlink" title="1. 标签平滑"></a>1. 标签平滑</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">label_smoothing_loss</span>(<span class="params">crf, emissions, tags, mask, epsilon=<span class="number">0.1</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;带标签平滑的 CRF 损失&quot;&quot;&quot;</span></span><br><span class="line">    nll_loss = crf(emissions, tags, mask)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 均匀分布的损失</span></span><br><span class="line">    uniform_loss = -torch.logsumexp(emissions, dim=-<span class="number">1</span>).mean()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> (<span class="number">1</span> - epsilon) * nll_loss + epsilon * uniform_loss</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-约束解码"><a href="#2-约束解码" class="headerlink" title="2. 约束解码"></a>2. 约束解码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加硬约束：B-X 后面只能接 I-X 或 O</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_constraints</span>(<span class="params">transitions, tag2idx</span>):</span><br><span class="line">    <span class="keyword">for</span> tag_from, idx_from <span class="keyword">in</span> tag2idx.items():</span><br><span class="line">        <span class="keyword">for</span> tag_to, idx_to <span class="keyword">in</span> tag2idx.items():</span><br><span class="line">            <span class="keyword">if</span> tag_from.startswith(<span class="string">&#x27;B-&#x27;</span>) <span class="keyword">or</span> tag_from.startswith(<span class="string">&#x27;I-&#x27;</span>):</span><br><span class="line">                entity = tag_from[<span class="number">2</span>:]</span><br><span class="line">                <span class="keyword">if</span> tag_to.startswith(<span class="string">&#x27;I-&#x27;</span>) <span class="keyword">and</span> tag_to[<span class="number">2</span>:] != entity:</span><br><span class="line">                    transitions.data[idx_to, idx_from] = -<span class="number">1e9</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li>Lafferty et al., <em>Conditional Random Fields</em> (2001)</li>
+<li>Huang et al., <em>Bidirectional LSTM-CRF Models for Sequence Tagging</em> (2015)</li>
+<li><a target="_blank" rel="noopener" href="https://pytorch-crf.readthedocs.io/">pytorch-crf Documentation</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+              <a href="/tags/machine-learning/" rel="tag"><i class="fa fa-tag"></i> machine learning</a>
+              <a href="/tags/CRF/" rel="tag"><i class="fa fa-tag"></i> CRF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/" rel="prev" title="BiDAF 论文解读：双向注意力流机制">
+                  <i class="fa fa-angle-left"></i> BiDAF 论文解读：双向注意力流机制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%AE%9E%E8%B7%B5/" rel="next" title="机器阅读理解实战：从零构建问答系统">
+                  机器阅读理解实战：从零构建问答系统 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

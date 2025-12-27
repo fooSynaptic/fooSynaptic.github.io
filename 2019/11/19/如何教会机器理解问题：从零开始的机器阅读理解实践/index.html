@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="本文从零开始实现一个机器阅读理解系统，涵盖数据处理、模型构建、训练和推理的完整流程。 任务定义给定上下文 $C$ 和问题 $Q$，预测答案 $A$ 在 $C$ 中的位置： $$(start, end) &#x3D; \arg\max_{i,j} P(start&#x3D;i, end&#x3D;j | C, Q)$$ 数据处理SQuAD 数据格式12345678910111213141516171">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器阅读理解实战：从零构建问答系统">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="本文从零开始实现一个机器阅读理解系统，涵盖数据处理、模型构建、训练和推理的完整流程。 任务定义给定上下文 $C$ 和问题 $Q$，预测答案 $A$ 在 $C$ 中的位置： $$(start, end) &#x3D; \arg\max_{i,j} P(start&#x3D;i, end&#x3D;j | C, Q)$$ 数据处理SQuAD 数据格式12345678910111213141516171">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-19T01:03:04.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:47:15.792Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="Deep learning">
+<meta property="article:tag" content="MRC">
+<meta property="article:tag" content="PyTorch">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%AE%9E%E8%B7%B5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%AE%9E%E8%B7%B5/","path":"2019/11/19/如何教会机器理解问题：从零开始的机器阅读理解实践/","title":"机器阅读理解实战：从零构建问答系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器阅读理解实战：从零构建问答系统 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">任务定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQuAD-%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">SQuAD 数据格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenization"><span class="nav-number">2.2.</span> <span class="nav-text">Tokenization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">模型实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-BERT-%E7%9A%84-MRC-%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">基于 BERT 的 MRC 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%EF%BC%9A%E8%81%94%E5%90%88-Start-End-%E9%A2%84%E6%B5%8B"><span class="nav-number">3.2.</span> <span class="nav-text">改进：联合 Start-End 预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">训练流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E4%B8%8E%E6%8E%A8%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">评估与推理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%96%B9%E6%B3%95%EF%BC%9A%E4%BD%BF%E7%94%A8-LLM"><span class="nav-number">6.</span> <span class="nav-text">现代方法：使用 LLM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">7.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器阅读理解实战：从零构建问答系统 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器阅读理解实战：从零构建问答系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-19 09:03:04" itemprop="dateCreated datePublished" datetime="2019-11-19T09:03:04+08:00">2019-11-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文从零开始实现一个机器阅读理解系统，涵盖数据处理、模型构建、训练和推理的完整流程。</p>
+<h2 id="任务定义"><a href="#任务定义" class="headerlink" title="任务定义"></a>任务定义</h2><p>给定上下文 $C$ 和问题 $Q$，预测答案 $A$ 在 $C$ 中的位置：</p>
+<p>$$<br>(start, end) &#x3D; \arg\max_{i,j} P(start&#x3D;i, end&#x3D;j | C, Q)<br>$$</p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><h3 id="SQuAD-数据格式"><a href="#SQuAD-数据格式" class="headerlink" title="SQuAD 数据格式"></a>SQuAD 数据格式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Optional</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Example</span>:</span><br><span class="line">    context: <span class="built_in">str</span></span><br><span class="line">    question: <span class="built_in">str</span></span><br><span class="line">    answer_text: <span class="built_in">str</span></span><br><span class="line">    start_position: <span class="built_in">int</span></span><br><span class="line">    end_position: <span class="built_in">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_squad</span>(<span class="params">file_path: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[Example]:</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        data = json.load(f)</span><br><span class="line">    </span><br><span class="line">    examples = []</span><br><span class="line">    <span class="keyword">for</span> article <span class="keyword">in</span> data[<span class="string">&#x27;data&#x27;</span>]:</span><br><span class="line">        <span class="keyword">for</span> paragraph <span class="keyword">in</span> article[<span class="string">&#x27;paragraphs&#x27;</span>]:</span><br><span class="line">            context = paragraph[<span class="string">&#x27;context&#x27;</span>]</span><br><span class="line">            <span class="keyword">for</span> qa <span class="keyword">in</span> paragraph[<span class="string">&#x27;qas&#x27;</span>]:</span><br><span class="line">                question = qa[<span class="string">&#x27;question&#x27;</span>]</span><br><span class="line">                <span class="keyword">if</span> qa.get(<span class="string">&#x27;is_impossible&#x27;</span>, <span class="literal">False</span>):</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                answer = qa[<span class="string">&#x27;answers&#x27;</span>][<span class="number">0</span>]</span><br><span class="line">                examples.append(Example(</span><br><span class="line">                    context=context,</span><br><span class="line">                    question=question,</span><br><span class="line">                    answer_text=answer[<span class="string">&#x27;text&#x27;</span>],</span><br><span class="line">                    start_position=answer[<span class="string">&#x27;answer_start&#x27;</span>],</span><br><span class="line">                    end_position=answer[<span class="string">&#x27;answer_start&#x27;</span>] + <span class="built_in">len</span>(answer[<span class="string">&#x27;text&#x27;</span>])</span><br><span class="line">                ))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> examples</span><br></pre></td></tr></table></figure>
+
+<h3 id="Tokenization"><a href="#Tokenization" class="headerlink" title="Tokenization"></a>Tokenization</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MRCTokenizer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model_name: <span class="built_in">str</span>, max_length: <span class="built_in">int</span> = <span class="number">384</span>, doc_stride: <span class="built_in">int</span> = <span class="number">128</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.tokenizer = AutoTokenizer.from_pretrained(model_name)</span><br><span class="line">        <span class="variable language_">self</span>.max_length = max_length</span><br><span class="line">        <span class="variable language_">self</span>.doc_stride = doc_stride</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">encode</span>(<span class="params">self, example: Example</span>):</span><br><span class="line">        <span class="comment"># Tokenize question and context</span></span><br><span class="line">        encoding = <span class="variable language_">self</span>.tokenizer(</span><br><span class="line">            example.question,</span><br><span class="line">            example.context,</span><br><span class="line">            max_length=<span class="variable language_">self</span>.max_length,</span><br><span class="line">            truncation=<span class="string">&#x27;only_second&#x27;</span>,</span><br><span class="line">            stride=<span class="variable language_">self</span>.doc_stride,</span><br><span class="line">            return_overflowing_tokens=<span class="literal">True</span>,</span><br><span class="line">            return_offsets_mapping=<span class="literal">True</span>,</span><br><span class="line">            padding=<span class="string">&#x27;max_length&#x27;</span>,</span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 找到答案在 token 序列中的位置</span></span><br><span class="line">        offset_mapping = encoding[<span class="string">&#x27;offset_mapping&#x27;</span>][<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        start_token = <span class="literal">None</span></span><br><span class="line">        end_token = <span class="literal">None</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> idx, (start, end) <span class="keyword">in</span> <span class="built_in">enumerate</span>(offset_mapping):</span><br><span class="line">            <span class="keyword">if</span> start &lt;= example.start_position &lt; end:</span><br><span class="line">                start_token = idx</span><br><span class="line">            <span class="keyword">if</span> start &lt; example.end_position &lt;= end:</span><br><span class="line">                end_token = idx</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&#x27;input_ids&#x27;</span>: encoding[<span class="string">&#x27;input_ids&#x27;</span>][<span class="number">0</span>],</span><br><span class="line">            <span class="string">&#x27;attention_mask&#x27;</span>: encoding[<span class="string">&#x27;attention_mask&#x27;</span>][<span class="number">0</span>],</span><br><span class="line">            <span class="string">&#x27;start_position&#x27;</span>: start_token <span class="keyword">or</span> <span class="number">0</span>,</span><br><span class="line">            <span class="string">&#x27;end_position&#x27;</span>: end_token <span class="keyword">or</span> <span class="number">0</span>,</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型实现"><a href="#模型实现" class="headerlink" title="模型实现"></a>模型实现</h2><h3 id="基于-BERT-的-MRC-模型"><a href="#基于-BERT-的-MRC-模型" class="headerlink" title="基于 BERT 的 MRC 模型"></a>基于 BERT 的 MRC 模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModel</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MRCModel</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model_name: <span class="built_in">str</span>, dropout: <span class="built_in">float</span> = <span class="number">0.1</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.bert = AutoModel.from_pretrained(model_name)</span><br><span class="line">        hidden_size = <span class="variable language_">self</span>.bert.config.hidden_size</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.dropout = nn.Dropout(dropout)</span><br><span class="line">        <span class="variable language_">self</span>.start_classifier = nn.Linear(hidden_size, <span class="number">1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.end_classifier = nn.Linear(hidden_size, <span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        input_ids: torch.Tensor,</span></span><br><span class="line"><span class="params">        attention_mask: torch.Tensor,</span></span><br><span class="line"><span class="params">        start_positions: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        end_positions: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        outputs = <span class="variable language_">self</span>.bert(input_ids=input_ids, attention_mask=attention_mask)</span><br><span class="line">        sequence_output = <span class="variable language_">self</span>.dropout(outputs.last_hidden_state)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># (batch, seq_len, 1) -&gt; (batch, seq_len)</span></span><br><span class="line">        start_logits = <span class="variable language_">self</span>.start_classifier(sequence_output).squeeze(-<span class="number">1</span>)</span><br><span class="line">        end_logits = <span class="variable language_">self</span>.end_classifier(sequence_output).squeeze(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Mask padding tokens</span></span><br><span class="line">        start_logits = start_logits.masked_fill(~attention_mask.<span class="built_in">bool</span>(), -<span class="number">1e9</span>)</span><br><span class="line">        end_logits = end_logits.masked_fill(~attention_mask.<span class="built_in">bool</span>(), -<span class="number">1e9</span>)</span><br><span class="line">        </span><br><span class="line">        loss = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> start_positions <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> end_positions <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            loss_fct = nn.CrossEntropyLoss()</span><br><span class="line">            start_loss = loss_fct(start_logits, start_positions)</span><br><span class="line">            end_loss = loss_fct(end_logits, end_positions)</span><br><span class="line">            loss = (start_loss + end_loss) / <span class="number">2</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&#x27;loss&#x27;</span>: loss,</span><br><span class="line">            <span class="string">&#x27;start_logits&#x27;</span>: start_logits,</span><br><span class="line">            <span class="string">&#x27;end_logits&#x27;</span>: end_logits,</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="改进：联合-Start-End-预测"><a href="#改进：联合-Start-End-预测" class="headerlink" title="改进：联合 Start-End 预测"></a>改进：联合 Start-End 预测</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">JointMRCModel</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;联合预测 start 和 end，考虑 start-end 依赖&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model_name: <span class="built_in">str</span>, max_answer_length: <span class="built_in">int</span> = <span class="number">30</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.bert = AutoModel.from_pretrained(model_name)</span><br><span class="line">        hidden_size = <span class="variable language_">self</span>.bert.config.hidden_size</span><br><span class="line">        <span class="variable language_">self</span>.max_answer_length = max_answer_length</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.start_classifier = nn.Linear(hidden_size, <span class="number">1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.end_classifier = nn.Linear(hidden_size * <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, input_ids, attention_mask, start_positions=<span class="literal">None</span>, end_positions=<span class="literal">None</span></span>):</span><br><span class="line">        outputs = <span class="variable language_">self</span>.bert(input_ids=input_ids, attention_mask=attention_mask)</span><br><span class="line">        H = outputs.last_hidden_state  <span class="comment"># (batch, seq_len, hidden)</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Start prediction</span></span><br><span class="line">        start_logits = <span class="variable language_">self</span>.start_classifier(H).squeeze(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.training <span class="keyword">and</span> start_positions <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 训练时使用真实的 start 位置</span></span><br><span class="line">            start_indices = start_positions.unsqueeze(-<span class="number">1</span>).unsqueeze(-<span class="number">1</span>)</span><br><span class="line">            start_repr = H.gather(<span class="number">1</span>, start_indices.expand(-<span class="number">1</span>, -<span class="number">1</span>, H.size(-<span class="number">1</span>))).squeeze(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 推理时使用预测的 start 位置</span></span><br><span class="line">            start_indices = start_logits.argmax(dim=-<span class="number">1</span>, keepdim=<span class="literal">True</span>).unsqueeze(-<span class="number">1</span>)</span><br><span class="line">            start_repr = H.gather(<span class="number">1</span>, start_indices.expand(-<span class="number">1</span>, -<span class="number">1</span>, H.size(-<span class="number">1</span>))).squeeze(<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># End prediction conditioned on start</span></span><br><span class="line">        start_repr_expanded = start_repr.unsqueeze(<span class="number">1</span>).expand(-<span class="number">1</span>, H.size(<span class="number">1</span>), -<span class="number">1</span>)</span><br><span class="line">        end_input = torch.cat([H, start_repr_expanded], dim=-<span class="number">1</span>)</span><br><span class="line">        end_logits = <span class="variable language_">self</span>.end_classifier(end_input).squeeze(-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 只允许 end &gt;= start 且在 max_answer_length 范围内</span></span><br><span class="line">        <span class="comment"># 这里简化处理，完整实现需要更复杂的 mask</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&#x27;start_logits&#x27;</span>: start_logits, <span class="string">&#x27;end_logits&#x27;</span>: end_logits&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="训练流程"><a href="#训练流程" class="headerlink" title="训练流程"></a>训练流程</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader, Dataset</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> get_linear_schedule_with_warmup</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">model, train_dataloader, val_dataloader, epochs=<span class="number">3</span>, lr=<span class="number">3e-5</span></span>):</span><br><span class="line">    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=<span class="number">0.01</span>)</span><br><span class="line">    </span><br><span class="line">    total_steps = <span class="built_in">len</span>(train_dataloader) * epochs</span><br><span class="line">    scheduler = get_linear_schedule_with_warmup(</span><br><span class="line">        optimizer, </span><br><span class="line">        num_warmup_steps=<span class="built_in">int</span>(<span class="number">0.1</span> * total_steps),</span><br><span class="line">        num_training_steps=total_steps</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    device = torch.device(<span class="string">&#x27;cuda&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line">    model.to(device)</span><br><span class="line">    </span><br><span class="line">    best_f1 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">        model.train()</span><br><span class="line">        total_loss = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> batch <span class="keyword">in</span> tqdm(train_dataloader, desc=<span class="string">f&#x27;Epoch <span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span>&#x27;</span>):</span><br><span class="line">            batch = &#123;k: v.to(device) <span class="keyword">for</span> k, v <span class="keyword">in</span> batch.items()&#125;</span><br><span class="line">            </span><br><span class="line">            outputs = model(**batch)</span><br><span class="line">            loss = outputs[<span class="string">&#x27;loss&#x27;</span>]</span><br><span class="line">            </span><br><span class="line">            loss.backward()</span><br><span class="line">            torch.nn.utils.clip_grad_norm_(model.parameters(), <span class="number">1.0</span>)</span><br><span class="line">            </span><br><span class="line">            optimizer.step()</span><br><span class="line">            scheduler.step()</span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">            </span><br><span class="line">            total_loss += loss.item()</span><br><span class="line">        </span><br><span class="line">        avg_loss = total_loss / <span class="built_in">len</span>(train_dataloader)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Epoch <span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span>, Loss: <span class="subst">&#123;avg_loss:<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Validation</span></span><br><span class="line">        f1 = evaluate(model, val_dataloader, device)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Validation F1: <span class="subst">&#123;f1:<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> f1 &gt; best_f1:</span><br><span class="line">            best_f1 = f1</span><br><span class="line">            torch.save(model.state_dict(), <span class="string">&#x27;best_model.pt&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+
+<h2 id="评估与推理"><a href="#评估与推理" class="headerlink" title="评估与推理"></a>评估与推理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize_answer</span>(<span class="params">s</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;标准化答案用于评估&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">remove_articles</span>(<span class="params">text</span>):</span><br><span class="line">        <span class="keyword">return</span> re.sub(<span class="string">r&#x27;\b(a|an|the)\b&#x27;</span>, <span class="string">&#x27; &#x27;</span>, text)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">white_space_fix</span>(<span class="params">text</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27; &#x27;</span>.join(text.split())</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">remove_punc</span>(<span class="params">text</span>):</span><br><span class="line">        exclude = <span class="built_in">set</span>(string.punctuation)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(ch <span class="keyword">for</span> ch <span class="keyword">in</span> text <span class="keyword">if</span> ch <span class="keyword">not</span> <span class="keyword">in</span> exclude)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">lower</span>(<span class="params">text</span>):</span><br><span class="line">        <span class="keyword">return</span> text.lower()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> white_space_fix(remove_articles(remove_punc(lower(s))))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_f1</span>(<span class="params">pred: <span class="built_in">str</span>, gold: <span class="built_in">str</span></span>) -&gt; <span class="built_in">float</span>:</span><br><span class="line">    pred_tokens = normalize_answer(pred).split()</span><br><span class="line">    gold_tokens = normalize_answer(gold).split()</span><br><span class="line">    </span><br><span class="line">    common = Counter(pred_tokens) &amp; Counter(gold_tokens)</span><br><span class="line">    num_same = <span class="built_in">sum</span>(common.values())</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> num_same == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    precision = num_same / <span class="built_in">len</span>(pred_tokens)</span><br><span class="line">    recall = num_same / <span class="built_in">len</span>(gold_tokens)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * precision * recall / (precision + recall)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">predict</span>(<span class="params">model, tokenizer, context: <span class="built_in">str</span>, question: <span class="built_in">str</span>, device</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;单条推理&quot;&quot;&quot;</span></span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    </span><br><span class="line">    encoding = tokenizer(</span><br><span class="line">        question, context,</span><br><span class="line">        max_length=<span class="number">384</span>,</span><br><span class="line">        truncation=<span class="string">&#x27;only_second&#x27;</span>,</span><br><span class="line">        return_tensors=<span class="string">&#x27;pt&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    encoding = &#123;k: v.to(device) <span class="keyword">for</span> k, v <span class="keyword">in</span> encoding.items()&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        outputs = model(**encoding)</span><br><span class="line">    </span><br><span class="line">    start_idx = outputs[<span class="string">&#x27;start_logits&#x27;</span>].argmax().item()</span><br><span class="line">    end_idx = outputs[<span class="string">&#x27;end_logits&#x27;</span>].argmax().item()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 确保 end &gt;= start</span></span><br><span class="line">    <span class="keyword">if</span> end_idx &lt; start_idx:</span><br><span class="line">        end_idx = start_idx</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 解码答案</span></span><br><span class="line">    answer_tokens = encoding[<span class="string">&#x27;input_ids&#x27;</span>][<span class="number">0</span>][start_idx:end_idx+<span class="number">1</span>]</span><br><span class="line">    answer = tokenizer.decode(answer_tokens, skip_special_tokens=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<h2 id="现代方法：使用-LLM"><a href="#现代方法：使用-LLM" class="headerlink" title="现代方法：使用 LLM"></a>现代方法：使用 LLM</h2><p>对于更复杂的问答需求，可以使用 LLM：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">llm_qa</span>(<span class="params">context: <span class="built_in">str</span>, question: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    client = OpenAI()</span><br><span class="line">    </span><br><span class="line">    response = client.chat.completions.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是一个问答助手。根据给定的上下文回答问题。如果答案不在上下文中，请说&#x27;无法回答&#x27;。&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;上下文：<span class="subst">&#123;context&#125;</span>\n\n问题：<span class="subst">&#123;question&#125;</span>&quot;</span>&#125;</span><br><span class="line">        ],</span><br><span class="line">        temperature=<span class="number">0</span></span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> response.choices[<span class="number">0</span>].message.content</span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Dataset</a></li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/docs/transformers/task_summary#question-answering">Hugging Face QA Pipeline</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.google.com/research/NaturalQuestions">Natural Questions</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MRC/" rel="tag"><i class="fa fa-tag"></i> MRC</a>
+              <a href="/tags/Deep-learning/" rel="tag"><i class="fa fa-tag"></i> Deep learning</a>
+              <a href="/tags/PyTorch/" rel="tag"><i class="fa fa-tag"></i> PyTorch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/" rel="prev" title="条件随机场：原理与实现">
+                  <i class="fa fa-angle-left"></i> 条件随机场：原理与实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/11/22/Nuural-Approaches-to-Machine-Reading-Comprehension-and-Dialogue/" rel="next" title="神经网络机器阅读理解：从 Attention 到 LLM">
+                  神经网络机器阅读理解：从 Attention 到 LLM <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

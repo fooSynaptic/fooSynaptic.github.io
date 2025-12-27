@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="因果推断是机器学习领域的重要研究方向，特别是在大语言模型时代，理解因果关系对于构建可解释、可信赖的 AI 系统至关重要。 为什么需要因果推断？传统机器学习依赖相关性，但相关性不等于因果性。例如：  冰淇淋销量与溺水事件正相关（共同原因：夏天） LLM 可能学到虚假相关性，导致 hallucination  因果推断帮助我们：  理解干预效果（如果我做 X，会发生什么？） 进行反事实推理（如果当时做">
+<meta property="og:type" content="article">
+<meta property="og:title" content="因果关系推断介绍">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="因果推断是机器学习领域的重要研究方向，特别是在大语言模型时代，理解因果关系对于构建可解释、可信赖的 AI 系统至关重要。 为什么需要因果推断？传统机器学习依赖相关性，但相关性不等于因果性。例如：  冰淇淋销量与溺水事件正相关（共同原因：夏天） LLM 可能学到虚假相关性，导致 hallucination  因果推断帮助我们：  理解干预效果（如果我做 X，会发生什么？） 进行反事实推理（如果当时做">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-03T15:34:37.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:42:22.797Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="bayesian network">
+<meta property="article:tag" content="causality infer">
+<meta property="article:tag" content="machine learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/","path":"2019/10/03/因果关系推断介绍/","title":"因果关系推断介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>因果关系推断介绍 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么需要因果推断？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E5%9B%BE-Causal-Graph"><span class="nav-number">2.1.</span> <span class="nav-text">因果图 (Causal Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E5%9B%A0%E6%9E%9C%E6%A8%A1%E5%9E%8B-SCM"><span class="nav-number">2.2.</span> <span class="nav-text">结构因果模型 (SCM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#do-%E7%AE%97%E5%AD%90%E4%B8%8E%E5%B9%B2%E9%A2%84"><span class="nav-number">2.3.</span> <span class="nav-text">do 算子与干预</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E5%8F%91%E7%8E%B0%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">因果发现算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PC-%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">PC 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">现代方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD%E4%B8%8E%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">因果推断与大语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-%E4%B8%AD%E7%9A%84%E5%9B%A0%E6%9E%9C%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">LLM 中的因果问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">4.2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E6%8E%A8%E7%90%86%E5%A2%9E%E5%BC%BA-RAG"><span class="nav-number">4.3.</span> <span class="nav-text">因果推理增强 RAG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E4%B8%8E%E8%B5%84%E6%BA%90"><span class="nav-number">5.</span> <span class="nav-text">工具与资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">6.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="因果关系推断介绍 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          因果关系推断介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-03 23:34:37" itemprop="dateCreated datePublished" datetime="2019-10-03T23:34:37+08:00">2019-10-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>因果推断是机器学习领域的重要研究方向，特别是在大语言模型时代，理解因果关系对于构建可解释、可信赖的 AI 系统至关重要。</p>
+<h2 id="为什么需要因果推断？"><a href="#为什么需要因果推断？" class="headerlink" title="为什么需要因果推断？"></a>为什么需要因果推断？</h2><p>传统机器学习依赖相关性，但<strong>相关性不等于因果性</strong>。例如：</p>
+<ul>
+<li>冰淇淋销量与溺水事件正相关（共同原因：夏天）</li>
+<li>LLM 可能学到虚假相关性，导致 hallucination</li>
+</ul>
+<p>因果推断帮助我们：</p>
+<ol>
+<li>理解干预效果（如果我做 X，会发生什么？）</li>
+<li>进行反事实推理（如果当时做了 Y，结果会怎样？）</li>
+<li>构建更鲁棒的模型</li>
+</ol>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><h3 id="因果图-Causal-Graph"><a href="#因果图-Causal-Graph" class="headerlink" title="因果图 (Causal Graph)"></a>因果图 (Causal Graph)</h3><p>使用有向无环图 (DAG) 表示变量之间的因果关系：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X → Y → Z    (链式结构)</span><br><span class="line">X ← W → Y    (混杂结构)  </span><br><span class="line">X → W ← Y    (对撞结构)</span><br></pre></td></tr></table></figure>
+
+<h3 id="结构因果模型-SCM"><a href="#结构因果模型-SCM" class="headerlink" title="结构因果模型 (SCM)"></a>结构因果模型 (SCM)</h3><p>$$<br>Y &#x3D; f(X, U_Y)<br>$$</p>
+<p>其中 $X$ 是原因，$Y$ 是结果，$U_Y$ 是噪声项。</p>
+<h3 id="do-算子与干预"><a href="#do-算子与干预" class="headerlink" title="do 算子与干预"></a>do 算子与干预</h3><p>区分观测和干预：</p>
+<ul>
+<li><strong>观测</strong>：$P(Y|X&#x3D;x)$ — 看到 X&#x3D;x 时 Y 的分布</li>
+<li><strong>干预</strong>：$P(Y|do(X&#x3D;x))$ — 强制设置 X&#x3D;x 时 Y 的分布</li>
+</ul>
+<h2 id="因果发现算法"><a href="#因果发现算法" class="headerlink" title="因果发现算法"></a>因果发现算法</h2><h3 id="PC-算法"><a href="#PC-算法" class="headerlink" title="PC 算法"></a>PC 算法</h3><p>基于条件独立性检验的经典算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PC 算法伪代码</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pc_algorithm</span>(<span class="params">data, alpha=<span class="number">0.05</span></span>):</span><br><span class="line">    <span class="comment"># 1. 初始化完全图</span></span><br><span class="line">    G = complete_graph(variables)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 骨架学习：移除条件独立的边</span></span><br><span class="line">    <span class="keyword">for</span> (X, Y) <span class="keyword">in</span> edges(G):</span><br><span class="line">        <span class="keyword">for</span> S <span class="keyword">in</span> subsets(neighbors):</span><br><span class="line">            <span class="keyword">if</span> conditional_independent(X, Y, S, alpha):</span><br><span class="line">                remove_edge(G, X, Y)</span><br><span class="line">                sep_set[X, Y] = S</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 方向确定：识别 v-structure</span></span><br><span class="line">    orient_v_structures(G, sep_set)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> G</span><br></pre></td></tr></table></figure>
+
+<p>Python 实现参考：<a target="_blank" rel="noopener" href="https://github.com/fooSynaptic/py_pcalg">fooSynaptic&#x2F;py_pcalg</a></p>
+<h3 id="现代方法"><a href="#现代方法" class="headerlink" title="现代方法"></a>现代方法</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>NOTEARS</strong></td>
+<td>连续优化，可微分</td>
+<td>线性&#x2F;非线性因果发现</td>
+</tr>
+<tr>
+<td><strong>DAG-GNN</strong></td>
+<td>基于图神经网络</td>
+<td>大规模因果图学习</td>
+</tr>
+<tr>
+<td><strong>Causal Transformer</strong></td>
+<td>结合注意力机制</td>
+<td>时序因果推断</td>
+</tr>
+</tbody></table>
+<h2 id="因果推断与大语言模型"><a href="#因果推断与大语言模型" class="headerlink" title="因果推断与大语言模型"></a>因果推断与大语言模型</h2><h3 id="LLM-中的因果问题"><a href="#LLM-中的因果问题" class="headerlink" title="LLM 中的因果问题"></a>LLM 中的因果问题</h3><ol>
+<li><strong>Hallucination</strong>：模型学到虚假相关性</li>
+<li><strong>Bias</strong>：训练数据中的混杂因素</li>
+<li><strong>Robustness</strong>：分布外泛化能力差</li>
+</ol>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 因果提示 (Causal Prompting) 示例</span></span><br><span class="line">prompt = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">请分析以下事件的因果关系，而非相关性：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">事件A: 公司增加广告投入</span></span><br><span class="line"><span class="string">事件B: 销售额上升</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">问：A 是否导致了 B？请考虑可能的混杂因素。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="因果推理增强-RAG"><a href="#因果推理增强-RAG" class="headerlink" title="因果推理增强 RAG"></a>因果推理增强 RAG</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CausalRAG</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, retriever, causal_graph</span>):</span><br><span class="line">        <span class="variable language_">self</span>.retriever = retriever</span><br><span class="line">        <span class="variable language_">self</span>.causal_graph = causal_graph</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">retrieve</span>(<span class="params">self, query</span>):</span><br><span class="line">        <span class="comment"># 1. 识别查询中的因果关系</span></span><br><span class="line">        cause, effect = extract_causal_pair(query)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 2. 基于因果图过滤无关文档</span></span><br><span class="line">        relevant_vars = <span class="variable language_">self</span>.causal_graph.ancestors(effect)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 3. 检索因果相关的文档</span></span><br><span class="line">        docs = <span class="variable language_">self</span>.retriever.search(query)</span><br><span class="line">        <span class="keyword">return</span> filter_by_causal_relevance(docs, relevant_vars)</span><br></pre></td></tr></table></figure>
+
+<h2 id="工具与资源"><a href="#工具与资源" class="headerlink" title="工具与资源"></a>工具与资源</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>语言</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DoWhy</strong></td>
+<td>Python</td>
+<td>因果推断框架</td>
+</tr>
+<tr>
+<td><strong>CausalNex</strong></td>
+<td>Python</td>
+<td>贝叶斯网络 + 因果发现</td>
+</tr>
+<tr>
+<td><strong>pgmpy</strong></td>
+<td>Python</td>
+<td>概率图模型</td>
+</tr>
+<tr>
+<td><strong>Tetrad</strong></td>
+<td>Java</td>
+<td>因果搜索算法</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DoWhy 示例</span></span><br><span class="line"><span class="keyword">import</span> dowhy</span><br><span class="line"><span class="keyword">from</span> dowhy <span class="keyword">import</span> CausalModel</span><br><span class="line"></span><br><span class="line">model = CausalModel(</span><br><span class="line">    data=df,</span><br><span class="line">    treatment=<span class="string">&#x27;treatment&#x27;</span>,</span><br><span class="line">    outcome=<span class="string">&#x27;outcome&#x27;</span>,</span><br><span class="line">    graph=<span class="string">&#x27;digraph &#123;treatment -&gt; outcome; confounder -&gt; treatment; confounder -&gt; outcome&#125;&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 识别因果效应</span></span><br><span class="line">identified = model.identify_effect()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 估计因果效应</span></span><br><span class="line">estimate = model.estimate_effect(identified, method_name=<span class="string">&quot;backdoor.propensity_score_matching&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li>Judea Pearl, <em>The Book of Why</em> (2018)</li>
+<li>Peters et al., <em>Elements of Causal Inference</em> (2017)</li>
+<li><a target="_blank" rel="noopener" href="https://cs.stanford.edu/~ermon/cs228/">Stanford CS 228: Probabilistic Graphical Models</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/machine-learning/" rel="tag"><i class="fa fa-tag"></i> machine learning</a>
+              <a href="/tags/bayesian-network/" rel="tag"><i class="fa fa-tag"></i> bayesian network</a>
+              <a href="/tags/causality-infer/" rel="tag"><i class="fa fa-tag"></i> causality infer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/03/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B9%8B%E4%B8%80%EF%BC%9ATruncate-SVD-%E5%92%8Crandom-SVD/" rel="prev" title="矩阵分解：从 SVD 到现代 AI 应用">
+                  <i class="fa fa-angle-left"></i> 矩阵分解：从 SVD 到现代 AI 应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/03/%E5%BD%93%E6%88%91%E4%BB%AC%E6%8A%8A%E7%9B%AE%E5%85%89%E6%94%BE%E5%9C%A8%E6%9C%BA%E5%99%A8%E9%98%85%E8%AF%BB%E7%90%86%E8%A7%A3%EF%BC%8C%E6%88%91%E4%BB%AC%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="next" title="机器阅读理解：从传统方法到大语言模型">
+                  机器阅读理解：从传统方法到大语言模型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

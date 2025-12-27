@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="矩阵分解是机器学习的基石技术，从传统的推荐系统到现代大语言模型的参数高效微调（LoRA），都离不开矩阵分解的思想。 奇异值分解 (SVD)基本形式任意矩阵 $A \in \mathbb{R}^{m \times n}$ 可以分解为： $$A &#x3D; U \Sigma V^T$$ 其中：  $U \in \mathbb{R}^{m \times m}$：左奇异向量（正交矩阵） $\Sigma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矩阵分解：从 SVD 到现代 AI 应用">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/10/03/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B9%8B%E4%B8%80%EF%BC%9ATruncate-SVD-%E5%92%8Crandom-SVD/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="矩阵分解是机器学习的基石技术，从传统的推荐系统到现代大语言模型的参数高效微调（LoRA），都离不开矩阵分解的思想。 奇异值分解 (SVD)基本形式任意矩阵 $A \in \mathbb{R}^{m \times n}$ 可以分解为： $$A &#x3D; U \Sigma V^T$$ 其中：  $U \in \mathbb{R}^{m \times m}$：左奇异向量（正交矩阵） $\Sigma">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-03T15:32:18.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:43:48.525Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="linear algebra">
+<meta property="article:tag" content="machine learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/10/03/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B9%8B%E4%B8%80%EF%BC%9ATruncate-SVD-%E5%92%8Crandom-SVD/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/10/03/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B9%8B%E4%B8%80%EF%BC%9ATruncate-SVD-%E5%92%8Crandom-SVD/","path":"2019/10/03/矩阵分解之一：Truncate-SVD-和random-SVD/","title":"矩阵分解：从 SVD 到现代 AI 应用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>矩阵分解：从 SVD 到现代 AI 应用 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3-SVD"><span class="nav-number">1.</span> <span class="nav-text">奇异值分解 (SVD)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">基本形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Truncated-SVD"><span class="nav-number">1.2.</span> <span class="nav-text">Truncated SVD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Randomized-SVD"><span class="nav-number">2.</span> <span class="nav-text">Randomized SVD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%AF%B9%E6%AF%94"><span class="nav-number">2.2.</span> <span class="nav-text">复杂度对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E5%BA%94%E7%94%A8%EF%BC%9ALoRA"><span class="nav-number">3.</span> <span class="nav-text">现代应用：LoRA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LoRA-%E5%8E%9F%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">LoRA 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">实现示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E6%95%88%E7%8E%87"><span class="nav-number">3.3.</span> <span class="nav-text">参数效率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">其他应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.1.</span> <span class="nav-text">1. 推荐系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%96%87%E6%9C%AC%E8%A1%A8%E7%A4%BA-LSA"><span class="nav-number">4.2.</span> <span class="nav-text">2. 文本表示 (LSA)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9"><span class="nav-number">4.3.</span> <span class="nav-text">3. 图像压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">数值稳定性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">条件数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E5%8C%96-SVD"><span class="nav-number">5.2.</span> <span class="nav-text">正则化 SVD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">6.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/10/03/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3%E4%B9%8B%E4%B8%80%EF%BC%9ATruncate-SVD-%E5%92%8Crandom-SVD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="矩阵分解：从 SVD 到现代 AI 应用 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          矩阵分解：从 SVD 到现代 AI 应用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-03 23:32:18" itemprop="dateCreated datePublished" datetime="2019-10-03T23:32:18+08:00">2019-10-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>矩阵分解是机器学习的基石技术，从传统的推荐系统到现代大语言模型的参数高效微调（LoRA），都离不开矩阵分解的思想。</p>
+<h2 id="奇异值分解-SVD"><a href="#奇异值分解-SVD" class="headerlink" title="奇异值分解 (SVD)"></a>奇异值分解 (SVD)</h2><h3 id="基本形式"><a href="#基本形式" class="headerlink" title="基本形式"></a>基本形式</h3><p>任意矩阵 $A \in \mathbb{R}^{m \times n}$ 可以分解为：</p>
+<p>$$<br>A &#x3D; U \Sigma V^T<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$U \in \mathbb{R}^{m \times m}$：左奇异向量（正交矩阵）</li>
+<li>$\Sigma \in \mathbb{R}^{m \times n}$：奇异值对角矩阵</li>
+<li>$V \in \mathbb{R}^{n \times n}$：右奇异向量（正交矩阵）</li>
+</ul>
+<h3 id="Truncated-SVD"><a href="#Truncated-SVD" class="headerlink" title="Truncated SVD"></a>Truncated SVD</h3><p>保留前 $r$ 个最大奇异值：</p>
+<p>$$<br>A \approx A_r &#x3D; U_r \Sigma_r V_r^T<br>$$</p>
+<p>这是<strong>最优</strong>的秩 $r$ 近似（Eckart-Young 定理）：</p>
+<p>$$<br>A_r &#x3D; \arg\min_{\text{rank}(B) &#x3D; r} |A - B|_F<br>$$</p>
+<h2 id="Randomized-SVD"><a href="#Randomized-SVD" class="headerlink" title="Randomized SVD"></a>Randomized SVD</h2><p>当矩阵规模巨大时，精确 SVD 计算代价过高。Randomized SVD 提供了高效的近似方法。</p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> linalg</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">randomized_svd</span>(<span class="params">A, n_components, n_oversamples=<span class="number">10</span>, n_iter=<span class="number">4</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Randomized SVD for large matrices.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        A: Input matrix (m x n)</span></span><br><span class="line"><span class="string">        n_components: Number of singular values to compute</span></span><br><span class="line"><span class="string">        n_oversamples: Additional random vectors for accuracy</span></span><br><span class="line"><span class="string">        n_iter: Number of power iterations</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        U, s, Vt: Truncated SVD components</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    m, n = A.shape</span><br><span class="line">    n_random = n_components + n_oversamples</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 1: Random projection</span></span><br><span class="line">    Q = np.random.randn(n, n_random)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 2: Power iteration for accuracy</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n_iter):</span><br><span class="line">        Q, _ = linalg.lu(A @ Q, permute_l=<span class="literal">True</span>)</span><br><span class="line">        Q, _ = linalg.lu(A.T @ Q, permute_l=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    Q, _ = linalg.qr(A @ Q, mode=<span class="string">&#x27;economic&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Step 3: Project and compute SVD</span></span><br><span class="line">    B = Q.T @ A</span><br><span class="line">    Uhat, s, Vt = linalg.svd(B, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    U = Q @ Uhat</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> U[:, :n_components], s[:n_components], Vt[:n_components, :]</span><br></pre></td></tr></table></figure>
+
+<h3 id="复杂度对比"><a href="#复杂度对比" class="headerlink" title="复杂度对比"></a>复杂度对比</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确 SVD</td>
+<td>$O(mn \cdot \min(m,n))$</td>
+<td>$O(mn)$</td>
+</tr>
+<tr>
+<td>Randomized SVD</td>
+<td>$O(mn \cdot r)$</td>
+<td>$O((m+n) \cdot r)$</td>
+</tr>
+<tr>
+<td>Truncated SVD (Lanczos)</td>
+<td>$O(mn \cdot r)$</td>
+<td>$O((m+n) \cdot r)$</td>
+</tr>
+</tbody></table>
+<h2 id="现代应用：LoRA"><a href="#现代应用：LoRA" class="headerlink" title="现代应用：LoRA"></a>现代应用：LoRA</h2><p>LoRA (Low-Rank Adaptation) 是大语言模型参数高效微调的核心技术，直接利用了低秩分解的思想。</p>
+<h3 id="LoRA-原理"><a href="#LoRA-原理" class="headerlink" title="LoRA 原理"></a>LoRA 原理</h3><p>预训练权重 $W_0$ 固定，只训练低秩增量：</p>
+<p>$$<br>W &#x3D; W_0 + \Delta W &#x3D; W_0 + BA<br>$$</p>
+<p>其中 $B \in \mathbb{R}^{d \times r}$，$A \in \mathbb{R}^{r \times k}$，$r \ll \min(d, k)$。</p>
+<h3 id="实现示例"><a href="#实现示例" class="headerlink" title="实现示例"></a>实现示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LoRALayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features, rank=<span class="number">4</span>, alpha=<span class="number">1.0</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.rank = rank</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 原始权重（冻结）</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Linear(in_features, out_features, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.W.weight.requires_grad = <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 低秩分解</span></span><br><span class="line">        <span class="variable language_">self</span>.A = nn.Linear(in_features, rank, bias=<span class="literal">False</span>)</span><br><span class="line">        <span class="variable language_">self</span>.B = nn.Linear(rank, out_features, bias=<span class="literal">False</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        nn.init.kaiming_uniform_(<span class="variable language_">self</span>.A.weight)</span><br><span class="line">        nn.init.zeros_(<span class="variable language_">self</span>.B.weight)</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.scaling = alpha / rank</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># W(x) + scaling * B(A(x))</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.W(x) + <span class="variable language_">self</span>.scaling * <span class="variable language_">self</span>.B(<span class="variable language_">self</span>.A(x))</span><br></pre></td></tr></table></figure>
+
+<h3 id="参数效率"><a href="#参数效率" class="headerlink" title="参数效率"></a>参数效率</h3><p>对于 LLaMA-7B：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>可训练参数</th>
+<th>显存占用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全量微调</td>
+<td>7B (100%)</td>
+<td>~140GB</td>
+</tr>
+<tr>
+<td>LoRA (r&#x3D;8)</td>
+<td>4.7M (0.07%)</td>
+<td>~14GB</td>
+</tr>
+<tr>
+<td>LoRA (r&#x3D;16)</td>
+<td>9.4M (0.13%)</td>
+<td>~16GB</td>
+</tr>
+</tbody></table>
+<h2 id="其他应用"><a href="#其他应用" class="headerlink" title="其他应用"></a>其他应用</h2><h3 id="1-推荐系统"><a href="#1-推荐系统" class="headerlink" title="1. 推荐系统"></a>1. 推荐系统</h3><p>矩阵分解用于协同过滤：</p>
+<p>$$<br>R \approx U V^T<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 surprise 库</span></span><br><span class="line"><span class="keyword">from</span> surprise <span class="keyword">import</span> SVD, Dataset, Reader</span><br><span class="line"></span><br><span class="line">reader = Reader(rating_scale=(<span class="number">1</span>, <span class="number">5</span>))</span><br><span class="line">data = Dataset.load_from_df(df[[<span class="string">&#x27;user&#x27;</span>, <span class="string">&#x27;item&#x27;</span>, <span class="string">&#x27;rating&#x27;</span>]], reader)</span><br><span class="line">model = SVD(n_factors=<span class="number">100</span>)</span><br><span class="line">model.fit(trainset)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-文本表示-LSA"><a href="#2-文本表示-LSA" class="headerlink" title="2. 文本表示 (LSA)"></a>2. 文本表示 (LSA)</h3><p>潜在语义分析：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> TruncatedSVD</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"></span><br><span class="line">vectorizer = TfidfVectorizer(max_features=<span class="number">10000</span>)</span><br><span class="line">X = vectorizer.fit_transform(documents)</span><br><span class="line"></span><br><span class="line">svd = TruncatedSVD(n_components=<span class="number">100</span>)</span><br><span class="line">X_reduced = svd.fit_transform(X)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-图像压缩"><a href="#3-图像压缩" class="headerlink" title="3. 图像压缩"></a>3. 图像压缩</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compress_image</span>(<span class="params">image_path, n_components=<span class="number">50</span></span>):</span><br><span class="line">    img = np.array(Image.<span class="built_in">open</span>(image_path).convert(<span class="string">&#x27;L&#x27;</span>))</span><br><span class="line">    U, s, Vt = np.linalg.svd(img, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 保留前 n_components 个奇异值</span></span><br><span class="line">    compressed = U[:, :n_components] @ np.diag(s[:n_components]) @ Vt[:n_components, :]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> compressed.astype(np.uint8)</span><br></pre></td></tr></table></figure>
+
+<h2 id="数值稳定性"><a href="#数值稳定性" class="headerlink" title="数值稳定性"></a>数值稳定性</h2><h3 id="条件数"><a href="#条件数" class="headerlink" title="条件数"></a>条件数</h3><p>$$<br>\kappa(A) &#x3D; \frac{\sigma_{\max}}{\sigma_{\min}}<br>$$</p>
+<p>条件数过大会导致数值不稳定。</p>
+<h3 id="正则化-SVD"><a href="#正则化-SVD" class="headerlink" title="正则化 SVD"></a>正则化 SVD</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">regularized_svd</span>(<span class="params">A, lambda_reg=<span class="number">0.01</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Add regularization for numerical stability.&quot;&quot;&quot;</span></span><br><span class="line">    U, s, Vt = np.linalg.svd(A, full_matrices=<span class="literal">False</span>)</span><br><span class="line">    s_reg = s / (s**<span class="number">2</span> + lambda_reg)</span><br><span class="line">    <span class="keyword">return</span> U, s_reg, Vt</span><br></pre></td></tr></table></figure>
+
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li>Halko et al., <em>Finding Structure with Randomness</em> (2011)</li>
+<li>Hu et al., <em>LoRA: Low-Rank Adaptation of Large Language Models</em> (2021)</li>
+<li><a target="_blank" rel="noopener" href="https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html">NumPy SVD Documentation</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/machine-learning/" rel="tag"><i class="fa fa-tag"></i> machine learning</a>
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/linear-algebra/" rel="tag"><i class="fa fa-tag"></i> linear algebra</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/03/%E5%BC%80%E7%AF%87/" rel="prev" title="开篇">
+                  <i class="fa fa-angle-left"></i> 开篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/03/%E5%9B%A0%E6%9E%9C%E5%85%B3%E7%B3%BB%E6%8E%A8%E6%96%AD%E4%BB%8B%E7%BB%8D/" rel="next" title="因果关系推断介绍">
+                  因果关系推断介绍 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

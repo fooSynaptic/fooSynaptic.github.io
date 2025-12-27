@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="BiDAF (Bi-Directional Attention Flow) 是机器阅读理解领域的经典模型，其双向注意力机制对后续 Transformer 架构产生了深远影响。 核心创新1. Memory-less Attention传统动态注意力 vs BiDAF 的无记忆注意力：    特性 Dynamic Attention Memory-less Attention    依赖 前一时间步的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BiDAF 论文解读：双向注意力流机制">
+<meta property="og:url" content="https://foosynaptic.github.io/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="BiDAF (Bi-Directional Attention Flow) 是机器阅读理解领域的经典模型，其双向注意力机制对后续 Transformer 架构产生了深远影响。 核心创新1. Memory-less Attention传统动态注意力 vs BiDAF 的无记忆注意力：    特性 Dynamic Attention Memory-less Attention    依赖 前一时间步的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-19T00:47:58.000Z">
+<meta property="article:modified_time" content="2025-12-27T18:45:19.934Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="MRC">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/","path":"2019/11/19/论文梗概：Bi-Directional-Attention-Flow-for-Machine-Comprehension/","title":"BiDAF 论文解读：双向注意力流机制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>BiDAF 论文解读：双向注意力流机制 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0"><span class="nav-number">1.</span> <span class="nav-text">核心创新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Memory-less-Attention"><span class="nav-number">1.1.</span> <span class="nav-text">1. Memory-less Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%8C%E5%90%91%E6%B3%A8%E6%84%8F%E5%8A%9B"><span class="nav-number">1.2.</span> <span class="nav-text">2. 双向注意力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE"><span class="nav-number">2.1.</span> <span class="nav-text">数学表达</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyTorch-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">PyTorch 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E-Transformer-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">4.</span> <span class="nav-text">与 Transformer 的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%BC%94%E8%BF%9B"><span class="nav-number">5.</span> <span class="nav-text">现代演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Cross-Attention-in-Transformer"><span class="nav-number">5.1.</span> <span class="nav-text">1. Cross-Attention in Transformer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-FiD-Fusion-in-Decoder"><span class="nav-number">5.2.</span> <span class="nav-text">2. FiD (Fusion-in-Decoder)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%EF%BC%88%E5%8E%9F%E8%AE%BA%E6%96%87%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">实验结果（原论文）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">7.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="BiDAF 论文解读：双向注意力流机制 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BiDAF 论文解读：双向注意力流机制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-11-19 08:47:58" itemprop="dateCreated datePublished" datetime="2019-11-19T08:47:58+08:00">2019-11-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>BiDAF (Bi-Directional Attention Flow) 是机器阅读理解领域的经典模型，其双向注意力机制对后续 Transformer 架构产生了深远影响。</p>
+<h2 id="核心创新"><a href="#核心创新" class="headerlink" title="核心创新"></a>核心创新</h2><h3 id="1-Memory-less-Attention"><a href="#1-Memory-less-Attention" class="headerlink" title="1. Memory-less Attention"></a>1. Memory-less Attention</h3><p>传统动态注意力 vs BiDAF 的无记忆注意力：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Dynamic Attention</th>
+<th>Memory-less Attention</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>依赖</td>
+<td>前一时间步的 attended vector</td>
+<td>仅当前 query 和 context</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>可建模时序依赖</td>
+<td>避免错误累积</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>错误会传播</td>
+<td>无法建模长程依赖</td>
+</tr>
+</tbody></table>
+<h3 id="2-双向注意力"><a href="#2-双向注意力" class="headerlink" title="2. 双向注意力"></a>2. 双向注意力</h3><p>同时计算：</p>
+<ul>
+<li><strong>Context-to-Query (C2Q)</strong>：每个 context 词最相关的 query 词</li>
+<li><strong>Query-to-Context (Q2C)</strong>：对回答问题最关键的 context 词</li>
+</ul>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input → Embedding → Encoding → Attention → Modeling → Output</span><br><span class="line">  │         │           │          │           │         │</span><br><span class="line"> 词向量    字符CNN     BiLSTM    双向注意力   BiLSTM   Span预测</span><br></pre></td></tr></table></figure>
+
+<h3 id="数学表达"><a href="#数学表达" class="headerlink" title="数学表达"></a>数学表达</h3><p><strong>相似度矩阵</strong>：</p>
+<p>$$<br>S_{ij} &#x3D; \alpha(H_i, U_j) &#x3D; w^T[H_i; U_j; H_i \odot U_j]<br>$$</p>
+<p>其中 $H \in \mathbb{R}^{T \times d}$ 是 context 表示，$U \in \mathbb{R}^{J \times d}$ 是 query 表示。</p>
+<p><strong>C2Q Attention</strong>：</p>
+<p>$$<br>\tilde{U}<em>i &#x3D; \sum_j a</em>{ij} U_j, \quad a_i &#x3D; \text{softmax}(S_i)<br>$$</p>
+<p><strong>Q2C Attention</strong>：</p>
+<p>$$<br>\tilde{H} &#x3D; \sum_i b_i H_i, \quad b &#x3D; \text{softmax}(\max_j S_{:j})<br>$$</p>
+<p><strong>融合表示</strong>：</p>
+<p>$$<br>G_i &#x3D; [H_i; \tilde{U}_i; H_i \odot \tilde{U}_i; H_i \odot \tilde{H}]<br>$$</p>
+<h2 id="PyTorch-实现"><a href="#PyTorch-实现" class="headerlink" title="PyTorch 实现"></a>PyTorch 实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BiDAFAttention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Linear(hidden_size * <span class="number">3</span>, <span class="number">1</span>, bias=<span class="literal">False</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, context, query, c_mask, q_mask</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            context: (batch, c_len, hidden)</span></span><br><span class="line"><span class="string">            query: (batch, q_len, hidden)</span></span><br><span class="line"><span class="string">            c_mask: (batch, c_len)</span></span><br><span class="line"><span class="string">            q_mask: (batch, q_len)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        batch, c_len, hidden = context.size()</span><br><span class="line">        q_len = query.size(<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 扩展维度以计算所有 (i, j) 对</span></span><br><span class="line">        c_expand = context.unsqueeze(<span class="number">2</span>).expand(-<span class="number">1</span>, -<span class="number">1</span>, q_len, -<span class="number">1</span>)</span><br><span class="line">        q_expand = query.unsqueeze(<span class="number">1</span>).expand(-<span class="number">1</span>, c_len, -<span class="number">1</span>, -<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算相似度矩阵 S</span></span><br><span class="line">        cq = torch.cat([c_expand, q_expand, c_expand * q_expand], dim=-<span class="number">1</span>)</span><br><span class="line">        S = <span class="variable language_">self</span>.W(cq).squeeze(-<span class="number">1</span>)  <span class="comment"># (batch, c_len, q_len)</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Mask</span></span><br><span class="line">        q_mask_expand = q_mask.unsqueeze(<span class="number">1</span>).expand(-<span class="number">1</span>, c_len, -<span class="number">1</span>)</span><br><span class="line">        S = S.masked_fill(~q_mask_expand, -<span class="number">1e9</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># C2Q attention</span></span><br><span class="line">        a = torch.softmax(S, dim=-<span class="number">1</span>)</span><br><span class="line">        c2q = torch.bmm(a, query)  <span class="comment"># (batch, c_len, hidden)</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Q2C attention</span></span><br><span class="line">        b = torch.softmax(S.<span class="built_in">max</span>(dim=-<span class="number">1</span>)[<span class="number">0</span>], dim=-<span class="number">1</span>)</span><br><span class="line">        q2c = torch.bmm(b.unsqueeze(<span class="number">1</span>), context)  <span class="comment"># (batch, 1, hidden)</span></span><br><span class="line">        q2c = q2c.expand(-<span class="number">1</span>, c_len, -<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 融合</span></span><br><span class="line">        G = torch.cat([context, c2q, context * c2q, context * q2c], dim=-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> G</span><br></pre></td></tr></table></figure>
+
+<h2 id="与-Transformer-的对比"><a href="#与-Transformer-的对比" class="headerlink" title="与 Transformer 的对比"></a>与 Transformer 的对比</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>BiDAF</th>
+<th>Transformer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>注意力方向</td>
+<td>双向（C2Q, Q2C）</td>
+<td>全方向自注意力</td>
+</tr>
+<tr>
+<td>位置编码</td>
+<td>BiLSTM 隐式编码</td>
+<td>显式位置编码</td>
+</tr>
+<tr>
+<td>并行化</td>
+<td>受限于 RNN</td>
+<td>完全并行</td>
+</tr>
+<tr>
+<td>长距离依赖</td>
+<td>受限</td>
+<td>理论上无限</td>
+</tr>
+<tr>
+<td>参数量</td>
+<td>较少</td>
+<td>较多</td>
+</tr>
+</tbody></table>
+<h2 id="现代演进"><a href="#现代演进" class="headerlink" title="现代演进"></a>现代演进</h2><p>BiDAF 的思想在现代模型中的体现：</p>
+<h3 id="1-Cross-Attention-in-Transformer"><a href="#1-Cross-Attention-in-Transformer" class="headerlink" title="1. Cross-Attention in Transformer"></a>1. Cross-Attention in Transformer</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CrossAttention</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, d_model, n_heads</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.mha = nn.MultiheadAttention(d_model, n_heads)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, query, key_value</span>):</span><br><span class="line">        <span class="comment"># query 来自一个序列，key/value 来自另一个序列</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.mha(query, key_value, key_value)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-FiD-Fusion-in-Decoder"><a href="#2-FiD-Fusion-in-Decoder" class="headerlink" title="2. FiD (Fusion-in-Decoder)"></a>2. FiD (Fusion-in-Decoder)</h3><p>用于 RAG 的架构，类似 BiDAF 的融合思想：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FiD</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, encoder, decoder</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="variable language_">self</span>.encoder = encoder</span><br><span class="line">        <span class="variable language_">self</span>.decoder = decoder</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, question, passages</span>):</span><br><span class="line">        <span class="comment"># 独立编码每个 passage</span></span><br><span class="line">        encoded = []</span><br><span class="line">        <span class="keyword">for</span> passage <span class="keyword">in</span> passages:</span><br><span class="line">            enc = <span class="variable language_">self</span>.encoder(question + passage)</span><br><span class="line">            encoded.append(enc)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 融合解码</span></span><br><span class="line">        fused = torch.cat(encoded, dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.decoder(fused)</span><br></pre></td></tr></table></figure>
+
+<h2 id="实验结果（原论文）"><a href="#实验结果（原论文）" class="headerlink" title="实验结果（原论文）"></a>实验结果（原论文）</h2><p>在 SQuAD 1.1 上的表现：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>EM</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BiDAF</td>
+<td>67.7</td>
+<td>77.3</td>
+</tr>
+<tr>
+<td>BiDAF + Self Attention</td>
+<td>72.1</td>
+<td>81.1</td>
+</tr>
+<tr>
+<td>BERT-base</td>
+<td>80.8</td>
+<td>88.5</td>
+</tr>
+<tr>
+<td>GPT-4 (few-shot)</td>
+<td>~90</td>
+<td>~95</td>
+</tr>
+</tbody></table>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1611.01603">BiDAF Paper</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1810.04805">BERT for QA</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>转载请注明出处</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MRC/" rel="tag"><i class="fa fa-tag"></i> MRC</a>
+              <a href="/tags/attention/" rel="tag"><i class="fa fa-tag"></i> attention</a>
+              <a href="/tags/deep-learning/" rel="tag"><i class="fa fa-tag"></i> deep learning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E5%8E%BB%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%E5%92%8C%E6%96%87%E6%9C%AC%E5%B9%B6%E4%B8%94%E5%9B%9E%E7%AD%94%E9%97%AE%E9%A2%98%EF%BC%88tensorflow%E5%AE%9E%E6%88%98%EF%BC%89/" rel="prev" title="MRC 模型实现：从 TensorFlow 到 PyTorch">
+                  <i class="fa fa-angle-left"></i> MRC 模型实现：从 TensorFlow 到 PyTorch
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/11/19/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E7%9A%84%E5%8E%9F%E7%90%86%E4%BB%A5%E5%8F%8A%E4%BB%8E%E9%9B%B6%E5%AE%9E%E7%8E%B0/" rel="next" title="条件随机场：原理与实现">
+                  条件随机场：原理与实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
