@@ -1,0 +1,183 @@
+# NexT Theme Configuration
+# See: https://theme-next.js.org/docs/getting-started/configuration
+
+# ---------------------------------------------------------------
+# Scheme Settings
+# ---------------------------------------------------------------
+scheme: Muse
+
+# Dark Mode
+darkmode: false
+
+# ---------------------------------------------------------------
+# Site Information Settings
+# ---------------------------------------------------------------
+
+favicon:
+  small: /images/jojo_small.ico
+  medium: /images/jojo_median.ico
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+
+# ---------------------------------------------------------------
+# Menu Settings
+# ---------------------------------------------------------------
+
+menu:
+  home: / || fa fa-home
+  archives: /archives/ || fa fa-archive
+  tags: /tags/ || fa fa-tags
+  categories: /categories/ || fa fa-th
+
+menu_settings:
+  icons: true
+  badges: false
+
+# ---------------------------------------------------------------
+# Sidebar Settings
+# ---------------------------------------------------------------
+
+sidebar:
+  position: left
+  display: post
+  padding: 18
+  offset: 12
+
+# Sidebar Avatar
+avatar:
+  url: /images/avatar.gif
+  rounded: true
+  rotated: false
+
+# Posts / Categories / Tags in sidebar.
+site_state: true
+
+# Social Links
+social:
+  GitHub: https://github.com/fooSynaptic || fab fa-github
+
+social_icons:
+  enable: true
+  icons_only: false
+  transition: false
+
+# Table of Contents in the Sidebar
+toc:
+  enable: true
+  number: true
+  wrap: false
+  expand_all: false
+  max_depth: 6
+
+# ---------------------------------------------------------------
+# Footer Settings
+# ---------------------------------------------------------------
+
+footer:
+  since: 2019
+  icon:
+    name: fa fa-heart
+    animated: true
+    color: "#ff0000"
+  copyright:
+  powered: true
+  beian:
+    enable: false
+
+# ---------------------------------------------------------------
+# Post Settings
+# ---------------------------------------------------------------
+
+# Automatically excerpt description in homepage as preamble text.
+excerpt_description: true
+
+# Read more button
+read_more_btn: true
+
+# Post meta display settings
+post_meta:
+  item_text: true
+  created_at: true
+  updated_at:
+    enable: false
+  categories: true
+
+# Post wordcount display settings
+symbols_count_time:
+  separated_meta: true
+  item_text_total: false
+
+# Use icon instead of the symbol # to indicate the tag at the bottom of the post
+tag_icon: true
+
+# ---------------------------------------------------------------
+# Font Settings
+# ---------------------------------------------------------------
+
+font:
+  enable: false
+
+# ---------------------------------------------------------------
+# Code Block Settings
+# ---------------------------------------------------------------
+
+codeblock:
+  # 使用 highlight.js 内置的主题名称
+  theme:
+    light: default
+    dark: dark
+  prism:
+    light: prism
+    dark: prism-dark
+  copy_button:
+    enable: true
+    style:
+
+# ---------------------------------------------------------------
+# Back To Top
+# ---------------------------------------------------------------
+
+back2top:
+  enable: true
+  sidebar: false
+  scrollpercent: true
+
+# ---------------------------------------------------------------
+# Animation Settings
+# ---------------------------------------------------------------
+
+motion:
+  enable: true
+  async: false
+  transition:
+    menu_item: fadeInDown
+    post_block: fadeIn
+    post_header: slideDownIn
+    post_body: slideDownIn
+    coll_header: slideLeftIn
+    sidebar: slideUpIn
+
+# ---------------------------------------------------------------
+# Comments Settings
+# ---------------------------------------------------------------
+
+# Multiple Comment System Support
+comments:
+  style: tabs
+  active:
+  storage: true
+  lazyload: false
+  nav:
+
+# ---------------------------------------------------------------
+# Search Services
+# ---------------------------------------------------------------
+
+# Local Search
+local_search:
+  enable: true
+  trigger: auto
+  top_n_per_article: 1
+  unescape: false
+  preload: false
+
