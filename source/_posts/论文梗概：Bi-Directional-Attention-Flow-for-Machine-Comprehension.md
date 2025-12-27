@@ -4,55 +4,77 @@ date: 2019-11-19T16:47:58+08:00
 tags:
   - MRC
   - bidaf
-  - dynamic attention vs memory-less attention
+  - attention
 ---
 
-# Abstract insights:
+## Abstract 要点
 
-  * requires modeling complex interactions between the context and the query.
-  * use attention to focus on a small portion of the context and summarize it with a fixed-size of vector
-  * muliti-stage hierachical process that represents the context at different levels of granularity and uses bi-directional attention flow mechanism to obtain a query-aware context representation without early summarization.
+- 需要对 context 和 query 之间的复杂交互进行建模
+- 使用 attention 关注 context 的小部分并用固定大小的向量进行概括
+- 多阶段分层过程：在不同粒度级别表示 context，使用双向 attention flow 机制获取 query-aware 的 context 表示，避免过早概括
 
+## Introduction 要点
 
+### Bi-directional Attention Flow 的三个创新点
 
-# Introduction insights:
+**第一：不用 attention 概括 context 为固定大小向量**
 
-## Bi-directional attention flow:
+Attention 在每个时间步计算，attended vector 连同之前层的表示一起流向后续的 modeling layer（这与 self-attention 类似），避免了过早概括造成的信息损失。
 
-  * First: the attention layer Is not used to summarize the context paragraph into a fixed-size vector. Instead, the attention is computed for every time step, and the attended vector at each time step, along with the representations form previous layers, is allowed to flow through to the subsequent modeling layer.(how similar to self-attention), prevent the information loss by early summary.
-  * Second, we use a memory-less attention mechanism. Thai is while we iteratively compute attention through time, the attention at each time step is a function of only the query and the context paragraph at the current time step and does not directly depend on the attention at the previous time step.  
-Second mechanism forces the attention layer to focus on learning the attention between the query and the context, and enables the modeling layer to focus on learning the interaction within the query-aware context representation( the output of the attention layer). It also allows the attention at each time step to be unaffected from incorrect attendances at previous time steps.
+**第二：Memory-less Attention 机制**
 
+虽然我们迭代地计算 attention，但每个时间步的 attention 只是当前 query 和 context 的函数，不直接依赖于前一时间步的 attention。
 
+这迫使 attention layer 专注于学习 query 和 context 之间的 attention，使 modeling layer 专注于学习 query-aware context 表示内部的交互。同时避免了前一时间步错误 attention 对当前时间步的影响。
 
-### keynotes:
+**关键对比：**
 
-Conventional dynamic attention: the attention weights at the current time step are a function of the attended vector at the previous time step.  
-bidaf: the attention is a computed for every time step, and the attended vector at each time step. The memeory-less attention: the attention at each time step is a function of only the query and the context paragraph at the current time step and doses not directly depend on the attention at the previous time step.
+| 类型 | 描述 |
+|------|------|
+| **Dynamic Attention** | 当前时间步的 attention 权重是前一时间步 attended vector 的函数 |
+| **Memory-less Attention** | 当前时间步的 attention 只依赖于当前的 query 和 context |
 
-_The author claim the memory-less attention gives a clear advanatge over dynamic attention._
+> 作者声称 memory-less attention 比 dynamic attention 有明显优势。
 
-  * Third: the bi-direction provide complimentary information to each other.
+**第三：双向信息互补**
 
+双向的 attention 提供了互补的信息。
 
+## BiDAF 网络架构
 
-# BiDAF network Architecture:
+前三层在不同粒度级别计算 query 和 context 的特征，类似于 CV 中 CNN 的多阶段特征计算。
 
-First three layers, computing features from the query and context at different levels of granularity, akin to the multi-stage feature computation of convolutional NN in the CV field.
+### 1. Character-level Embedding
 
-  * character-level
-  * word-level
-  * contextual embedding： utilizes contextual cues from surrounding words to refine the embedding of the words.  
-::=>We use a LSTM on top of the embeddings provided by the previous layers to model the temporal interactions between words. We place an LSTM in both directions and concatenate the outputs of the two LSTMs,
+字符级别的嵌入表示。
 
+### 2. Word-level Embedding
 
-  * Attention Flow Layer: couples the query and context vectors and produces a set of query-aware feature vectors for each word in the context.  
-α(h, u) = W[h;u;h@u]  
-Context-to-query attention. C2q attenton signifies which query words are most relevant to each context word.  
-Query-to-context(Q2C) attention signifies wich context words have the closest similarity to one of the query words and are hence critical for answering the query.
+词级别的嵌入表示。
 
+### 3. Contextual Embedding
 
-  * Modeling Layer: employs a Recurrent Neural Network to scan the context.
-  * output Layer: provides an answer to the query(task oriented realization).
+利用上下文线索来精炼词的嵌入：
 
+> 在前面层提供的 embeddings 之上使用 LSTM 来建模词之间的时序交互。双向放置 LSTM 并拼接两个方向的输出。
 
+### 4. Attention Flow Layer
+
+耦合 query 和 context 向量，为 context 中的每个词生成 query-aware 的特征向量。
+
+```
+α(h, u) = W[h; u; h ⊙ u]
+```
+
+**两种 Attention 方向：**
+
+- **Context-to-Query (C2Q)**：表示每个 context 词最相关的 query 词
+- **Query-to-Context (Q2C)**：表示哪些 context 词与某个 query 词最相似，对回答问题最关键
+
+### 5. Modeling Layer
+
+使用 RNN 扫描 context，捕获长距离依赖。
+
+### 6. Output Layer
+
+提供问题的答案（面向任务的具体实现）。
