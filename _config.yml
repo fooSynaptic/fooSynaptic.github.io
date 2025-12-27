@@ -88,6 +88,15 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: next
 
+# MathJax 配置
+mathjax:
+  tags: none  # 或 'ams' 或 'all'
+  single_dollars: true  # 支持单个 $ 符号的行内公式
+  cjk_width: 0.9
+  normal_width: 0.6
+  append_css: true
+  every_page: true
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
