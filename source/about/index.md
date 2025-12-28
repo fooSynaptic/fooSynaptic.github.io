@@ -61,9 +61,9 @@ comments: false
 
 ## 🌟 座右铭
 
-> **Head first to the Truth as Synaptic.**
+> **Truth through synaptic thinking.**
 >
-> 像神经突触一样，直达真理的核心。
+> 以突触般的智能连接，探索真理。
 
 ---
 
