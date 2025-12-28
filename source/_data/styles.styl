@@ -18,12 +18,13 @@ body {
 
 // ====== 头部样式 ======
 
-// 头部容器
+// 头部容器 - 使用白色背景配紫色文字
 .header-inner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   padding: 25px 0 !important;
   border-radius: 0 0 20px 20px !important;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15) !important;
+  backdrop-filter: blur(10px) !important;
 }
 
 // 网站标题容器
@@ -33,27 +34,28 @@ body {
 
 // 网站标题
 .brand {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border-radius: 8px !important;
-  padding: 10px 25px !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 10px !important;
+  padding: 12px 30px !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
 }
 
 .site-title {
   color: #fff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2) !important;
   font-weight: 700 !important;
 }
 
-// 副标题（邮箱）
+// 副标题（邮箱）- 深色文字
 .site-subtitle {
   font-size: 0.95em !important;
-  color: rgba(255, 255, 255, 0.95) !important;
-  background: rgba(255, 255, 255, 0.15) !important;
+  color: #667eea !important;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)) !important;
   padding: 10px 25px !important;
   border-radius: 25px !important;
   display: inline-block !important;
   margin-top: 15px !important;
-  backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(102, 126, 234, 0.2) !important;
 }
 
 // 导航菜单
