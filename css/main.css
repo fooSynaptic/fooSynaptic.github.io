@@ -1252,7 +1252,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #400873;
+  background: #30a2ff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2648,4 +2648,30 @@ header.header {
   .sidebar-active .footer-fixed {
     left: 320px;
   }
+}
+.posts-expand .post-body {
+  display: none;
+}
+.posts-expand .post-button {
+  display: none;
+}
+.posts-expand .post-title {
+  font-size: 1.3em;
+  margin-bottom: 5px;
+}
+.posts-expand .post-title-link {
+  border-bottom: none;
+}
+.posts-expand .post-meta {
+  margin-bottom: 10px;
+  font-size: 0.85em;
+}
+.posts-expand .post-block {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #eee;
+}
+.site-subtitle {
+  font-size: 0.9em;
+  color: #666;
 }
