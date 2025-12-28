@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="本文深入解读 LLM 智能体领域的三个重要应用扩展：VOYAGER（终身学习）、Project Sid（AI文明）和 Agent Hospital（可进化医疗智能体）。  一、VOYAGER：开放世界具身终身学习智能体论文: An Open-Ended Embodied Agent with Large Language Models会议: NeurIPS 2023 (FMDM Workshop)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM 游戏智能体论文解读：应用扩展篇">
+<meta property="og:url" content="https://foosynaptic.github.io/2025/12/28/LLM-Game-Agents-%E5%BA%94%E7%94%A8%E6%89%A9%E5%B1%95%E7%AF%87/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="本文深入解读 LLM 智能体领域的三个重要应用扩展：VOYAGER（终身学习）、Project Sid（AI文明）和 Agent Hospital（可进化医疗智能体）。  一、VOYAGER：开放世界具身终身学习智能体论文: An Open-Ended Embodied Agent with Large Language Models会议: NeurIPS 2023 (FMDM Workshop)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-27T20:02:00.000Z">
+<meta property="article:modified_time" content="2025-12-28T02:27:38.480Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="AI文明">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Agent Hospital">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Project Sid">
+<meta property="article:tag" content="VOYAGER">
+<meta property="article:tag" content="终身学习">
+<meta property="article:tag" content="论文解读">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2025/12/28/LLM-Game-Agents-%E5%BA%94%E7%94%A8%E6%89%A9%E5%B1%95%E7%AF%87/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2025/12/28/LLM-Game-Agents-%E5%BA%94%E7%94%A8%E6%89%A9%E5%B1%95%E7%AF%87/","path":"2025/12/28/LLM-Game-Agents-应用扩展篇/","title":"LLM 游戏智能体论文解读：应用扩展篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LLM 游戏智能体论文解读：应用扩展篇 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81VOYAGER%EF%BC%9A%E5%BC%80%E6%94%BE%E4%B8%96%E7%95%8C%E5%85%B7%E8%BA%AB%E7%BB%88%E8%BA%AB%E5%AD%A6%E4%B9%A0%E6%99%BA%E8%83%BD%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">一、VOYAGER：开放世界具身终身学习智能体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 核心创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%87%AA%E5%8A%A8%E8%AF%BE%E7%A8%8B%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 自动课程系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%8A%80%E8%83%BD%E5%BA%93%E6%9C%BA%E5%88%B6"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 技能库机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E8%BF%AD%E4%BB%A3%E6%8F%90%E7%A4%BA%E6%9C%BA%E5%88%B6"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 迭代提示机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-%E5%85%B3%E9%94%AE%E6%B4%9E%E8%A7%81"><span class="nav-number">1.7.</span> <span class="nav-text">1.7 关键洞见</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Project-Sid%EF%BC%9A%E8%BF%88%E5%90%91AI%E6%96%87%E6%98%8E%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E6%A8%A1%E6%8B%9F"><span class="nav-number">2.</span> <span class="nav-text">二、Project Sid：迈向AI文明的多智能体模拟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 核心问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%9E%84%E5%BB%BAAI%E6%96%87%E6%98%8E%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 构建AI文明的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-PIANO-%E6%9E%B6%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 PIANO 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%96%87%E6%98%8E%E8%BF%9B%E6%AD%A5%E5%9F%BA%E5%87%86"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 文明进步基准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%87%861%EF%BC%9A%E4%B8%93%E4%B8%9A%E5%8C%96"><span class="nav-number">2.4.1.</span> <span class="nav-text">基准1：专业化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%87%862%EF%BC%9A%E9%9B%86%E4%BD%93%E8%A7%84%E5%88%99"><span class="nav-number">2.4.2.</span> <span class="nav-text">基准2：集体规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%87%863%EF%BC%9A%E6%96%87%E5%8C%96%E4%BC%A0%E6%92%AD"><span class="nav-number">2.4.3.</span> <span class="nav-text">基准3：文化传播</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E9%87%8F%E5%8C%96%E7%BB%93%E6%9E%9C"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 量化结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Agent-Hospital%EF%BC%9A%E5%8F%AF%E8%BF%9B%E5%8C%96%E7%9A%84%E5%8C%BB%E7%96%97%E6%99%BA%E8%83%BD%E4%BD%93"><span class="nav-number">3.</span> <span class="nav-text">三、Agent Hospital：可进化的医疗智能体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 核心创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%B2%BB%E7%96%97%E9%97%AD%E7%8E%AF"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 治疗闭环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-SEAL-%E6%A1%86%E6%9E%B6"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 SEAL 框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-MedAgent-Zero-%E8%BF%9B%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 MedAgent-Zero 进化机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-%E4%B8%8E-Generative-Agents-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 与 Generative Agents 的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-SEAL-%E7%9A%84%E9%80%9A%E7%94%A8%E6%80%A7"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 SEAL 的通用性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%89%E5%A4%A7%E5%BA%94%E7%94%A8%E6%89%A9%E5%B1%95%E5%AF%B9%E6%AF%94"><span class="nav-number">4.</span> <span class="nav-text">四、三大应用扩展对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 核心差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%88%9B%E6%96%B0%E8%B4%A1%E7%8C%AE"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 创新贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%8A%80%E6%9C%AF%E6%BC%94%E8%BF%9B%E8%B7%AF%E7%BA%BF"><span class="nav-number">5.</span> <span class="nav-text">五、技术演进路线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E5%BA%94%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 从基础到应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E8%A7%84%E6%A8%A1%E6%BC%94%E8%BF%9B"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 规模演进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%AA%81%E7%A0%B4"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 关键技术突破</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="nav-number">6.</span> <span class="nav-text">六、实践建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 技术选型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 架构设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E8%A7%84%E6%A8%A1%E5%8C%96%E8%80%83%E8%99%91"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 规模化考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%85%B3%E9%94%AE%E8%AE%BA%E6%96%87%E5%8E%9F%E6%96%87%E5%BC%95%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">七、关键论文原文引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VOYAGER"><span class="nav-number">7.1.</span> <span class="nav-text">VOYAGER</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Project-Sid"><span class="nav-number">7.2.</span> <span class="nav-text">Project Sid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Agent-Hospital"><span class="nav-number">7.3.</span> <span class="nav-text">Agent Hospital</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2025/12/28/LLM-Game-Agents-%E5%BA%94%E7%94%A8%E6%89%A9%E5%B1%95%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LLM 游戏智能体论文解读：应用扩展篇 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LLM 游戏智能体论文解读：应用扩展篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-28 04:02:00" itemprop="dateCreated datePublished" datetime="2025-12-28T04:02:00+08:00">2025-12-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" itemprop="url" rel="index"><span itemprop="name">论文解读</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文深入解读 LLM 智能体领域的三个重要应用扩展：VOYAGER（终身学习）、Project Sid（AI文明）和 Agent Hospital（可进化医疗智能体）。</p>
+<hr>
+<h2 id="一、VOYAGER：开放世界具身终身学习智能体"><a href="#一、VOYAGER：开放世界具身终身学习智能体" class="headerlink" title="一、VOYAGER：开放世界具身终身学习智能体"></a>一、VOYAGER：开放世界具身终身学习智能体</h2><p><strong>论文</strong>: An Open-Ended Embodied Agent with Large Language Models<br><strong>会议</strong>: NeurIPS 2023 (FMDM Workshop)<br><strong>作者</strong>: Guanzhi Wang 等 (NVIDIA, Caltech, UT Austin)<br><strong>项目主页</strong>: <a target="_blank" rel="noopener" href="https://voyager.minedojo.org/">voyager.minedojo.org</a></p>
+<h3 id="1-1-核心创新"><a href="#1-1-核心创新" class="headerlink" title="1.1 核心创新"></a>1.1 核心创新</h3><p>VOYAGER 是<strong>首个 LLM 驱动的具身终身学习智能体</strong>，在 Minecraft 中持续探索世界、获取技能、做出新发现，无需人类干预。</p>
+<p><strong>三大核心组件</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+<th>技术实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>自动课程</strong></td>
+<td>提出适当难度的任务</td>
+<td>GPT-4 + 探索进度 + 智能体状态</td>
+</tr>
+<tr>
+<td><strong>技能库</strong></td>
+<td>存储和检索可复用代码</td>
+<td>向量数据库 + 嵌入检索</td>
+</tr>
+<tr>
+<td><strong>迭代提示</strong></td>
+<td>自我改进代码生成</td>
+<td>环境反馈 + 执行错误 + 自我验证</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-系统架构"><a href="#1-2-系统架构" class="headerlink" title="1.2 系统架构"></a>1.2 系统架构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    VOYAGER 系统架构                                  │</span><br><span class="line">├─────────────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                                     │</span><br><span class="line">│   ┌───────────────┐                                                 │</span><br><span class="line">│   │   GPT-4 API   │◀──────────────────────────────────┐            │</span><br><span class="line">│   │  (黑盒调用)    │                                   │            │</span><br><span class="line">│   └───────────────┘                                   │            │</span><br><span class="line">│          │                                            │            │</span><br><span class="line">│          ▼                                            │            │</span><br><span class="line">│   ┌───────────────┐    ┌───────────────┐    ┌────────┴────────┐   │</span><br><span class="line">│   │ 自动课程生成   │    │   代码生成    │    │    自我验证     │   │</span><br><span class="line">│   │ (GPT-4提示)   │    │ (GPT-4提示)   │    │  (GPT-4提示)    │   │</span><br><span class="line">│   └───────────────┘    └───────────────┘    └─────────────────┘   │</span><br><span class="line">│          │                    │                      │             │</span><br><span class="line">│          ▼                    ▼                      ▼             │</span><br><span class="line">│   ┌───────────────┐    ┌───────────────┐    ┌─────────────────┐   │</span><br><span class="line">│   │   任务队列    │    │  Minecraft    │    │    技能库       │   │</span><br><span class="line">│   └───────────────┘    │   环境执行    │    │  (向量数据库)   │   │</span><br><span class="line">│                        └───────────────┘    └─────────────────┘   │</span><br><span class="line">│                                                                     │</span><br><span class="line">└─────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-自动课程系统"><a href="#1-3-自动课程系统" class="headerlink" title="1.3 自动课程系统"></a>1.3 自动课程系统</h3><p><strong>设计理念</strong>: 自下而上展开，由好奇心驱动</p>
+<p><strong>输入提示组件</strong>:</p>
+<ol>
+<li><strong>指令</strong>: 鼓励多样化行为并施加约束</li>
+<li><strong>智能体当前状态</strong>: 物品栏、装备、位置、生命值等</li>
+<li><strong>先前任务记录</strong>: 已完成和失败的任务</li>
+<li><strong>额外上下文</strong>: GPT-3.5 自问自答</li>
+</ol>
+<p><strong>示例提示</strong>:</p>
+<blockquote>
+<p>“我的最终目标是发现尽可能多的多样化事物…下一个任务不应该太难，因为我可能还没有必要的资源或学会足够的技能来完成它。”</p>
+</blockquote>
+<h3 id="1-4-技能库机制"><a href="#1-4-技能库机制" class="headerlink" title="1.4 技能库机制"></a>1.4 技能库机制</h3><p><strong>技能表示</strong>: 可执行的 JavaScript 代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例技能: 制作木镐</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">craftWoodenPickaxe</span>(<span class="params">bot</span>) {</span><br><span class="line">  <span class="comment">// 首先获取木材</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">mineBlock</span>(bot, <span class="string">"oak_log"</span>, <span class="number">1</span>);</span><br><span class="line">  <span class="comment">// 制作木板</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">craftItem</span>(bot, <span class="string">"oak_planks"</span>, <span class="number">4</span>);</span><br><span class="line">  <span class="comment">// 制作木棍</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">craftItem</span>(bot, <span class="string">"stick"</span>, <span class="number">2</span>);</span><br><span class="line">  <span class="comment">// 制作木镐</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">craftItem</span>(bot, <span class="string">"wooden_pickaxe"</span>, <span class="number">1</span>);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p><strong>存储与检索</strong>:</p>
+<ul>
+<li><strong>键</strong>: 程序描述的嵌入向量（GPT-3.5生成）</li>
+<li><strong>值</strong>: 可执行的JavaScript代码</li>
+<li><strong>检索</strong>: 余弦相似度 + 任务上下文</li>
+</ul>
+<h3 id="1-5-迭代提示机制"><a href="#1-5-迭代提示机制" class="headerlink" title="1.5 迭代提示机制"></a>1.5 迭代提示机制</h3><p><strong>三种反馈类型</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>反馈类型</th>
+<th>来源</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>环境反馈</strong></td>
+<td>程序执行日志</td>
+<td>显示中间进度，如”需要多7个铁锭”</td>
+</tr>
+<tr>
+<td><strong>执行错误</strong></td>
+<td>程序解释器</td>
+<td>揭示语法错误和无效操作</td>
+</tr>
+<tr>
+<td><strong>自我验证</strong></td>
+<td>GPT-4评论家</td>
+<td>判断任务完成，提供改进建议</td>
+</tr>
+</tbody></table>
+<p><strong>代码生成的12个提示组件</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>组件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>代码生成指南</td>
+<td>编写规范和约束</td>
+</tr>
+<tr>
+<td>2</td>
+<td>控制原语API</td>
+<td>高级API（exploreUntil, mineBlock等）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mineflayer API</td>
+<td>底层游戏控制API</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>检索的技能</strong></td>
+<td>从技能库检索的相关代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>上一轮代码</strong></td>
+<td>用于迭代改进</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>环境反馈</strong></td>
+<td>聊天日志中的执行信息</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>执行错误</strong></td>
+<td>解释器错误信息</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>自我验证批评</strong></td>
+<td>验证模块的反馈</td>
+</tr>
+<tr>
+<td>9</td>
+<td>智能体状态</td>
+<td>物品栏、位置、生命值等</td>
+</tr>
+<tr>
+<td>10</td>
+<td>任务</td>
+<td>自动课程提出的任务</td>
+</tr>
+<tr>
+<td>11</td>
+<td>任务上下文</td>
+<td>GPT-3.5生成的解决建议</td>
+</tr>
+<tr>
+<td>12</td>
+<td>思维链提示</td>
+<td>要求解释→计划→代码的顺序</td>
+</tr>
+</tbody></table>
+<h3 id="1-6-实验结果"><a href="#1-6-实验结果" class="headerlink" title="1.6 实验结果"></a>1.6 实验结果</h3><p><strong>vs 基线方法</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>VOYAGER</th>
+<th>AutoGPT</th>
+<th>ReAct</th>
+<th>Reflexion</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>独特物品发现</td>
+<td><strong>63</strong></td>
+<td>19</td>
+<td>~10</td>
+<td>~10</td>
+</tr>
+<tr>
+<td>倍数</td>
+<td><strong>3.3x</strong></td>
+<td>1x</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p><strong>科技树解锁速度</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>VOYAGER</th>
+<th>AutoGPT</th>
+<th>提升</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>木制工具</td>
+<td>6分钟</td>
+<td>92分钟</td>
+<td><strong>15.3x</strong></td>
+</tr>
+<tr>
+<td>石制工具</td>
+<td>11分钟</td>
+<td>94分钟</td>
+<td><strong>8.5x</strong></td>
+</tr>
+<tr>
+<td>铁制工具</td>
+<td>21分钟</td>
+<td>135分钟</td>
+<td><strong>6.4x</strong></td>
+</tr>
+<tr>
+<td>钻石工具</td>
+<td>102分钟</td>
+<td>N/A</td>
+<td><strong>唯一成功</strong></td>
+</tr>
+</tbody></table>
+<p><strong>消融实验结论</strong>:</p>
+<ul>
+<li>自动课程至关重要：移除后物品发现下降93%</li>
+<li>自我验证最重要：移除后物品发现下降73%</li>
+<li>GPT-4 vs GPT-3.5：GPT-4获得5.7倍更多独特物品</li>
+</ul>
+<h3 id="1-7-关键洞见"><a href="#1-7-关键洞见" class="headerlink" title="1.7 关键洞见"></a>1.7 关键洞见</h3><blockquote>
+<p><strong>代码即记忆</strong>: VOYAGER 将”学习”转化为”运行时组合”——通过检索已有技能并迭代改进代码，而不是更新模型权重。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>传统方法</th>
+<th>VOYAGER</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>微调模型参数</td>
+<td>黑盒API调用</td>
+</tr>
+<tr>
+<td>隐式知识存储</td>
+<td>显式代码技能库</td>
+</tr>
+<tr>
+<td>难以解释</td>
+<td>代码可读可执行</td>
+</tr>
+<tr>
+<td>灾难性遗忘</td>
+<td>技能永久保存</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="二、Project-Sid：迈向AI文明的多智能体模拟"><a href="#二、Project-Sid：迈向AI文明的多智能体模拟" class="headerlink" title="二、Project Sid：迈向AI文明的多智能体模拟"></a>二、Project Sid：迈向AI文明的多智能体模拟</h2><p><strong>论文</strong>: Many-agent simulations toward AI civilization<br><strong>机构</strong>: Altera.AL<br><strong>发布日期</strong>: 2024年10月<br><strong>规模</strong>: 10-1000+ 智能体</p>
+<h3 id="2-1-核心问题"><a href="#2-1-核心问题" class="headerlink" title="2.1 核心问题"></a>2.1 核心问题</h3><blockquote>
+<p><strong>为什么我们应该尝试构建AI文明？</strong></p>
+</blockquote>
+<p>为了让智能体与人类社会共存，他们需要是<strong>自主的和协作的</strong>。文明进步——通过智能体在人类文明中共存和进步的能力来衡量——代表了AI智能体能力的<strong>终极基准</strong>。</p>
+<h3 id="2-2-构建AI文明的挑战"><a href="#2-2-构建AI文明的挑战" class="headerlink" title="2.2 构建AI文明的挑战"></a>2.2 构建AI文明的挑战</h3><table>
+<thead>
+<tr>
+<th>挑战</th>
+<th>问题描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>单智能体不进展</strong></td>
+<td>幻觉积累、陷入重复动作循环</td>
+</tr>
+<tr>
+<td><strong>多智能体不协调</strong></td>
+<td>错误沟通导致幻觉传播</td>
+</tr>
+<tr>
+<td><strong>缺乏基准</strong></td>
+<td>无法量化文明进步</td>
+</tr>
+</tbody></table>
+<p><strong>一致性问题示例</strong>:</p>
+<blockquote>
+<p>智能体Abby被Bob要求”给我一把镐”时，聊天模块回应”当然可以！”，但函数调用模块选择”探索”。Bob可能然后尝试用想象的镐采矿。</p>
+</blockquote>
+<h3 id="2-3-PIANO-架构"><a href="#2-3-PIANO-架构" class="headerlink" title="2.3 PIANO 架构"></a>2.3 PIANO 架构</h3><p><strong>PIANO</strong> = Parallel Information Aggregation via Neural Orchestration<br>（通过神经编排的并行信息聚合）</p>
+<p><strong>两大设计原则</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>并发性</strong></td>
+<td>慢速思考不应阻止快速反应</td>
+<td>多模块并行运行，不同时间尺度</td>
+</tr>
+<tr>
+<td><strong>一致性</strong></td>
+<td>多输出模块可能产生冲突</td>
+<td>认知控制器(CC)作为瓶颈</td>
+</tr>
+</tbody></table>
+<p><strong>10个核心模块</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>记忆</td>
+<td>存储/检索对话、动作、观察</td>
+</tr>
+<tr>
+<td>动作意识</td>
+<td>评估自身状态和性能</td>
+</tr>
+<tr>
+<td>目标生成</td>
+<td>基于经验创建新目标</td>
+</tr>
+<tr>
+<td>社会意识</td>
+<td>解释他人社会线索</td>
+</tr>
+<tr>
+<td>说话</td>
+<td>解释和生成语音</td>
+</tr>
+<tr>
+<td>技能执行</td>
+<td>执行环境中的动作</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    PIANO 架构                                │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                             │</span><br><span class="line">│  并发模块:                    认知控制器(瓶颈):              │</span><br><span class="line">│  ┌─────────┐                 ┌───────────────┐             │</span><br><span class="line">│  │ 记忆    │──────────────▶ │               │             │</span><br><span class="line">│  ├─────────┤                │   信息综合    │             │</span><br><span class="line">│  │ 社会    │──────────────▶ │       ↓       │             │</span><br><span class="line">│  ├─────────┤                │   高层决策    │             │</span><br><span class="line">│  │ 目标    │──────────────▶ │       ↓       │             │</span><br><span class="line">│  ├─────────┤                │   决策广播    │             │</span><br><span class="line">│  │ 动作    │──────────────▶ │               │             │</span><br><span class="line">│  └─────────┘                └───────────────┘             │</span><br><span class="line">│       ↑                            │                       │</span><br><span class="line">│       │                            ▼                       │</span><br><span class="line">│       │                     ┌───────────────┐             │</span><br><span class="line">│       │                     │ 输出模块      │             │</span><br><span class="line">│       │                     │ 说话/动作/... │             │</span><br><span class="line">│       │                     └───────────────┘             │</span><br><span class="line">│       └─────────────────────────────┘                      │</span><br><span class="line">│                                                             │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-文明进步基准"><a href="#2-4-文明进步基准" class="headerlink" title="2.4 文明进步基准"></a>2.4 文明进步基准</h3><h4 id="基准1：专业化"><a href="#基准1：专业化" class="headerlink" title="基准1：专业化"></a>基准1：专业化</h4><p><strong>定义</strong>: 智能体自主发展专业角色</p>
+<p><strong>三个标准</strong>:</p>
+<ol>
+<li>在选择和转换角色方面表现自主性</li>
+<li>专业化通过互动涌现，无需明确指导</li>
+<li>角色体现在与专业化一致的行为中</li>
+</ol>
+<p><strong>实验结果</strong> (30智能体，20分钟):</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>发现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>角色多样性</td>
+<td>农民、矿工、工程师、守卫、探险家、铁匠</td>
+</tr>
+<tr>
+<td>角色持久性</td>
+<td>每个智能体角色在时间上大体稳定</td>
+</tr>
+<tr>
+<td>角色-行为一致性</td>
+<td>艺术家专注采花，农民专注收集种子</td>
+</tr>
+</tbody></table>
+<p><strong>武术社会 vs 艺术社会</strong>:</p>
+<ul>
+<li>武术社会特有角色：侦察兵、战略家</li>
+<li>艺术社会特有角色：策展人、收藏家</li>
+</ul>
+<h4 id="基准2：集体规则"><a href="#基准2：集体规则" class="headerlink" title="基准2：集体规则"></a>基准2：集体规则</h4><p><strong>定义</strong>: 智能体遵守和改变法律</p>
+<p><strong>实验设置</strong>:</p>
+<ul>
+<li>25个选民智能体</li>
+<li>3个影响者（亲税/反税）</li>
+<li>1个选举经理</li>
+<li>税法：交20%物品到社区箱子</li>
+</ul>
+<p><strong>关键发现</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>遵守法律</td>
+<td>平均交付~20%物品</td>
+</tr>
+<tr>
+<td>影响者影响</td>
+<td>亲税/反税影响者显著改变选民态度</td>
+</tr>
+<tr>
+<td>宪法变更</td>
+<td>税率从20%降到5-10%时，行为相应调整</td>
+</tr>
+</tbody></table>
+<h4 id="基准3：文化传播"><a href="#基准3：文化传播" class="headerlink" title="基准3：文化传播"></a>基准3：文化传播</h4><p><strong>实验规模</strong>: 500智能体 (6城镇 + 农村)</p>
+<p><strong>关键现象</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>发现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>模因多样性</td>
+<td>不同城镇流行不同模因</td>
+</tr>
+<tr>
+<td>模因动态</td>
+<td>流行度随时间上升和下降</td>
+</tr>
+<tr>
+<td>宗教传播</td>
+<td>20个牧师传播”飞天面条神教”</td>
+</tr>
+<tr>
+<td>皈依扩散</td>
+<td>皈依者数量持续增加，未饱和</td>
+</tr>
+</tbody></table>
+<h3 id="2-5-量化结果"><a href="#2-5-量化结果" class="headerlink" title="2.5 量化结果"></a>2.5 量化结果</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>30分钟内获取物品</td>
+<td>平均17个独特物品</td>
+</tr>
+<tr>
+<td>4小时物品饱和</td>
+<td>~320个（1/3总物品）</td>
+</tr>
+<tr>
+<td>社会感知准确性</td>
+<td>r = 0.81（5+观察者）</td>
+</tr>
+<tr>
+<td>最大规模</td>
+<td>1000+ 智能体</td>
+</tr>
+</tbody></table>
+<h3 id="2-6-局限性"><a href="#2-6-局限性" class="headerlink" title="2.6 局限性"></a>2.6 局限性</h3><ol>
+<li><strong>缺乏视觉推理</strong>: 限制空间导航和建造能力</li>
+<li><strong>缺乏内在驱动</strong>: 无生存、好奇心等催化社会发展</li>
+<li><strong>无法从头涌现</strong>: 基于预训练知识，无法模拟创新涌现</li>
+</ol>
+<hr>
+<h2 id="三、Agent-Hospital：可进化的医疗智能体"><a href="#三、Agent-Hospital：可进化的医疗智能体" class="headerlink" title="三、Agent Hospital：可进化的医疗智能体"></a>三、Agent Hospital：可进化的医疗智能体</h2><p><strong>论文</strong>: A Simulacrum of Hospital with Evolvable Medical Agents<br><strong>机构</strong>: 清华大学 AIR<br><strong>发布日期</strong>: 2024年5月</p>
+<h3 id="3-1-核心创新"><a href="#3-1-核心创新" class="headerlink" title="3.1 核心创新"></a>3.1 核心创新</h3><p><strong>医生培养的两个阶段</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阶段1</td>
+<td>知识获取（学校）</td>
+<td>~20年</td>
+</tr>
+<tr>
+<td>阶段2</td>
+<td>技能获取（医院）</td>
+<td>~3年</td>
+</tr>
+</tbody></table>
+<p>现有医疗AI主要集中在<strong>阶段1</strong>（如Med-PaLM）。Agent Hospital 解决<strong>阶段2</strong>：从实践中获取专业技能。</p>
+<h3 id="3-2-系统架构"><a href="#3-2-系统架构" class="headerlink" title="3.2 系统架构"></a>3.2 系统架构</h3><p><strong>Agent Hospital</strong> = 虚拟医院，所有患者、护士、医生都是LLM驱动的智能体</p>
+<p><strong>系统规模</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>科室</td>
+<td>32个</td>
+</tr>
+<tr>
+<td>覆盖疾病</td>
+<td>339种</td>
+</tr>
+<tr>
+<td>医生智能体</td>
+<td>42个</td>
+</tr>
+<tr>
+<td>护士智能体</td>
+<td>4个</td>
+</tr>
+<tr>
+<td>功能区域</td>
+<td>16个</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-治疗闭环"><a href="#3-3-治疗闭环" class="headerlink" title="3.3 治疗闭环"></a>3.3 治疗闭环</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    治疗闭环                                  │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                             │</span><br><span class="line">│  1. 疾病发作 ──▶ 2. 分诊 ──▶ 3. 挂号                        │</span><br><span class="line">│        │                                                    │</span><br><span class="line">│        ▼                                                    │</span><br><span class="line">│  8. 康复反馈 ◀── 7. 取药 ◀── 6. 诊断                        │</span><br><span class="line">│        │                        ▲                           │</span><br><span class="line">│        │                        │                           │</span><br><span class="line">│        └─────▶ 4. 就诊 ──▶ 5. 检查 ─┘                       │</span><br><span class="line">│                                                             │</span><br><span class="line">│  额外事件：医生智能体在非工作时间阅读医学书籍                  │</span><br><span class="line">│                                                             │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-SEAL-框架"><a href="#3-4-SEAL-框架" class="headerlink" title="3.4 SEAL 框架"></a>3.4 SEAL 框架</h3><p><strong>SEAL</strong> = Simulacrum-based Evolutionary Agent Learning<br>（基于仿真的进化智能体学习）</p>
+<p><strong>两个组件</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>仿真系统构建</strong></td>
+<td>构建虚拟世界，自动生成数据</td>
+</tr>
+<tr>
+<td><strong>智能体进化</strong></td>
+<td>从成功/失败中学习</td>
+</tr>
+</tbody></table>
+<h3 id="3-5-MedAgent-Zero-进化机制"><a href="#3-5-MedAgent-Zero-进化机制" class="headerlink" title="3.5 MedAgent-Zero 进化机制"></a>3.5 MedAgent-Zero 进化机制</h3><p><strong>“Zero”含义</strong>: 不使用任何人工标注数据</p>
+<p><strong>学习来源</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>内容</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>成功案例</strong></td>
+<td>正确的诊断和治疗</td>
+<td>作为参考案例检索</td>
+</tr>
+<tr>
+<td><strong>失败案例</strong></td>
+<td>错误的诊断或治疗</td>
+<td>反思避免重复错误</td>
+</tr>
+<tr>
+<td><strong>医学教材</strong></td>
+<td>专业医学知识</td>
+<td>巩固和整合知识</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│              MedAgent-Zero 进化流程                          │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                                                             │</span><br><span class="line">│  1. 治疗患者智能体                                           │</span><br><span class="line">│     ↓                                                       │</span><br><span class="line">│  2. 收到患者反馈（康复/未康复）                               │</span><br><span class="line">│     ↓                                                       │</span><br><span class="line">│  ┌─────────────────┬─────────────────┐                     │</span><br><span class="line">│  │   成功案例      │    失败案例      │                     │</span><br><span class="line">│  │                 │                 │                     │</span><br><span class="line">│  │  存储为参考案例  │  反思获取经验    │                     │</span><br><span class="line">│  │  用于未来检索   │  避免重复错误    │                     │</span><br><span class="line">│  └─────────────────┴─────────────────┘                     │</span><br><span class="line">│     ↓                                                       │</span><br><span class="line">│  3. 阅读医学教材巩固知识                                     │</span><br><span class="line">│     ↓                                                       │</span><br><span class="line">│  4. 能力持续提升                                             │</span><br><span class="line">│                                                             │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-实验结果"><a href="#3-6-实验结果" class="headerlink" title="3.6 实验结果"></a>3.6 实验结果</h3><p><strong>进化效果</strong> (诊断准确率):</p>
+<table>
+<thead>
+<tr>
+<th>治疗患者数</th>
+<th>准确率</th>
+<th>提升</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 (初始)</td>
+<td>~60%</td>
+<td>-</td>
+</tr>
+<tr>
+<td>1,000</td>
+<td>~72%</td>
+<td>+20%</td>
+</tr>
+<tr>
+<td>10,000</td>
+<td>~85%</td>
+<td>+42%</td>
+</tr>
+<tr>
+<td>50,000</td>
+<td>~93%</td>
+<td><strong>+55%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>MedQA 基准测试</strong> (美国医师执照考试):</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>准确率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-4 (少样本)</td>
+<td>78.4%</td>
+</tr>
+<tr>
+<td>Med-PaLM 2</td>
+<td>86.5%</td>
+</tr>
+<tr>
+<td><strong>Agent Hospital (进化后)</strong></td>
+<td><strong>88.7%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>亮点</strong>: 无需使用基准的标注训练数据！</p>
+<h3 id="3-7-与-Generative-Agents-的关系"><a href="#3-7-与-Generative-Agents-的关系" class="headerlink" title="3.7 与 Generative Agents 的关系"></a>3.7 与 Generative Agents 的关系</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Generative Agents</th>
+<th>Agent Hospital</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>灵感来源</td>
+<td>原创</td>
+<td>受GA启发</td>
+</tr>
+<tr>
+<td>环境</td>
+<td>虚拟小镇</td>
+<td>虚拟医院</td>
+</tr>
+<tr>
+<td>智能体数量</td>
+<td>25个</td>
+<td>46+</td>
+</tr>
+<tr>
+<td>任务类型</td>
+<td>社交模拟</td>
+<td><strong>医疗诊断</strong></td>
+</tr>
+<tr>
+<td>能力进化</td>
+<td>无</td>
+<td><strong>有(核心创新)</strong></td>
+</tr>
+<tr>
+<td>评估方式</td>
+<td>定性</td>
+<td>定量(MedQA)</td>
+</tr>
+</tbody></table>
+<h3 id="3-8-SEAL-的通用性"><a href="#3-8-SEAL-的通用性" class="headerlink" title="3.8 SEAL 的通用性"></a>3.8 SEAL 的通用性</h3><p><strong>方法论公式</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">领域工作流程 → 构建仿真系统 → 自动生成数据 → 智能体进化</span><br></pre></td></tr></table></figure>
+
+<p><strong>优势</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无需人工标注</td>
+<td>数据由虚拟世界自动生成</td>
+</tr>
+<tr>
+<td>领域适应</td>
+<td>直接适应特定应用需求</td>
+</tr>
+<tr>
+<td>成本低</td>
+<td>减少数据标注开销</td>
+</tr>
+<tr>
+<td>可扩展</td>
+<td>可模拟大量场景和时间</td>
+</tr>
+</tbody></table>
+<p><strong>潜在应用</strong>: 法律咨询、金融投资、教育培训、客户服务</p>
+<hr>
+<h2 id="四、三大应用扩展对比"><a href="#四、三大应用扩展对比" class="headerlink" title="四、三大应用扩展对比"></a>四、三大应用扩展对比</h2><h3 id="4-1-核心差异"><a href="#4-1-核心差异" class="headerlink" title="4.1 核心差异"></a>4.1 核心差异</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>VOYAGER</th>
+<th>Project Sid</th>
+<th>Agent Hospital</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>核心目标</strong></td>
+<td>终身学习技能</td>
+<td>AI文明模拟</td>
+<td>医疗智能体进化</td>
+</tr>
+<tr>
+<td><strong>环境</strong></td>
+<td>Minecraft</td>
+<td>Minecraft</td>
+<td>虚拟医院</td>
+</tr>
+<tr>
+<td><strong>智能体数量</strong></td>
+<td>1</td>
+<td>10-1000+</td>
+<td>46+</td>
+</tr>
+<tr>
+<td><strong>时间跨度</strong></td>
+<td>数小时</td>
+<td>4小时+</td>
+<td>持续</td>
+</tr>
+<tr>
+<td><strong>学习机制</strong></td>
+<td>技能库积累</td>
+<td>社会互动</td>
+<td>经验反思</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-创新贡献"><a href="#4-2-创新贡献" class="headerlink" title="4.2 创新贡献"></a>4.2 创新贡献</h3><table>
+<thead>
+<tr>
+<th>论文</th>
+<th>核心创新</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>VOYAGER</strong></td>
+<td>代码即记忆，技能可组合复用</td>
+</tr>
+<tr>
+<td><strong>Project Sid</strong></td>
+<td>文明进步基准：专业化、规则、文化</td>
+</tr>
+<tr>
+<td><strong>Agent Hospital</strong></td>
+<td>智能体能力可进化，虚拟技能迁移现实</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-适用场景"><a href="#4-3-适用场景" class="headerlink" title="4.3 适用场景"></a>4.3 适用场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方法</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开放世界游戏</td>
+<td>VOYAGER</td>
+<td>技能积累和终身学习</td>
+</tr>
+<tr>
+<td>社会科学研究</td>
+<td>Project Sid</td>
+<td>大规模社会动态模拟</td>
+</tr>
+<tr>
+<td>专业领域AI</td>
+<td>Agent Hospital</td>
+<td>从实践中持续进化</td>
+</tr>
+<tr>
+<td>多智能体协作</td>
+<td>Project Sid</td>
+<td>PIANO架构支持一致性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、技术演进路线"><a href="#五、技术演进路线" class="headerlink" title="五、技术演进路线"></a>五、技术演进路线</h2><h3 id="5-1-从基础到应用"><a href="#5-1-从基础到应用" class="headerlink" title="5.1 从基础到应用"></a>5.1 从基础到应用</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">基础框架 (2022-2023):</span><br><span class="line">├── ReAct: 推理+行动</span><br><span class="line">├── Reflexion: 语言反馈学习</span><br><span class="line">└── Generative Agents: 记忆+反思</span><br><span class="line"></span><br><span class="line">应用扩展 (2023-2024):</span><br><span class="line">├── VOYAGER: 终身学习 + 技能库</span><br><span class="line">├── Project Sid: 大规模文明模拟</span><br><span class="line">└── Agent Hospital: 专业领域进化</span><br><span class="line"></span><br><span class="line">未来趋势 (2025+):</span><br><span class="line">├── Agent OS化: AutoGen, LangGraph</span><br><span class="line">├── 多模态融合: 视觉+语言+行动</span><br><span class="line">└── 商业化部署: Operator, Claude</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-规模演进"><a href="#5-2-规模演进" class="headerlink" title="5.2 规模演进"></a>5.2 规模演进</h3><table>
+<thead>
+<tr>
+<th>时间</th>
+<th>论文</th>
+<th>智能体数量</th>
+<th>涌现现象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023/04</td>
+<td>Generative Agents</td>
+<td>25</td>
+<td>社交行为</td>
+</tr>
+<tr>
+<td>2023/05</td>
+<td>VOYAGER</td>
+<td>1</td>
+<td>终身学习</td>
+</tr>
+<tr>
+<td>2024/05</td>
+<td>Agent Hospital</td>
+<td>46+</td>
+<td>能力进化</td>
+</tr>
+<tr>
+<td>2024/10</td>
+<td>Project Sid</td>
+<td>500-1000+</td>
+<td>文明进步</td>
+</tr>
+</tbody></table>
+<h3 id="5-3-关键技术突破"><a href="#5-3-关键技术突破" class="headerlink" title="5.3 关键技术突破"></a>5.3 关键技术突破</h3><table>
+<thead>
+<tr>
+<th>突破</th>
+<th>论文</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码作为记忆</td>
+<td>VOYAGER</td>
+<td>可执行、可组合的知识表示</td>
+</tr>
+<tr>
+<td>文明进步基准</td>
+<td>Project Sid</td>
+<td>量化多智能体社会能力</td>
+</tr>
+<tr>
+<td>无标注进化</td>
+<td>Agent Hospital</td>
+<td>从实践中自动学习</td>
+</tr>
+<tr>
+<td>千智能体规模</td>
+<td>Project Sid</td>
+<td>验证大规模可行性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、实践建议"><a href="#六、实践建议" class="headerlink" title="六、实践建议"></a>六、实践建议</h2><h3 id="6-1-技术选型"><a href="#6-1-技术选型" class="headerlink" title="6.1 技术选型"></a>6.1 技术选型</h3><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>推荐技术栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单智能体技能学习</td>
+<td>VOYAGER (技能库 + 迭代提示)</td>
+</tr>
+<tr>
+<td>多智能体协作</td>
+<td>Project Sid (PIANO架构)</td>
+</tr>
+<tr>
+<td>专业领域应用</td>
+<td>Agent Hospital (SEAL框架)</td>
+</tr>
+<tr>
+<td>通用任务完成</td>
+<td>ReAct + Reflexion</td>
+</tr>
+</tbody></table>
+<h3 id="6-2-架构设计"><a href="#6-2-架构设计" class="headerlink" title="6.2 架构设计"></a>6.2 架构设计</h3><p><strong>理想组合</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">理想智能体 = VOYAGER的技能库</span><br><span class="line">           + Project Sid的社会意识</span><br><span class="line">           + Agent Hospital的进化机制</span><br><span class="line">           + Generative Agents的记忆系统</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-规模化考虑"><a href="#6-3-规模化考虑" class="headerlink" title="6.3 规模化考虑"></a>6.3 规模化考虑</h3><table>
+<thead>
+<tr>
+<th>规模</th>
+<th>关键挑战</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1-10</td>
+<td>单智能体能力</td>
+<td>技能库 + 反思</td>
+</tr>
+<tr>
+<td>10-50</td>
+<td>协调一致性</td>
+<td>PIANO架构</td>
+</tr>
+<tr>
+<td>50-500</td>
+<td>计算资源</td>
+<td>并行模块</td>
+</tr>
+<tr>
+<td>500+</td>
+<td>涌现管理</td>
+<td>文明基准</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、关键论文原文引用"><a href="#七、关键论文原文引用" class="headerlink" title="七、关键论文原文引用"></a>七、关键论文原文引用</h2><h3 id="VOYAGER"><a href="#VOYAGER" class="headerlink" title="VOYAGER"></a>VOYAGER</h3><blockquote>
+<p>“VOYAGER is the first LLM-powered embodied lifelong learning agent that explores the world, acquires diverse skills, and makes novel discoveries without human intervention.”</p>
+</blockquote>
+<h3 id="Project-Sid"><a href="#Project-Sid" class="headerlink" title="Project Sid"></a>Project Sid</h3><blockquote>
+<p>“We show how 10-1000+ AI agents behave and progress in agent societies. These simulations reveal that agents can achieve meaningful progress—autonomously developing specialized roles, adhering to and modifying collective rules, and engaging in cultural and religious propagation.”</p>
+</blockquote>
+<h3 id="Agent-Hospital"><a href="#Agent-Hospital" class="headerlink" title="Agent Hospital"></a>Agent Hospital</h3><blockquote>
+<p>“Doctor agents can evolve by treating a large number of patient agents, without the need for manually curated training data. After treating tens of thousands of patient agents (which may take several years for real-world doctors), the evolved doctor agents surpassed state-of-the-art medical AI methods on the MedQA benchmark.”</p>
+</blockquote>
+<hr>
+<p><a href="/2025/12/28/LLM-Game-Agents-%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB-%E6%80%BB%E8%A7%88/">返回总览</a> | <a href="/2025/12/28/LLM-Game-Agents-%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6%E7%AF%87/">上一篇：基础框架篇</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/Agent/" rel="tag"><i class="fa fa-tag"></i> Agent</a>
+              <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" rel="tag"><i class="fa fa-tag"></i> 论文解读</a>
+              <a href="/tags/VOYAGER/" rel="tag"><i class="fa fa-tag"></i> VOYAGER</a>
+              <a href="/tags/Project-Sid/" rel="tag"><i class="fa fa-tag"></i> Project Sid</a>
+              <a href="/tags/Agent-Hospital/" rel="tag"><i class="fa fa-tag"></i> Agent Hospital</a>
+              <a href="/tags/%E7%BB%88%E8%BA%AB%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 终身学习</a>
+              <a href="/tags/AI%E6%96%87%E6%98%8E/" rel="tag"><i class="fa fa-tag"></i> AI文明</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/28/LLM-Game-Agents-%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6%E7%AF%87/" rel="prev" title="LLM 游戏智能体论文解读：基础框架篇">
+                  <i class="fa fa-angle-left"></i> LLM 游戏智能体论文解读：基础框架篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
