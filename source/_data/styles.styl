@@ -149,6 +149,24 @@ body {
 
 // ====== 分类和归档页面 ======
 
+// 隐藏分类页面的"分类"文字后缀
+.category-all-page .category-all-title small,
+.category-all small,
+.post-block .category-list-item::after,
+span.category-title,
+.category-list-header small,
+.posts-collapse .collection-title small,
+// 隐藏所有页面标题后的类型标识
+.page-title small,
+.collection-header small {
+  display: none !important;
+}
+
+// 分类页面标题样式
+.category-list-header .category-list-count {
+  display: none !important;
+}
+
 // 分类页标题
 .category-all-page .category-all-title,
 .tag-cloud-title {
