@@ -1252,7 +1252,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #4effff;
+  background: #96463c;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2759,6 +2759,19 @@ body {
 }
 .posts-expand .post-meta a {
   color: #764ba2 !important;
+}
+.category-all-page .category-all-title small,
+.category-all small,
+.post-block .category-list-item::after,
+span.category-title,
+.category-list-header small,
+.posts-collapse .collection-title small,
+.page-title small,
+.collection-header small {
+  display: none !important;
+}
+.category-list-header .category-list-count {
+  display: none !important;
 }
 .category-all-page .category-all-title,
 .tag-cloud-title {
