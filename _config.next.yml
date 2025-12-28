@@ -13,6 +13,9 @@ darkmode: false
 # Site Information Settings
 # ---------------------------------------------------------------
 
+# 在首页标题下显示副标题（包含邮箱）
+index_with_subtitle: true
+
 favicon:
   small: /images/jojo_small.ico
   medium: /images/jojo_median.ico
@@ -91,10 +94,14 @@ footer:
 # ---------------------------------------------------------------
 
 # Automatically excerpt description in homepage as preamble text.
-excerpt_description: true
+excerpt_description: false
 
 # Read more button
-read_more_btn: true
+read_more_btn: false
+
+# 首页文章摘录长度设为0，只显示标题
+auto_excerpt:
+  enable: false
 
 # Post meta display settings
 post_meta:
@@ -111,6 +118,13 @@ symbols_count_time:
 
 # Use icon instead of the symbol # to indicate the tag at the bottom of the post
 tag_icon: true
+
+# ---------------------------------------------------------------
+# Custom Files Settings
+# ---------------------------------------------------------------
+
+custom_file_path:
+  style: source/_data/styles.styl
 
 # ---------------------------------------------------------------
 # Font Settings
