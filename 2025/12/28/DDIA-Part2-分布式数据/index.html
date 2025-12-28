@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="本文是 DDIA 第二部分的读书笔记，涵盖第 5-9 章：数据复制、分区、事务、分布式挑战、一致性与共识。  第5章：数据复制复制的目的   目的 说明    高可用性 部分节点故障时系统仍可用   降低延迟 数据放在离用户更近的地方   提高读吞吐 多个副本并行处理读请求   主从复制12客户端 ──写入──&gt; 主节点 ──复制日志──&gt; 从节点1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDIA Part 2：分布式数据">
+<meta property="og:url" content="https://foosynaptic.github.io/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="本文是 DDIA 第二部分的读书笔记，涵盖第 5-9 章：数据复制、分区、事务、分布式挑战、一致性与共识。  第5章：数据复制复制的目的   目的 说明    高可用性 部分节点故障时系统仍可用   降低延迟 数据放在离用户更近的地方   提高读吞吐 多个副本并行处理读请求   主从复制12客户端 ──写入──&gt; 主节点 ──复制日志──&gt; 从节点1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-27T18:02:00.000Z">
+<meta property="article:modified_time" content="2025-12-28T02:03:25.119Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="DDIA">
+<meta property="article:tag" content="一致性">
+<meta property="article:tag" content="共识算法">
+<meta property="article:tag" content="分布式系统">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/","path":"2025/12/28/DDIA-Part2-分布式数据/","title":"DDIA Part 2：分布式数据"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DDIA Part 2：分布式数据 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC5%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">第5章：数据复制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%9A%84%E7%9B%AE%E7%9A%84"><span class="nav-number">1.1.</span> <span class="nav-text">复制的目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E5%BB%B6%E8%BF%9F%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.</span> <span class="nav-text">复制延迟问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%BB%E5%A4%8D%E5%88%B6"><span class="nav-number">1.4.</span> <span class="nav-text">多主复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E4%B8%BB%E5%A4%8D%E5%88%B6-Dynamo-%E9%A3%8E%E6%A0%BC"><span class="nav-number">1.5.</span> <span class="nav-text">无主复制 (Dynamo 风格)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC6%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%88%86%E5%8C%BA"><span class="nav-number">2.</span> <span class="nav-text">第6章：数据分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5"><span class="nav-number">2.1.</span> <span class="nav-text">分区策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%83%AD%E7%82%B9%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">热点问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95%E5%88%86%E5%8C%BA"><span class="nav-number">2.3.</span> <span class="nav-text">二级索引分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%8D%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="nav-number">2.4.</span> <span class="nav-text">再平衡策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%B7%AF%E7%94%B1"><span class="nav-number">2.5.</span> <span class="nav-text">请求路由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC7%E7%AB%A0%EF%BC%9A%E4%BA%8B%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">第7章：事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID-%E7%89%B9%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">ACID 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">3.2.</span> <span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A2%E5%A4%B1%E6%9B%B4%E6%96%B0%E9%97%AE%E9%A2%98"><span class="nav-number">3.3.</span> <span class="nav-text">丢失更新问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%81%8F%E6%96%9C"><span class="nav-number">3.4.</span> <span class="nav-text">写偏斜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E5%8C%96%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.5.</span> <span class="nav-text">串行化实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2PC"><span class="nav-number">3.6.</span> <span class="nav-text">分布式事务 (2PC)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC8%E7%AB%A0%EF%BC%9A%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">4.</span> <span class="nav-text">第8章：分布式系统的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E5%A4%B1%E6%95%88"><span class="nav-number">4.1.</span> <span class="nav-text">部分失效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E9%9D%A0%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="nav-number">4.2.</span> <span class="nav-text">不可靠的网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E9%9D%A0%E7%9A%84%E6%97%B6%E9%92%9F"><span class="nav-number">4.3.</span> <span class="nav-text">不可靠的时钟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fencing-Token"><span class="nav-number">4.4.</span> <span class="nav-text">Fencing Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.5.</span> <span class="nav-text">系统模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC9%E7%AB%A0%EF%BC%9A%E4%B8%80%E8%87%B4%E6%80%A7%E4%B8%8E%E5%85%B1%E8%AF%86"><span class="nav-number">5.</span> <span class="nav-text">第9章：一致性与共识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">一致性模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text">线性一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-%E5%AE%9A%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">CAP 定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E8%AF%86%E9%97%AE%E9%A2%98"><span class="nav-number">5.4.</span> <span class="nav-text">共识问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Paxos-%E7%AE%97%E6%B3%95"><span class="nav-number">5.5.</span> <span class="nav-text">Paxos 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Raft-%E7%AE%97%E6%B3%95"><span class="nav-number">5.6.</span> <span class="nav-text">Raft 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E8%AF%86%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">5.7.</span> <span class="nav-text">共识的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E9%83%A8%E5%88%86%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">本部分要点总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Head first to the Truth as Synaptic.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Head first to the Truth as Synaptic.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DDIA Part 2：分布式数据 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DDIA Part 2：分布式数据
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-28 02:02:00" itemprop="dateCreated datePublished" datetime="2025-12-28T02:02:00+08:00">2025-12-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是 DDIA 第二部分的读书笔记，涵盖第 5-9 章：数据复制、分区、事务、分布式挑战、一致性与共识。</p>
+<hr>
+<h2 id="第5章：数据复制"><a href="#第5章：数据复制" class="headerlink" title="第5章：数据复制"></a>第5章：数据复制</h2><h3 id="复制的目的"><a href="#复制的目的" class="headerlink" title="复制的目的"></a>复制的目的</h3><table>
+<thead>
+<tr>
+<th>目的</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高可用性</td>
+<td>部分节点故障时系统仍可用</td>
+</tr>
+<tr>
+<td>降低延迟</td>
+<td>数据放在离用户更近的地方</td>
+</tr>
+<tr>
+<td>提高读吞吐</td>
+<td>多个副本并行处理读请求</td>
+</tr>
+</tbody></table>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">客户端 ──写入──&gt; 主节点 ──复制日志──&gt; 从节点1</span><br><span class="line">                              └──&gt; 从节点2</span><br></pre></td></tr></table></figure>
+
+<p><strong>同步 vs 异步复制</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步</td>
+<td>数据一致</td>
+<td>延迟高，可用性差</td>
+</tr>
+<tr>
+<td>异步</td>
+<td>延迟低</td>
+<td>可能数据丢失</td>
+</tr>
+<tr>
+<td>半同步</td>
+<td>平衡</td>
+<td>实现复杂</td>
+</tr>
+</tbody></table>
+<h3 id="复制延迟问题"><a href="#复制延迟问题" class="headerlink" title="复制延迟问题"></a>复制延迟问题</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>说明</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读己之写</td>
+<td>写后读可能读到旧数据</td>
+<td>修改的数据从主节点读</td>
+</tr>
+<tr>
+<td>单调读</td>
+<td>刷新后可能看到更旧的数据</td>
+<td>每个用户固定副本</td>
+</tr>
+<tr>
+<td>一致前缀读</td>
+<td>因果关系被打乱</td>
+<td>相关写入同一分区</td>
+</tr>
+</tbody></table>
+<h3 id="多主复制"><a href="#多主复制" class="headerlink" title="多主复制"></a>多主复制</h3><p><strong>适用场景</strong>：多数据中心、离线客户端、协作编辑</p>
+<p><strong>写冲突解决</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>最后写入胜出 (LWW)</td>
+<td>时间戳最新的覆盖</td>
+</tr>
+<tr>
+<td>合并值</td>
+<td>如拼接 “A/B”</td>
+</tr>
+<tr>
+<td>CRDT</td>
+<td>特殊数据结构自动合并</td>
+</tr>
+<tr>
+<td>提示用户</td>
+<td>类似 Git 冲突</td>
+</tr>
+</tbody></table>
+<h3 id="无主复制-Dynamo-风格"><a href="#无主复制-Dynamo-风格" class="headerlink" title="无主复制 (Dynamo 风格)"></a>无主复制 (Dynamo 风格)</h3><p><strong>Quorum 公式</strong>：<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="11.88ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 5251 765"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D44A" d="M436 683Q450 683 486 682T553 680Q604 680 638 681T677 682Q695 682 695 674Q695 670 692 659Q687 641 683 639T661 637Q636 636 621 632T600 624T597 615Q597 603 613 377T629 138L631 141Q633 144 637 151T649 170T666 200T690 241T720 295T759 362Q863 546 877 572T892 604Q892 619 873 628T831 637Q817 637 817 647Q817 650 819 660Q823 676 825 679T839 682Q842 682 856 682T895 682T949 681Q1015 681 1034 683Q1048 683 1048 672Q1048 666 1045 655T1038 640T1028 637Q1006 637 988 631T958 617T939 600T927 584L923 578L754 282Q586 -14 585 -15Q579 -22 561 -22Q546 -22 542 -17Q539 -14 523 229T506 480L494 462Q472 425 366 239Q222 -13 220 -15T215 -19Q210 -22 197 -22Q178 -22 176 -15Q176 -12 154 304T131 622Q129 631 121 633T82 637H58Q51 644 51 648Q52 671 64 683H76Q118 680 176 680Q301 680 313 683H323Q329 677 329 674T327 656Q322 641 318 637H297Q236 634 232 620Q262 160 266 136L501 550L499 587Q496 629 489 632Q483 636 447 637Q428 637 422 639T416 648Q416 650 418 660Q419 664 420 669T421 676T424 680T428 682T436 683Z"></path></g><g data-mml-node="mo" transform="translate(1270.2,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mi" transform="translate(2270.4,0)"><path data-c="1D445" d="M230 637Q203 637 198 638T193 649Q193 676 204 682Q206 683 378 683Q550 682 564 680Q620 672 658 652T712 606T733 563T739 529Q739 484 710 445T643 385T576 351T538 338L545 333Q612 295 612 223Q612 212 607 162T602 80V71Q602 53 603 43T614 25T640 16Q668 16 686 38T712 85Q717 99 720 102T735 105Q755 105 755 93Q755 75 731 36Q693 -21 641 -21H632Q571 -21 531 4T487 82Q487 109 502 166T517 239Q517 290 474 313Q459 320 449 321T378 323H309L277 193Q244 61 244 59Q244 55 245 54T252 50T269 48T302 46H333Q339 38 339 37T336 19Q332 6 326 0H311Q275 2 180 2Q146 2 117 2T71 2T50 1Q33 1 33 10Q33 12 36 24Q41 43 46 45Q50 46 61 46H67Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628Q287 635 230 637ZM630 554Q630 586 609 608T523 636Q521 636 500 636T462 637H440Q393 637 386 627Q385 624 352 494T319 361Q319 360 388 360Q466 361 492 367Q556 377 592 426Q608 449 619 486T630 554Z"></path></g><g data-mml-node="mo" transform="translate(3307.2,0)"><path data-c="3E" d="M84 520Q84 528 88 533T96 539L99 540Q106 540 253 471T544 334L687 265Q694 260 694 250T687 235Q685 233 395 96L107 -40H101Q83 -38 83 -20Q83 -19 83 -17Q82 -10 98 -1Q117 9 248 71Q326 108 378 132L626 250L378 368Q90 504 86 509Q84 513 84 520Z"></path></g><g data-mml-node="mi" transform="translate(4363,0)"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g></g></g></svg></mjx-container></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">N=3, W=2, R=2:</span><br><span class="line">写入需要 2 个副本确认</span><br><span class="line">读取需要查询 2 个副本</span><br><span class="line">至少 1 个副本既写入又读取，保证读到最新值</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="第6章：数据分区"><a href="#第6章：数据分区" class="headerlink" title="第6章：数据分区"></a>第6章：数据分区</h2><h3 id="分区策略"><a href="#分区策略" class="headerlink" title="分区策略"></a>分区策略</h3><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按键范围</td>
+<td>支持范围查询</td>
+<td>可能热点</td>
+</tr>
+<tr>
+<td>按键哈希</td>
+<td>分布均匀</td>
+<td>失去范围查询</td>
+</tr>
+</tbody></table>
+<p><strong>一致性哈希</strong>：添加/删除节点只影响相邻区间</p>
+<h3 id="热点问题"><a href="#热点问题" class="headerlink" title="热点问题"></a>热点问题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">明星发微博 → 所有请求发往同一分区</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决方案</strong>：拆分热键（添加随机后缀）、本地缓存、限流</p>
+<h3 id="二级索引分区"><a href="#二级索引分区" class="headerlink" title="二级索引分区"></a>二级索引分区</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本地索引</td>
+<td>每分区维护自己的索引，查询需 scatter/gather</td>
+</tr>
+<tr>
+<td>全局索引</td>
+<td>索引本身分区，读快写慢（异步更新）</td>
+</tr>
+</tbody></table>
+<h3 id="再平衡策略"><a href="#再平衡策略" class="headerlink" title="再平衡策略"></a>再平衡策略</h3><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>说明</th>
+<th>产品示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>固定分区数</td>
+<td>预创建大量分区</td>
+<td>Elasticsearch</td>
+</tr>
+<tr>
+<td>动态分区</td>
+<td>自动拆分合并</td>
+<td>HBase</td>
+</tr>
+<tr>
+<td>按节点比例</td>
+<td>每节点固定分区数</td>
+<td>Cassandra</td>
+</tr>
+</tbody></table>
+<h3 id="请求路由"><a href="#请求路由" class="headerlink" title="请求路由"></a>请求路由</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">方案1: 客户端直连任意节点 → 转发</span><br><span class="line">方案2: 路由层（知道分区映射）</span><br><span class="line">方案3: 客户端感知分区（如使用 ZooKeeper）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="第7章：事务"><a href="#第7章：事务" class="headerlink" title="第7章：事务"></a>第7章：事务</h2><h3 id="ACID-特性"><a href="#ACID-特性" class="headerlink" title="ACID 特性"></a>ACID 特性</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原子性</td>
+<td>全部成功或全部失败</td>
+</tr>
+<tr>
+<td>一致性</td>
+<td>从有效状态到有效状态</td>
+</tr>
+<tr>
+<td>隔离性</td>
+<td>并发事务互不干扰</td>
+</tr>
+<tr>
+<td>持久性</td>
+<td>提交后数据不丢失</td>
+</tr>
+</tbody></table>
+<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><table>
+<thead>
+<tr>
+<th>级别</th>
+<th>防止问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读已提交</td>
+<td>脏读、脏写</td>
+</tr>
+<tr>
+<td>快照隔离</td>
+<td>不可重复读</td>
+</tr>
+<tr>
+<td>串行化</td>
+<td>所有并发异常</td>
+</tr>
+</tbody></table>
+<h3 id="丢失更新问题"><a href="#丢失更新问题" class="headerlink" title="丢失更新问题"></a>丢失更新问题</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">事务1: 读取 counter=10     写入 counter=11</span><br><span class="line">事务2:      读取 counter=10        写入 counter=11</span><br><span class="line">期望: 12，实际: 11（事务1的更新丢失）</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决</strong>：原子操作、显式锁定、Compare-and-Set</p>
+<h3 id="写偏斜"><a href="#写偏斜" class="headerlink" title="写偏斜"></a>写偏斜</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">医院规则：至少1名医生值班</span><br><span class="line">Alice 查询：2人值班，取消自己</span><br><span class="line">Bob 同时：2人值班，取消自己</span><br><span class="line">结果：无人值班！</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决</strong>：串行化隔离、物化冲突、显式锁定</p>
+<h3 id="串行化实现"><a href="#串行化实现" class="headerlink" title="串行化实现"></a>串行化实现</h3><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>特点</th>
+<th>产品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实际串行</td>
+<td>单线程执行</td>
+<td>Redis, VoltDB</td>
+</tr>
+<tr>
+<td>两阶段锁 (2PL)</td>
+<td>读写互斥</td>
+<td>传统数据库</td>
+</tr>
+<tr>
+<td>串行化快照隔离 (SSI)</td>
+<td>乐观并发</td>
+<td>PostgreSQL 9.1+</td>
+</tr>
+</tbody></table>
+<h3 id="分布式事务-2PC"><a href="#分布式事务-2PC" class="headerlink" title="分布式事务 (2PC)"></a>分布式事务 (2PC)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">阶段1: 协调者 ──准备?──&gt; 所有参与者</span><br><span class="line">阶段2: 协调者 ──提交/回滚──&gt; 所有参与者</span><br><span class="line"></span><br><span class="line">问题：协调者故障时参与者阻塞</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="第8章：分布式系统的挑战"><a href="#第8章：分布式系统的挑战" class="headerlink" title="第8章：分布式系统的挑战"></a>第8章：分布式系统的挑战</h2><h3 id="部分失效"><a href="#部分失效" class="headerlink" title="部分失效"></a>部分失效</h3><table>
+<thead>
+<tr>
+<th>单机系统</th>
+<th>分布式系统</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>要么工作要么不工作</td>
+<td>部分可能工作</td>
+</tr>
+<tr>
+<td>故障通常完全</td>
+<td>故障通常部分</td>
+</tr>
+</tbody></table>
+<h3 id="不可靠的网络"><a href="#不可靠的网络" class="headerlink" title="不可靠的网络"></a>不可靠的网络</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">请求可能：丢失、延迟、重复</span><br><span class="line">响应可能：丢失、延迟</span><br><span class="line">无法区分：网络故障 vs 节点故障</span><br></pre></td></tr></table></figure>
+
+<p><strong>超时困境</strong>：太短误判正常节点，太长恢复慢</p>
+<h3 id="不可靠的时钟"><a href="#不可靠的时钟" class="headerlink" title="不可靠的时钟"></a>不可靠的时钟</h3><table>
+<thead>
+<tr>
+<th>时钟类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日历时钟</td>
+<td>当前时间（可能跳跃）</td>
+</tr>
+<tr>
+<td>单调时钟</td>
+<td>测量持续时间（保证递增）</td>
+</tr>
+</tbody></table>
+<p><strong>LWW 的风险</strong>：时钟不同步导致新数据被旧数据覆盖</p>
+<h3 id="Fencing-Token"><a href="#Fencing-Token" class="headerlink" title="Fencing Token"></a>Fencing Token</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">节点A 获取锁 token=33 → 暂停</span><br><span class="line">节点B 获取锁 token=34 → 写入成功</span><br><span class="line">节点A 恢复 token=33 → 被拒绝（33 &lt; 34）</span><br></pre></td></tr></table></figure>
+
+<h3 id="系统模型"><a href="#系统模型" class="headerlink" title="系统模型"></a>系统模型</h3><table>
+<thead>
+<tr>
+<th>时序假设</th>
+<th>节点故障假设</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步/部分同步/异步</td>
+<td>崩溃-停止/崩溃-恢复/拜占庭</td>
+</tr>
+</tbody></table>
+<p><strong>正确性</strong>：安全性（坏事不发生） + 活性（好事最终发生）</p>
+<hr>
+<h2 id="第9章：一致性与共识"><a href="#第9章：一致性与共识" class="headerlink" title="第9章：一致性与共识"></a>第9章：一致性与共识</h2><h3 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">弱 ←─────────────────────────────────→ 强</span><br><span class="line"></span><br><span class="line">最终一致性    因果一致性    顺序一致性    线性一致性</span><br></pre></td></tr></table></figure>
+
+<h3 id="线性一致性"><a href="#线性一致性" class="headerlink" title="线性一致性"></a>线性一致性</h3><blockquote>
+<p>系统表现得好像只有一个数据副本，所有操作都是原子的</p>
+</blockquote>
+<p><strong>应用</strong>：分布式锁、领导者选举、唯一性约束</p>
+<h3 id="CAP-定理"><a href="#CAP-定理" class="headerlink" title="CAP 定理"></a>CAP 定理</h3><p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.452ex;" xmlns="http://www.w3.org/2000/svg" width="38.462ex" height="2.149ex" role="img" focusable="false" viewBox="0 -750 17000 950"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mtext"><text data-variant="normal" transform="scale(1,-1)" font-size="884px" font-family="serif">网</text><text data-variant="normal" transform="translate(1000,0) scale(1,-1)" font-size="884px" font-family="serif">络</text><text data-variant="normal" transform="translate(2000,0) scale(1,-1)" font-size="884px" font-family="serif">分</text><text data-variant="normal" transform="translate(3000,0) scale(1,-1)" font-size="884px" font-family="serif">区</text><text data-variant="normal" transform="translate(4000,0) scale(1,-1)" font-size="884px" font-family="serif">时</text><text data-variant="normal" transform="translate(5000,0) scale(1,-1)" font-size="884px" font-family="serif">，</text><text data-variant="normal" transform="translate(6000,0) scale(1,-1)" font-size="884px" font-family="serif">一</text><text data-variant="normal" transform="translate(7000,0) scale(1,-1)" font-size="884px" font-family="serif">致</text><text data-variant="normal" transform="translate(8000,0) scale(1,-1)" font-size="884px" font-family="serif">性</text><text data-variant="normal" transform="translate(9000,0) scale(1,-1)" font-size="884px" font-family="serif">与</text><text data-variant="normal" transform="translate(10000,0) scale(1,-1)" font-size="884px" font-family="serif">可</text><text data-variant="normal" transform="translate(11000,0) scale(1,-1)" font-size="884px" font-family="serif">用</text><text data-variant="normal" transform="translate(12000,0) scale(1,-1)" font-size="884px" font-family="serif">性</text><text data-variant="normal" transform="translate(13000,0) scale(1,-1)" font-size="884px" font-family="serif">不</text><text data-variant="normal" transform="translate(14000,0) scale(1,-1)" font-size="884px" font-family="serif">可</text><text data-variant="normal" transform="translate(15000,0) scale(1,-1)" font-size="884px" font-family="serif">兼</text><text data-variant="normal" transform="translate(16000,0) scale(1,-1)" font-size="884px" font-family="serif">得</text></g></g></g></svg></mjx-container></p>
+<table>
+<thead>
+<tr>
+<th>选择</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CP</td>
+<td>保证一致性，牺牲可用性</td>
+</tr>
+<tr>
+<td>AP</td>
+<td>保证可用性，牺牲一致性</td>
+</tr>
+</tbody></table>
+<h3 id="共识问题"><a href="#共识问题" class="headerlink" title="共识问题"></a>共识问题</h3><blockquote>
+<p>多个节点就某个值达成一致</p>
+</blockquote>
+<p><strong>性质</strong>：一致同意、完整性、终止性、有效性</p>
+<p><strong>FLP 不可能定理</strong>：异步系统中存在故障节点时，不存在总能达成共识的算法</p>
+<h3 id="Paxos-算法"><a href="#Paxos-算法" class="headerlink" title="Paxos 算法"></a>Paxos 算法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">阶段1 (Prepare):</span><br><span class="line">提议者 ──Prepare(n)──&gt; 接受者</span><br><span class="line">        &lt;──Promise──</span><br><span class="line"></span><br><span class="line">阶段2 (Accept):</span><br><span class="line">提议者 ──Accept(n,v)──&gt; 接受者</span><br><span class="line">        &lt;──Accepted──</span><br></pre></td></tr></table></figure>
+
+<h3 id="Raft-算法"><a href="#Raft-算法" class="headerlink" title="Raft 算法"></a>Raft 算法</h3><p><strong>比 Paxos 更易理解</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">角色：领导者、跟随者、候选人</span><br><span class="line">任期：逻辑时钟，每次选举递增</span><br><span class="line"></span><br><span class="line">选举流程：</span><br><span class="line">1. 跟随者超时 → 变候选人</span><br><span class="line">2. 请求投票 → 获多数票</span><br><span class="line">3. 成为领导者 → 复制日志</span><br></pre></td></tr></table></figure>
+
+<h3 id="共识的应用"><a href="#共识的应用" class="headerlink" title="共识的应用"></a>共识的应用</h3><table>
+<thead>
+<tr>
+<th>产品</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ZooKeeper</td>
+<td>协调服务、配置管理</td>
+</tr>
+<tr>
+<td>etcd</td>
+<td>Kubernetes 状态存储</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>服务发现</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="本部分要点总结"><a href="#本部分要点总结" class="headerlink" title="本部分要点总结"></a>本部分要点总结</h2><ol>
+<li><strong>复制的核心挑战是处理数据变更</strong></li>
+<li><strong>分区策略需要权衡范围查询和负载均衡</strong></li>
+<li><strong>事务隔离级别是正确性和性能的权衡</strong></li>
+<li><strong>分布式系统的核心挑战是部分失效</strong></li>
+<li><strong>线性一致性是最强保证，但代价高昂</strong></li>
+<li><strong>Raft 比 Paxos 更易理解，适合学习</strong></li>
+</ol>
+<hr>
+<p><a href="/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">上一部分：数据系统基础</a> | <a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/">返回总览</a> | <a href="/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/">下一部分：衍生数据</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DDIA/" rel="tag"><i class="fa fa-tag"></i> DDIA</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" rel="tag"><i class="fa fa-tag"></i> 分布式系统</a>
+              <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" rel="tag"><i class="fa fa-tag"></i> 一致性</a>
+              <a href="/tags/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 共识算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" rel="prev" title="DDIA Part 1：数据系统基础">
+                  <i class="fa fa-angle-left"></i> DDIA Part 1：数据系统基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/" rel="next" title="DDIA Part 3：衍生数据">
+                  DDIA Part 3：衍生数据 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
