@@ -1,3 +1,71 @@
+// ====== 全局主题美化 ======
+
+// 页面背景渐变
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 50%, #f0e6f6 100%);
+  background-attachment: fixed;
+}
+
+// 主内容区域样式
+.main-inner {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+  padding: 30px;
+  margin-top: 20px;
+}
+
+// ====== 头部样式 ======
+
+// 网站标题
+.site-brand-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 30px 0;
+}
+
+.site-title {
+  color: #fff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+// 副标题（邮箱）
+.site-subtitle {
+  font-size: 0.95em;
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+// 导航菜单
+.site-nav {
+  background: transparent !important;
+}
+
+.menu-item a {
+  color: #555 !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 8px 16px !important;
+}
+
+.menu-item a:hover,
+.menu-item-active a {
+  color: #667eea !important;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.menu-item .fa,
+.menu-item .fab {
+  color: #764ba2;
+}
+
+// ====== 首页文章列表 ======
+
 // 首页只显示文章标题，隐藏内容
 .posts-expand .post-body {
   display: none;
@@ -7,33 +75,211 @@
   display: none;
 }
 
-// 首页文章标题样式优化
+// 首页文章卡片样式
+.posts-expand .post-block {
+  background: linear-gradient(145deg, #fff 0%, #faf8fc 100%);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.08);
+  transition: all 0.3s ease;
+}
+
+.posts-expand .post-block:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+// 文章标题样式
 .posts-expand .post-title {
-  font-size: 1.3em;
-  margin-bottom: 5px;
+  font-size: 1.4em;
+  margin-bottom: 10px;
 }
 
 .posts-expand .post-title-link {
+  color: #333 !important;
   border-bottom: none;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
 }
 
-// 文章 meta 信息简化
+.posts-expand .post-title-link:hover {
+  opacity: 0.8;
+}
+
+// 文章 meta 信息
 .posts-expand .post-meta {
-  margin-bottom: 10px;
+  margin-bottom: 0;
   font-size: 0.85em;
+  color: #888;
 }
 
-// 文章块间距调整
-.posts-expand .post-block {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px dashed #eee;
+.posts-expand .post-meta a {
+  color: #764ba2 !important;
 }
 
-// 首页邮箱显示样式
-.site-subtitle {
+// ====== 链接和按钮 ======
+
+a {
+  color: #667eea;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: #764ba2;
+}
+
+// ====== 分类和标签页 ======
+
+.category-all-page .category-list-link,
+.tag-cloud a {
+  color: #667eea !important;
+  transition: all 0.3s ease;
+}
+
+.category-all-page .category-list-link:hover,
+.tag-cloud a:hover {
+  color: #764ba2 !important;
+}
+
+// 标签云样式
+.tag-cloud a {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  padding: 5px 12px;
+  border-radius: 15px;
+  margin: 3px;
+  display: inline-block;
+}
+
+.tag-cloud a:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+}
+
+// ====== 归档页 ======
+
+.post-list .post-list-item a {
+  color: #333 !important;
+}
+
+.post-list .post-list-item a:hover {
+  color: #667eea !important;
+}
+
+// ====== 文章页内容 ======
+
+.post-body {
+  color: #444;
+  line-height: 1.8;
+}
+
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4 {
+  color: #333;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+  padding-bottom: 8px;
+}
+
+// 代码块样式
+.post-body code {
+  background: linear-gradient(135deg, #f8f4fc, #f0f4ff);
+  color: #764ba2;
+  padding: 2px 6px;
+  border-radius: 4px;
   font-size: 0.9em;
-  color: #666;
+}
+
+.post-body pre {
+  background: linear-gradient(135deg, #2d2d3a, #1a1a2e) !important;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+// 表格样式
+.post-body table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.1);
+}
+
+.post-body table th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+.post-body table tr:nth-child(even) {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+// 引用块样式
+.post-body blockquote {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  border-left: 4px solid #764ba2;
+  border-radius: 0 8px 8px 0;
+  padding: 15px 20px;
+  margin: 20px 0;
+}
+
+// ====== 页脚 ======
+
+.footer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 30px 0;
+  margin-top: 40px;
+}
+
+.footer a {
+  color: #fff !important;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+// ====== 搜索框 ======
+
+.search-input {
+  border-radius: 20px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #764ba2;
+  box-shadow: 0 0 10px rgba(118, 75, 162, 0.2);
+}
+
+// ====== 返回顶部按钮 ======
+
+.back-to-top {
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  color: #fff !important;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+// ====== 分页器 ======
+
+.pagination .page-number {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-number:hover,
+.pagination .page-number.current {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff !important;
 }
 
 // ====== 侧边栏 About Me 样式 ======
