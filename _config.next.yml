@@ -43,15 +43,26 @@ menu_settings:
 
 sidebar:
   position: left
-  display: post
+  display: always
   padding: 18
   offset: 12
+  # 在侧边栏宽度适配更多内容
+  width: 320
 
 # Sidebar Avatar
 avatar:
   url: /images/avatar.gif
   rounded: true
   rotated: false
+
+# 作者信息（显示在侧边栏）
+# Author info is defined in main _config.yml
+
+# 侧边栏描述信息
+description: |
+  🔬 AI Researcher & Developer
+  📚 NLP | LLM Agent | Deep Learning
+  💡 Head first to the Truth
 
 # Posts / Categories / Tags in sidebar.
 site_state: true
@@ -65,6 +76,16 @@ social_icons:
   enable: true
   icons_only: false
   transition: false
+
+# Links 友情链接
+links_settings:
+  icon: fa fa-globe
+  title: 快速导航
+
+links:
+  关于我: /about/
+  论文解读: /categories/论文解读/
+  读书笔记: /categories/读书笔记/
 
 # Table of Contents in the Sidebar
 toc:

@@ -36,3 +36,116 @@
   color: #666;
 }
 
+// ====== 侧边栏 About Me 样式 ======
+
+// 侧边栏整体样式
+.sidebar-inner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+}
+
+// 作者头像样式
+.site-author-image {
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.site-author-image:hover {
+  transform: scale(1.1);
+}
+
+// 作者名称样式
+.site-author-name {
+  color: #fff !important;
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-top: 15px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+// 侧边栏描述样式
+.site-description {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-size: 0.9em;
+  line-height: 1.8;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+// 侧边栏状态（文章数等）
+.site-state-item {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  margin: 5px;
+  padding: 8px 15px;
+}
+
+.site-state-item-count {
+  color: #fff !important;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.site-state-item-name {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+// 社交链接样式
+.links-of-author a {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 5px 15px;
+  margin: 3px;
+  transition: all 0.3s ease;
+}
+
+.links-of-author a:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+// 友情链接/快速导航样式
+.links-of-blogroll-title {
+  color: #fff !important;
+  font-size: 1em;
+  margin-top: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.links-of-blogroll-list a {
+  color: rgba(255, 255, 255, 0.9) !important;
+  display: block;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.links-of-blogroll-list a:hover {
+  color: #fff !important;
+  padding-left: 10px;
+}
+
+// 侧边栏目录样式（文章页）
+.post-toc {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.post-toc a {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.post-toc a:hover,
+.post-toc .active a {
+  color: #fff !important;
+}
+
