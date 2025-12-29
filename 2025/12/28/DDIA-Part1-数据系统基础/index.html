@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="本文是 DDIA 第一部分的读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。  第1章：可靠性、可扩展性与可维护性数据密集型应用的组成现代数据密集型应用通常由多个组件组合： 123456┌─────────────────────────────────────────┐│         数据密集型应用架构               │├─────────────">
+    <meta name="description" content="本文是 DDIA 第一部分的完整读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。  第1章：可靠性、可扩展性与可维护性1.1 数据密集型应用的组成现代数据密集型应用通常由多个组件组合： 12345678910┌─────────────────────────────────────────────────────────────┐│">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DDIA Part 1：数据系统基础">
+<meta property="og:title" content="DDIA Part 1: 数据系统基础">
 <meta property="og:url" content="https://foosynaptic.github.io/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="本文是 DDIA 第一部分的读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。  第1章：可靠性、可扩展性与可维护性数据密集型应用的组成现代数据密集型应用通常由多个组件组合： 123456┌─────────────────────────────────────────┐│         数据密集型应用架构               │├─────────────">
+<meta property="og:description" content="本文是 DDIA 第一部分的完整读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。  第1章：可靠性、可扩展性与可维护性1.1 数据密集型应用的组成现代数据密集型应用通常由多个组件组合： 12345678910┌─────────────────────────────────────────────────────────────┐│">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-27T18:01:00.000Z">
-<meta property="article:modified_time" content="2025-12-28T02:05:40.616Z">
+<meta property="article:published_time" content="2025-12-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-29T13:32:28.486Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="DDIA">
 <meta property="article:tag" content="存储引擎">
@@ -39,10 +39,10 @@
 <link rel="canonical" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/","path":"2025/12/28/DDIA-Part1-数据系统基础/","title":"DDIA Part 1：数据系统基础"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/","path":"2025/12/28/DDIA-Part1-数据系统基础/","title":"DDIA Part 1: 数据系统基础"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>DDIA Part 1：数据系统基础 | fooSynaptic</title>
+<title>DDIA Part 1: 数据系统基础 | fooSynaptic</title>
   
 
 
@@ -279,7 +279,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC1%E7%AB%A0%EF%BC%9A%E5%8F%AF%E9%9D%A0%E6%80%A7%E3%80%81%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">第1章：可靠性、可扩展性与可维护性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">1.1.</span> <span class="nav-text">数据密集型应用的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-Reliability"><span class="nav-number">1.2.</span> <span class="nav-text">可靠性 (Reliability)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7-Scalability"><span class="nav-number">1.3.</span> <span class="nav-text">可扩展性 (Scalability)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7-Maintainability"><span class="nav-number">1.4.</span> <span class="nav-text">可维护性 (Maintainability)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC2%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">第2章：数据模型与查询语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">三种数据模型对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">关系模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">文档模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">图模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F-vs-%E5%91%BD%E4%BB%A4%E5%BC%8F"><span class="nav-number">2.5.</span> <span class="nav-text">声明式 vs 命令式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC3%E7%AB%A0%EF%BC%9A%E5%AD%98%E5%82%A8%E4%B8%8E%E6%A3%80%E7%B4%A2"><span class="nav-number">3.</span> <span class="nav-text">第3章：存储与检索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E5%A4%A7%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%AE%B6%E6%97%8F"><span class="nav-number">3.1.</span> <span class="nav-text">两大存储引擎家族</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LSM-Tree-%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">LSM-Tree 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree-%E7%BB%93%E6%9E%84"><span class="nav-number">3.3.</span> <span class="nav-text">B-Tree 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree-vs-LSM-Tree"><span class="nav-number">3.4.</span> <span class="nav-text">B-Tree vs LSM-Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OLTP-vs-OLAP"><span class="nav-number">3.5.</span> <span class="nav-text">OLTP vs OLAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC4%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E6%BC%94%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">第4章：数据编码与演化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7%E6%A6%82%E5%BF%B5"><span class="nav-number">4.1.</span> <span class="nav-text">兼容性概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="nav-number">4.2.</span> <span class="nav-text">编码格式对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Protocol-Buffers"><span class="nav-number">4.3.</span> <span class="nav-text">Protocol Buffers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Avro"><span class="nav-number">4.4.</span> <span class="nav-text">Avro</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.5.</span> <span class="nav-text">数据流模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E9%83%A8%E5%88%86%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">本部分要点总结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC1%E7%AB%A0%EF%BC%9A%E5%8F%AF%E9%9D%A0%E6%80%A7%E3%80%81%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E4%B8%8E%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">第1章：可靠性、可扩展性与可维护性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 数据密集型应用的组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%8F%AF%E9%9D%A0%E6%80%A7%EF%BC%88Reliability%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 可靠性（Reliability）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%85%E9%9A%9C%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%BA%94%E5%AF%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">故障类型及应对</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%EF%BC%88Scalability%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 可扩展性（Scalability）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0%E6%80%A7%E8%83%BD%EF%BC%9A%E7%99%BE%E5%88%86%E4%BD%8D%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">描述性能：百分位数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Twitter-%E6%A1%88%E4%BE%8B%EF%BC%9A%E6%8E%A8%E6%8B%89%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">Twitter 案例：推拉模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%AD%96%E7%95%A5"><span class="nav-number">1.3.3.</span> <span class="nav-text">扩展策略</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7%EF%BC%88Maintainability%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 可维护性（Maintainability）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC2%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">第2章：数据模型与查询语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E5%88%86%E5%B1%82"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据模型分层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 关系模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%96%87%E6%A1%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 文档模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%9B%BE%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 图模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 数据模型选择指南</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC3%E7%AB%A0%EF%BC%9A%E5%AD%98%E5%82%A8%E4%B8%8E%E6%A3%80%E7%B4%A2"><span class="nav-number">3.</span> <span class="nav-text">第3章：存储与检索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A4%E5%A4%A7%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%AE%B6%E6%97%8F"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 两大存储引擎家族</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 哈希索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-LSM-Tree%EF%BC%88Log-Structured-Merge-Tree%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 LSM-Tree（Log-Structured Merge-Tree）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-B-Tree"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 B-Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-OLTP-vs-OLAP"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 OLTP vs OLAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC4%E7%AB%A0%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81%E4%B8%8E%E6%BC%94%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">第4章：数据编码与演化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%85%BC%E5%AE%B9%E6%80%A7%E6%A6%82%E5%BF%B5"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 兼容性概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E7%BC%96%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 编码格式对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Protocol-Buffers-%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 Protocol Buffers 示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 数据流模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">本章关键要点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">6.</span> <span class="nav-text">延伸阅读</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -371,12 +371,12 @@ mjx-container[display="true"] + br {
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="DDIA Part 1：数据系统基础 | fooSynaptic">
+      <meta itemprop="name" content="DDIA Part 1: 数据系统基础 | fooSynaptic">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          DDIA Part 1：数据系统基础
+          DDIA Part 1: 数据系统基础
         </h1>
 
         <div class="post-meta-container">
@@ -387,7 +387,7 @@ mjx-container[display="true"] + br {
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-12-28 02:01:00" itemprop="dateCreated datePublished" datetime="2025-12-28T02:01:00+08:00">2025-12-28</time>
+      <time title="创建时间：2025-12-28 00:00:00" itemprop="dateCreated datePublished" datetime="2025-12-28T00:00:00+08:00">2025-12-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -408,66 +408,139 @@ mjx-container[display="true"] + br {
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>本文是 DDIA 第一部分的读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。</p>
+    <div class="post-body" itemprop="articleBody"><p>本文是 DDIA 第一部分的完整读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。</p>
 <hr>
-<h2 id="第1章：可靠性、可扩展性与可维护性"><a href="#第1章：可靠性、可扩展性与可维护性" class="headerlink" title="第1章：可靠性、可扩展性与可维护性"></a>第1章：可靠性、可扩展性与可维护性</h2><h3 id="数据密集型应用的组成"><a href="#数据密集型应用的组成" class="headerlink" title="数据密集型应用的组成"></a>数据密集型应用的组成</h3><p>现代数据密集型应用通常由多个组件组合：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────┐</span><br><span class="line">│         数据密集型应用架构               │</span><br><span class="line">├─────────────────────────────────────────┤</span><br><span class="line">│  数据库 → 缓存 → 搜索索引               │</span><br><span class="line">│  流处理 → 批处理 → 消息队列             │</span><br><span class="line">└─────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="第1章：可靠性、可扩展性与可维护性"><a href="#第1章：可靠性、可扩展性与可维护性" class="headerlink" title="第1章：可靠性、可扩展性与可维护性"></a>第1章：可靠性、可扩展性与可维护性</h2><h3 id="1-1-数据密集型应用的组成"><a href="#1-1-数据密集型应用的组成" class="headerlink" title="1.1 数据密集型应用的组成"></a>1.1 数据密集型应用的组成</h3><p>现代数据密集型应用通常由多个组件组合：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                     数据密集型应用架构                        │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │</span><br><span class="line">│  │   数据库     │    │    缓存      │    │   搜索索引   │     │</span><br><span class="line">│  └─────────────┘    └─────────────┘    └─────────────┘     │</span><br><span class="line">│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │</span><br><span class="line">│  │  流处理     │    │   批处理     │    │  消息队列    │     │</span><br><span class="line">│  └─────────────┘    └─────────────┘    └─────────────┘     │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
 
-<h3 id="可靠性-Reliability"><a href="#可靠性-Reliability" class="headerlink" title="可靠性 (Reliability)"></a>可靠性 (Reliability)</h3><blockquote>
-<p>系统在面对故障时仍能正确运行</p>
-</blockquote>
-<p><strong>故障类型与应对：</strong></p>
 <table>
 <thead>
 <tr>
-<th>故障类型</th>
-<th>应对策略</th>
+<th>类型</th>
+<th>特点</th>
+<th>主要瓶颈</th>
+<th>典型场景</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>硬件故障</td>
-<td>RAID、双电源、多副本</td>
+<td><strong>数据密集型</strong></td>
+<td>数据量大、复杂、变化快</td>
+<td>磁盘I/O、网络带宽</td>
+<td>Web应用、社交网络</td>
 </tr>
 <tr>
-<td>软件错误</td>
-<td>测试、隔离、监控、快速重启</td>
-</tr>
-<tr>
-<td>人为错误</td>
-<td>沙箱环境、灰度发布、快速回滚</td>
+<td><strong>计算密集型</strong></td>
+<td>计算量大、算法复杂</td>
+<td>CPU处理能力</td>
+<td>科学计算、图形渲染</td>
 </tr>
 </tbody></table>
-<h3 id="可扩展性-Scalability"><a href="#可扩展性-Scalability" class="headerlink" title="可扩展性 (Scalability)"></a>可扩展性 (Scalability)</h3><blockquote>
-<p>系统应对负载增长的能力</p>
+<h3 id="1-2-可靠性（Reliability）"><a href="#1-2-可靠性（Reliability）" class="headerlink" title="1.2 可靠性（Reliability）"></a>1.2 可靠性（Reliability）</h3><blockquote>
+<p><strong>可靠性</strong>：系统在面对故障时，仍能正确运行</p>
 </blockquote>
-<p><strong>性能指标</strong>：使用百分位数而非平均值</p>
 <table>
+<thead>
+<tr>
+<th>术语</th>
+<th>英文</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>故障</strong></td>
+<td>Fault</td>
+<td>系统中某个组件偏离其规格</td>
+</tr>
+<tr>
+<td><strong>失效</strong></td>
+<td>Failure</td>
+<td>整个系统停止为用户提供服务</td>
+</tr>
+<tr>
+<td><strong>容错</strong></td>
+<td>Fault-tolerant</td>
+<td>系统能够处理某些类型的故障</td>
+</tr>
+</tbody></table>
+<h4 id="故障类型及应对"><a href="#故障类型及应对" class="headerlink" title="故障类型及应对"></a>故障类型及应对</h4><p><strong>1. 硬件故障</strong></p>
+<ul>
+<li>硬盘损坏、内存故障、电源中断</li>
+<li>应对：RAID、双电源、热备份、多副本</li>
+</ul>
+<p><strong>2. 软件错误</strong></p>
+<ul>
+<li>比硬件故障更难预测，可能导致系统性问题</li>
+<li>应对：全面测试、进程隔离、监控告警</li>
+</ul>
+<p><strong>3. 人为错误</strong></p>
+<ul>
+<li>研究表明，运维人员的配置错误是系统中断的首要原因</li>
+<li>应对：良好的API设计、沙箱环境、快速回滚</li>
+</ul>
+<h3 id="1-3-可扩展性（Scalability）"><a href="#1-3-可扩展性（Scalability）" class="headerlink" title="1.3 可扩展性（Scalability）"></a>1.3 可扩展性（Scalability）</h3><blockquote>
+<p><strong>可扩展性</strong>：系统应对负载增长的能力</p>
+</blockquote>
+<h4 id="描述性能：百分位数"><a href="#描述性能：百分位数" class="headerlink" title="描述性能：百分位数"></a>描述性能：百分位数</h4><table>
 <thead>
 <tr>
 <th>百分位</th>
 <th>含义</th>
+<th>用途</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>p50</td>
-<td>中位数，典型响应时间</td>
+<td><strong>p50</strong></td>
+<td>中位数</td>
+<td>典型响应时间</td>
 </tr>
 <tr>
-<td>p95</td>
-<td>95%请求快于此值</td>
+<td><strong>p95</strong></td>
+<td>95%的请求快于此值</td>
+<td>较高标准</td>
 </tr>
 <tr>
-<td>p99</td>
-<td>常用于 SLA 标准</td>
+<td><strong>p99</strong></td>
+<td>99%的请求快于此值</td>
+<td>SLA标准</td>
 </tr>
 </tbody></table>
-<p><strong>扩展策略</strong>：</p>
-<ul>
-<li><strong>纵向扩展</strong>：使用更强大的机器</li>
-<li><strong>横向扩展</strong>：使用多台普通机器</li>
+<h4 id="Twitter-案例：推拉模式"><a href="#Twitter-案例：推拉模式" class="headerlink" title="Twitter 案例：推拉模式"></a>Twitter 案例：推拉模式</h4><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>描述</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>拉模式</strong></td>
+<td>读取时间线时查询关注者的推文</td>
+<td>写入简单</td>
+<td>读取开销大</td>
+</tr>
+<tr>
+<td><strong>推模式</strong></td>
+<td>发推时写入所有关注者的缓存</td>
+<td>读取快速</td>
+<td>写入开销大（大V问题）</td>
+</tr>
+<tr>
+<td><strong>混合模式</strong></td>
+<td>普通用户推模式，大V拉模式</td>
+<td>平衡读写</td>
+<td>实现复杂</td>
+</tr>
+</tbody></table>
+<h4 id="扩展策略"><a href="#扩展策略" class="headerlink" title="扩展策略"></a>扩展策略</h4><ul>
+<li><strong>纵向扩展</strong>：使用更强大的机器（简单但有上限）</li>
+<li><strong>横向扩展</strong>：使用多台普通机器（需要复杂设计）</li>
 <li><strong>弹性扩展</strong>：根据负载自动增减资源</li>
 </ul>
-<h3 id="可维护性-Maintainability"><a href="#可维护性-Maintainability" class="headerlink" title="可维护性 (Maintainability)"></a>可维护性 (Maintainability)</h3><table>
+<h3 id="1-4-可维护性（Maintainability）"><a href="#1-4-可维护性（Maintainability）" class="headerlink" title="1.4 可维护性（Maintainability）"></a>1.4 可维护性（Maintainability）</h3><blockquote>
+<p>软件的大部分成本不在于最初的开发，而在于后续的维护</p>
+</blockquote>
+<table>
 <thead>
 <tr>
 <th>方面</th>
@@ -475,106 +548,121 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>可操作性</td>
-<td>运维团队能轻松保持系统运行</td>
+<td><strong>可操作性</strong></td>
+<td>让运维团队能够轻松保持系统运行</td>
 </tr>
 <tr>
-<td>简单性</td>
-<td>新工程师能快速理解系统</td>
+<td><strong>简单性</strong></td>
+<td>让新工程师能够轻松理解系统</td>
 </tr>
 <tr>
-<td>可演化性</td>
-<td>能轻松修改和扩展系统</td>
+<td><strong>可演化性</strong></td>
+<td>让工程师能够轻松对系统进行修改</td>
 </tr>
 </tbody></table>
 <hr>
-<h2 id="第2章：数据模型与查询语言"><a href="#第2章：数据模型与查询语言" class="headerlink" title="第2章：数据模型与查询语言"></a>第2章：数据模型与查询语言</h2><h3 id="三种数据模型对比"><a href="#三种数据模型对比" class="headerlink" title="三种数据模型对比"></a>三种数据模型对比</h3><table>
+<h2 id="第2章：数据模型与查询语言"><a href="#第2章：数据模型与查询语言" class="headerlink" title="第2章：数据模型与查询语言"></a>第2章：数据模型与查询语言</h2><h3 id="2-1-数据模型分层"><a href="#2-1-数据模型分层" class="headerlink" title="2.1 数据模型分层"></a>2.1 数据模型分层</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│         应用程序层（对象、数据结构、API）        │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│         数据模型层（表、文档、图）              │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│         存储层（字节序列、内存、磁盘）           │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│         硬件层（电信号、磁场）                  │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-关系模型"><a href="#2-2-关系模型" class="headerlink" title="2.2 关系模型"></a>2.2 关系模型</h3><table>
 <thead>
 <tr>
-<th>模型</th>
-<th>特点</th>
-<th>适用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>关系模型</strong></td>
-<td>结构化、规范化、SQL</td>
-<td>事务处理、复杂查询</td>
-</tr>
-<tr>
-<td><strong>文档模型</strong></td>
-<td>灵活模式、嵌套结构</td>
-<td>树状数据、快速迭代</td>
-</tr>
-<tr>
-<td><strong>图模型</strong></td>
-<td>多对多关系</td>
-<td>社交网络、知识图谱</td>
-</tr>
-</tbody></table>
-<h3 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 规范化设计：使用外键</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> users (</span><br><span class="line">    user_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>),</span><br><span class="line">    position_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> positions(position_id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p><strong>优势</strong>：数据一致性、灵活查询、事务支持<br><strong>局限</strong>：对象-关系阻抗不匹配、模式僵化</p>
-<h3 id="文档模型"><a href="#文档模型" class="headerlink" title="文档模型"></a>文档模型</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"user_id"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"张三"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"positions"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"工程师"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"ABC公司"</span><span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"技术总监"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"XYZ公司"</span><span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>Schema-on-read vs Schema-on-write</strong>：</p>
-<ul>
-<li>关系数据库：写入时验证模式（静态类型）</li>
-<li>文档数据库：读取时解释结构（动态类型）</li>
-</ul>
-<h3 id="图模型"><a href="#图模型" class="headerlink" title="图模型"></a>图模型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// Neo4j Cypher 查询</span><br><span class="line">MATCH (alice:Person {name: 'Alice'})-[:FOLLOWS]-&gt;()-[:FOLLOWS]-&gt;(fof)</span><br><span class="line">RETURN fof.name</span><br></pre></td></tr></table></figure>
-
-<h3 id="声明式-vs-命令式"><a href="#声明式-vs-命令式" class="headerlink" title="声明式 vs 命令式"></a>声明式 vs 命令式</h3><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>特点</th>
+<th>概念</th>
+<th>描述</th>
 <th>示例</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>声明式</td>
-<td>描述想要什么结果</td>
-<td>SQL, Cypher</td>
+<td><strong>关系（Relation）</strong></td>
+<td>表</td>
+<td>users表</td>
 </tr>
 <tr>
-<td>命令式</td>
-<td>描述如何得到结果</td>
-<td>编程语言循环</td>
+<td><strong>元组（Tuple）</strong></td>
+<td>行/记录</td>
+<td>一个用户记录</td>
+</tr>
+<tr>
+<td><strong>属性（Attribute）</strong></td>
+<td>列</td>
+<td>name, email, age</td>
 </tr>
 </tbody></table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 规范化设计：使用外键引用</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> positions (</span><br><span class="line">    position_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    title <span class="type">VARCHAR</span>(<span class="number">100</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> users (</span><br><span class="line">    user_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>),</span><br><span class="line">    position_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> positions(position_id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>优势</strong>：数据一致性、灵活查询、ACID事务、成熟稳定<br><strong>局限</strong>：对象-关系阻抗不匹配、模式僵化、扩展困难</p>
+<h3 id="2-3-文档模型"><a href="#2-3-文档模型" class="headerlink" title="2.3 文档模型"></a>2.3 文档模型</h3><p><strong>代表产品</strong>：MongoDB, CouchDB, Elasticsearch</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"user_id"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"张三"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"positions"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"软件工程师"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"ABC公司"</span><span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"技术总监"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"XYZ公司"</span><span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"skills"</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">"Java"</span><span class="punctuation">,</span> <span class="string">"Python"</span><span class="punctuation">,</span> <span class="string">"分布式系统"</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>文档模型</th>
+<th>关系模型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据结构</strong></td>
+<td>嵌套/层次化</td>
+<td>扁平/规范化</td>
+</tr>
+<tr>
+<td><strong>模式</strong></td>
+<td>灵活（Schema-on-read）</td>
+<td>严格（Schema-on-write）</td>
+</tr>
+<tr>
+<td><strong>局部性</strong></td>
+<td>好（整个文档一起存储）</td>
+<td>差（需要JOIN多表）</td>
+</tr>
+<tr>
+<td><strong>多对多关系</strong></td>
+<td>较难处理</td>
+<td>容易处理</td>
+</tr>
+</tbody></table>
+<h3 id="2-4-图模型"><a href="#2-4-图模型" class="headerlink" title="2.4 图模型"></a>2.4 图模型</h3><p><strong>适用场景</strong>：社交网络、知识图谱、推荐系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// Neo4j Cypher 示例</span><br><span class="line">CREATE (alice:Person {name: 'Alice', age: 30})</span><br><span class="line">CREATE (bob:Person {name: 'Bob', age: 25})</span><br><span class="line">CREATE (alice)-[:FOLLOWS {since: '2020-01-01'}]-&gt;(bob)</span><br><span class="line"></span><br><span class="line">-- 找出 Alice 关注的人所关注的人</span><br><span class="line">MATCH (alice:Person {name: 'Alice'})-[:FOLLOWS]-&gt;()-[:FOLLOWS]-&gt;(fof)</span><br><span class="line">RETURN fof.name</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-数据模型选择指南"><a href="#2-5-数据模型选择指南" class="headerlink" title="2.5 数据模型选择指南"></a>2.5 数据模型选择指南</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">     ┌───────────────┐</span><br><span class="line">     │ 数据关系复杂吗？│</span><br><span class="line">     └───────────────┘</span><br><span class="line">        │         │</span><br><span class="line">      复杂       简单</span><br><span class="line">        │         │</span><br><span class="line">        ▼         ▼</span><br><span class="line"> ┌──────────┐  ┌─────────────┐</span><br><span class="line"> │多对多关系？│  │树状/层次结构？│</span><br><span class="line"> └──────────┘  └─────────────┘</span><br><span class="line">   │     │        │       │</span><br><span class="line">  是    否       是      否</span><br><span class="line">   ▼     ▼        ▼       ▼</span><br><span class="line">图模型  关系模型  文档模型  关系模型</span><br></pre></td></tr></table></figure>
+
 <hr>
-<h2 id="第3章：存储与检索"><a href="#第3章：存储与检索" class="headerlink" title="第3章：存储与检索"></a>第3章：存储与检索</h2><h3 id="两大存储引擎家族"><a href="#两大存储引擎家族" class="headerlink" title="两大存储引擎家族"></a>两大存储引擎家族</h3><table>
+<h2 id="第3章：存储与检索"><a href="#第3章：存储与检索" class="headerlink" title="第3章：存储与检索"></a>第3章：存储与检索</h2><h3 id="3-1-两大存储引擎家族"><a href="#3-1-两大存储引擎家族" class="headerlink" title="3.1 两大存储引擎家族"></a>3.1 两大存储引擎家族</h3><table>
 <thead>
 <tr>
 <th>类型</th>
 <th>优化目标</th>
+<th>典型应用</th>
 <th>代表产品</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>日志结构 (LSM)</td>
+<td><strong>日志结构存储</strong></td>
 <td>写入优化</td>
-<td>RocksDB, Cassandra</td>
+<td>高写入负载</td>
+<td>LevelDB, RocksDB, Cassandra</td>
 </tr>
 <tr>
-<td>原地更新 (B-Tree)</td>
+<td><strong>原地更新存储</strong></td>
 <td>读取优化</td>
-<td>MySQL, PostgreSQL</td>
+<td>事务处理</td>
+<td>MySQL InnoDB, PostgreSQL</td>
 </tr>
 </tbody></table>
-<h3 id="LSM-Tree-结构"><a href="#LSM-Tree-结构" class="headerlink" title="LSM-Tree 结构"></a>LSM-Tree 结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Level 0 (内存):</span><br><span class="line">┌────────────┐</span><br><span class="line">│  Memtable  │ ← 当前写入（平衡树）</span><br><span class="line">└────────────┘</span><br><span class="line">      ↓ 达到阈值，写入磁盘</span><br><span class="line">Level 1-N (磁盘):</span><br><span class="line">┌────┐ ┌────┐ ┌────┐</span><br><span class="line">│SS1 │ │SS2 │ │SS3 │ ← SSTable（排序键）</span><br><span class="line">└────┘ └────┘ └────┘</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-哈希索引"><a href="#3-2-哈希索引" class="headerlink" title="3.2 哈希索引"></a>3.2 哈希索引</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│              内存中的哈希表                   │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│  key1 ──&gt; 字节偏移量 0                       │</span><br><span class="line">│  key2 ──&gt; 字节偏移量 128                     │</span><br><span class="line">│  key3 ──&gt; 字节偏移量 256                     │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br><span class="line">                    │</span><br><span class="line">                    ▼</span><br><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│              磁盘上的日志文件                 │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│ offset 0  : key1,value1                      │</span><br><span class="line">│ offset 128: key2,value2                      │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
 
-<p><strong>读取流程</strong>：Memtable → 最新 SSTable → … → 最老 SSTable</p>
+<p><strong>局限</strong>：所有键必须在内存中、范围查询慢</p>
+<h3 id="3-3-LSM-Tree（Log-Structured-Merge-Tree）"><a href="#3-3-LSM-Tree（Log-Structured-Merge-Tree）" class="headerlink" title="3.3 LSM-Tree（Log-Structured Merge-Tree）"></a>3.3 LSM-Tree（Log-Structured Merge-Tree）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Level 0 (内存):</span><br><span class="line">┌────────────┐</span><br><span class="line">│  Memtable  │ ← 当前写入（平衡树）</span><br><span class="line">└────────────┘</span><br><span class="line"></span><br><span class="line">Level 1 (磁盘):</span><br><span class="line">┌────┐ ┌────┐ ┌────┐</span><br><span class="line">│SS1 │ │SS2 │ │SS3 │ ← 较新的 SSTable</span><br><span class="line">└────┘ └────┘ └────┘</span><br><span class="line"></span><br><span class="line">Level 2 (磁盘):</span><br><span class="line">┌────────┐ ┌────────┐</span><br><span class="line">│  SS4   │ │  SS5   │ ← 经过合并的 SSTable</span><br><span class="line">└────────┘ └────────┘</span><br></pre></td></tr></table></figure>
+
 <p><strong>优化技术</strong>：</p>
 <ul>
-<li><strong>布隆过滤器</strong>：快速判断键是否存在</li>
+<li><strong>布隆过滤器</strong>：快速判断键是否存在（避免无效磁盘读取）</li>
 <li><strong>压缩策略</strong>：Size-Tiered（写密集）、Leveled（读密集）</li>
 </ul>
-<h3 id="B-Tree-结构"><a href="#B-Tree-结构" class="headerlink" title="B-Tree 结构"></a>B-Tree 结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">          ┌───────────────┐</span><br><span class="line">          │    [30, 70]   │ ← 根节点</span><br><span class="line">          └───────────────┘</span><br><span class="line">         /       │        \</span><br><span class="line">┌───────┐  ┌───────────┐  ┌───────┐</span><br><span class="line">│[10,20]│  │[40,50,60] │  │[80,90]│ ← 叶子节点</span><br><span class="line">└───────┘  └───────────┘  └───────┘</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-B-Tree"><a href="#3-4-B-Tree" class="headerlink" title="3.4 B-Tree"></a>3.4 B-Tree</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">             ┌───────────────┐</span><br><span class="line">             │    [30, 70]   │ ← 根节点</span><br><span class="line">             └───────────────┘</span><br><span class="line">            /       │        \</span><br><span class="line">   ┌───────┐  ┌───────────┐  ┌───────┐</span><br><span class="line">   │[10,20]│  │[40,50,60] │  │[80,90]│ ← 内部节点</span><br><span class="line">   └───────┘  └───────────┘  └───────┘</span><br><span class="line">  /   │   \      /  │  \  \    /  │  \</span><br><span class="line">叶子节点（包含实际数据或指向数据的指针）</span><br></pre></td></tr></table></figure>
 
-<p><strong>WAL (预写日志)</strong>：先写日志，再更新数据，保证崩溃恢复</p>
-<h3 id="B-Tree-vs-LSM-Tree"><a href="#B-Tree-vs-LSM-Tree" class="headerlink" title="B-Tree vs LSM-Tree"></a>B-Tree vs LSM-Tree</h3><table>
+<table>
 <thead>
 <tr>
 <th>特性</th>
@@ -583,27 +671,27 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>写入</td>
+<td><strong>写入</strong></td>
 <td>原地更新</td>
 <td>追加写入</td>
 </tr>
 <tr>
-<td>读取</td>
+<td><strong>读取</strong></td>
 <td>快（一次定位）</td>
-<td>可能检查多个文件</td>
+<td>可能需要检查多个文件</td>
 </tr>
 <tr>
-<td>写放大</td>
+<td><strong>写放大</strong></td>
 <td>较低</td>
 <td>较高（压缩开销）</td>
 </tr>
 <tr>
-<td>空间利用</td>
+<td><strong>空间利用</strong></td>
 <td>可能碎片化</td>
 <td>更紧凑</td>
 </tr>
 </tbody></table>
-<h3 id="OLTP-vs-OLAP"><a href="#OLTP-vs-OLAP" class="headerlink" title="OLTP vs OLAP"></a>OLTP vs OLAP</h3><table>
+<h3 id="3-5-OLTP-vs-OLAP"><a href="#3-5-OLTP-vs-OLAP" class="headerlink" title="3.5 OLTP vs OLAP"></a>3.5 OLTP vs OLAP</h3><table>
 <thead>
 <tr>
 <th>特性</th>
@@ -612,68 +700,89 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>操作</td>
+<td><strong>全称</strong></td>
+<td>在线事务处理</td>
+<td>在线分析处理</td>
+</tr>
+<tr>
+<td><strong>主要操作</strong></td>
 <td>增删改查</td>
 <td>复杂查询、聚合</td>
 </tr>
 <tr>
-<td>数据量</td>
+<td><strong>访问模式</strong></td>
+<td>基于键的随机访问</td>
+<td>扫描大量记录</td>
+</tr>
+<tr>
+<td><strong>数据量</strong></td>
 <td>GB~TB</td>
 <td>TB~PB</td>
 </tr>
 <tr>
-<td>用户</td>
-<td>应用程序</td>
-<td>分析师</td>
-</tr>
-<tr>
-<td>存储</td>
-<td>行存储</td>
-<td>列存储</td>
+<td><strong>响应时间</strong></td>
+<td>毫秒级</td>
+<td>秒~分钟级</td>
 </tr>
 </tbody></table>
-<p><strong>列存储优势</strong>：只读取需要的列、压缩友好、向量化处理</p>
+<p><strong>列式存储优势</strong>：</p>
+<ul>
+<li>只读取需要的列</li>
+<li>相同类型数据更易压缩</li>
+<li>向量化处理</li>
+</ul>
 <hr>
-<h2 id="第4章：数据编码与演化"><a href="#第4章：数据编码与演化" class="headerlink" title="第4章：数据编码与演化"></a>第4章：数据编码与演化</h2><h3 id="兼容性概念"><a href="#兼容性概念" class="headerlink" title="兼容性概念"></a>兼容性概念</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">时间线: v1 ──&gt; v2 ──&gt; v3 ──&gt; v4</span><br><span class="line"></span><br><span class="line">后向兼容：新代码能读取旧数据 (v3 读 v1 数据 ✓)</span><br><span class="line">前向兼容：旧代码能读取新数据 (v1 读 v3 数据 ✓)</span><br></pre></td></tr></table></figure>
+<h2 id="第4章：数据编码与演化"><a href="#第4章：数据编码与演化" class="headerlink" title="第4章：数据编码与演化"></a>第4章：数据编码与演化</h2><h3 id="4-1-兼容性概念"><a href="#4-1-兼容性概念" class="headerlink" title="4.1 兼容性概念"></a>4.1 兼容性概念</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">后向兼容（Backward Compatibility）：</span><br><span class="line">新代码能读取旧代码写的数据</span><br><span class="line">v3 代码 ─── 读取 ───&gt; v1 数据  ✓</span><br><span class="line"></span><br><span class="line">前向兼容（Forward Compatibility）：</span><br><span class="line">旧代码能读取新代码写的数据</span><br><span class="line">v1 代码 ─── 读取 ───&gt; v3 数据  ✓</span><br></pre></td></tr></table></figure>
 
-<p><strong>滚动升级</strong>：新旧版本代码同时运行，需要双向兼容</p>
-<h3 id="编码格式对比"><a href="#编码格式对比" class="headerlink" title="编码格式对比"></a>编码格式对比</h3><table>
+<p><strong>滚动升级</strong>：不停机部署新版本，同时运行新旧版本代码</p>
+<h3 id="4-2-编码格式对比"><a href="#4-2-编码格式对比" class="headerlink" title="4.2 编码格式对比"></a>4.2 编码格式对比</h3><table>
 <thead>
 <tr>
-<th>格式</th>
-<th>可读性</th>
-<th>空间效率</th>
-<th>模式演化</th>
+<th>特性</th>
+<th>JSON</th>
+<th>Protobuf</th>
+<th>Thrift</th>
+<th>Avro</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>JSON</td>
+<td>可读性</td>
 <td>高</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>空间效率</td>
 <td>低</td>
-<td>手动</td>
-</tr>
-<tr>
-<td>Protobuf</td>
-<td>无</td>
 <td>高</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>Thrift</td>
-<td>无</td>
 <td>高</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>Avro</td>
-<td>无</td>
 <td>最高</td>
+</tr>
+<tr>
+<td>模式</td>
+<td>可选</td>
+<td>必须</td>
+<td>必须</td>
+<td>必须</td>
+</tr>
+<tr>
+<td>模式演化</td>
+<td>手动</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>动态模式</td>
+<td>天然</td>
+<td>困难</td>
+<td>困难</td>
 <td>支持</td>
 </tr>
 </tbody></table>
-<h3 id="Protocol-Buffers"><a href="#Protocol-Buffers" class="headerlink" title="Protocol Buffers"></a>Protocol Buffers</h3><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Person</span> {</span><br><span class="line">  <span class="keyword">required</span> <span class="type">string</span> user_name = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">optional</span> <span class="type">int64</span> favorite_number = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">repeated</span> <span class="type">string</span> interests = <span class="number">3</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h3 id="4-3-Protocol-Buffers-示例"><a href="#4-3-Protocol-Buffers-示例" class="headerlink" title="4.3 Protocol Buffers 示例"></a>4.3 Protocol Buffers 示例</h3><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Person</span> {</span><br><span class="line">  <span class="keyword">required</span> <span class="type">string</span> user_name = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">optional</span> <span class="type">int64</span> favorite_number = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">repeated</span> <span class="type">string</span> interests = <span class="number">3</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
-<p><strong>关键规则</strong>：字段名可改，字段标签（数字）不能改</p>
 <p><strong>兼容性规则</strong>：</p>
 <table>
 <thead>
@@ -698,45 +807,38 @@ mjx-container[display="true"] + br {
 <td>✗</td>
 <td>✗</td>
 </tr>
-</tbody></table>
-<h3 id="Avro"><a href="#Avro" class="headerlink" title="Avro"></a>Avro</h3><p><strong>特点</strong>：读写模式分离，不存储字段标签，更紧凑</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"type"</span><span class="punctuation">:</span> <span class="string">"record"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"Person"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"fields"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"userName"</span><span class="punctuation">,</span> <span class="attr">"type"</span><span class="punctuation">:</span> <span class="string">"string"</span><span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"favoriteNumber"</span><span class="punctuation">,</span> <span class="attr">"type"</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">"null"</span><span class="punctuation">,</span> <span class="string">"long"</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="attr">"default"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="数据流模式"><a href="#数据流模式" class="headerlink" title="数据流模式"></a>数据流模式</h3><table>
-<thead>
 <tr>
-<th>模式</th>
-<th>场景</th>
-<th>兼容性考虑</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>数据库</td>
-<td>持久存储</td>
-<td>数据可能比代码更持久</td>
-</tr>
-<tr>
-<td>服务调用</td>
-<td>REST/RPC</td>
-<td>API 版本控制</td>
-</tr>
-<tr>
-<td>消息传递</td>
-<td>队列/Actor</td>
-<td>生产者消费者解耦</td>
+<td>修改字段标签</td>
+<td>✗</td>
+<td>✗</td>
 </tr>
 </tbody></table>
+<h3 id="4-4-数据流模式"><a href="#4-4-数据流模式" class="headerlink" title="4.4 数据流模式"></a>4.4 数据流模式</h3><p><strong>1. 数据库</strong>：数据可能比代码更持久，需要能够读取多年前写入的数据</p>
+<p><strong>2. 服务调用（REST/RPC）</strong>：</p>
+<ul>
+<li>REST：基于HTTP，资源导向</li>
+<li>gRPC：基于Protobuf，高性能</li>
+</ul>
+<p><strong>3. 消息传递</strong>：</p>
+<ul>
+<li>解耦、缓冲、异步、可靠性</li>
+<li>代表：Kafka, RabbitMQ</li>
+</ul>
 <hr>
-<h2 id="本部分要点总结"><a href="#本部分要点总结" class="headerlink" title="本部分要点总结"></a>本部分要点总结</h2><ol>
-<li><strong>可靠性、可扩展性、可维护性</strong>是优秀系统的三大支柱</li>
-<li><strong>数据模型选择</strong>取决于数据结构和查询需求</li>
-<li><strong>LSM-Tree 优化写入，B-Tree 优化读取</strong></li>
-<li><strong>列存储适合 OLAP，行存储适合 OLTP</strong></li>
-<li><strong>二进制编码比 JSON 更紧凑高效</strong></li>
-<li><strong>模式演化需要保证前向和后向兼容</strong></li>
+<h2 id="本章关键要点"><a href="#本章关键要点" class="headerlink" title="本章关键要点"></a>本章关键要点</h2><ol>
+<li><strong>可靠性</strong>不是追求零故障，而是在故障发生时系统仍能正常工作</li>
+<li><strong>百分位数</strong>比平均值更能反映用户真实体验</li>
+<li><strong>抽象</strong>是管理复杂性的最重要工具</li>
+<li><strong>没有万能的数据模型</strong>，选择取决于应用场景</li>
+<li><strong>LSM-Tree</strong>优化写入，<strong>B-Tree</strong>优化读取</li>
+<li><strong>兼容性是渐进式部署的前提</strong></li>
 </ol>
 <hr>
-<p><a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/">返回总览</a> | <a href="/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/">下一部分：分布式数据</a></p>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li>《Site Reliability Engineering》：Google SRE 实践</li>
+<li>《Database Internals》：数据库内部原理深入指南</li>
+<li>《Building Microservices》：服务间通信详解</li>
+</ul>
 
     </div>
 
@@ -756,13 +858,13 @@ mjx-container[display="true"] + br {
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/" rel="prev" title="DDIA 读书笔记：数据密集型应用系统设计">
-                  <i class="fa fa-angle-left"></i> DDIA 读书笔记：数据密集型应用系统设计
+                <a href="/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/" rel="prev" title="DDIA Part 2: 分布式数据">
+                  <i class="fa fa-angle-left"></i> DDIA Part 2: 分布式数据
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/" rel="next" title="DDIA Part 2：分布式数据">
-                  DDIA Part 2：分布式数据 <i class="fa fa-angle-right"></i>
+                <a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/" rel="next" title="DDIA 读书笔记：数据密集型应用系统设计">
+                  DDIA 读书笔记：数据密集型应用系统设计 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
