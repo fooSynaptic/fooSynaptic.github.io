@@ -1252,7 +1252,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #96463c;
+  background: #ffff78;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2720,11 +2720,18 @@ body {
 .menu-item .fab {
   color: #764ba2 !important;
 }
-.posts-expand .post-body {
+.home .posts-expand .post-body,
+.archive .posts-expand .post-body,
+body.index .posts-expand .post-body {
   display: none !important;
 }
-.posts-expand .post-button {
+.home .posts-expand .post-button,
+.archive .posts-expand .post-button,
+body.index .posts-expand .post-button {
   display: none !important;
+}
+.post-body {
+  display: block !important;
 }
 .posts-expand .post-block {
   background: linear-gradient(145deg, #fff 0%, #faf8fc 100%) !important;
