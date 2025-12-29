@@ -94,13 +94,22 @@ body {
 
 // ====== 首页文章列表 ======
 
-// 首页只显示文章标题，隐藏内容
-.posts-expand .post-body {
+// 首页只显示文章标题，隐藏内容（仅在首页和归档页生效，不影响文章详情页）
+.home .posts-expand .post-body,
+.archive .posts-expand .post-body,
+body.index .posts-expand .post-body {
   display: none !important;
 }
 
-.posts-expand .post-button {
+.home .posts-expand .post-button,
+.archive .posts-expand .post-button,
+body.index .posts-expand .post-button {
   display: none !important;
+}
+
+// 文章详情页正文显示
+.post-body {
+  display: block !important;
 }
 
 // 首页文章卡片样式
