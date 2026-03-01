@@ -1,4 +1,4 @@
-# fooSynaptic Blog 📝
+# fooSynaptic Blog <img src=".github/icons/note.svg" width="16" height="16" alt="note">
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-brightgreen)](https://foosynaptic.github.io)
 [![Hexo](https://img.shields.io/badge/Powered%20by-Hexo-0E83CD)](https://hexo.io/)
@@ -10,16 +10,16 @@ Personal blog powered by [Hexo](https://hexo.io/) using the [NexT](https://theme
 
 **URL:** [https://foosynaptic.github.io](https://foosynaptic.github.io)
 
-## 📚 Blog Content
+## <img src=".github/icons/book.svg" width="16" height="16" alt="book"> Blog Content
 
 ### Categories
-- 📖 **读书笔记** - Book reviews and study notes
+- <img src=".github/icons/book.svg" width="16" height="16" alt="book"> **读书笔记** - Book reviews and study notes
 - 📄 **论文解读** - Research paper summaries and analysis
 
 ### Tags
 `AI` `LLM` `NLP` `Deep Learning` `Machine Learning` `Game AI` `Multi-Agent Systems` `Distributed Systems` `DDIA`
 
-## 🛠️ Technology Stack
+## <img src=".github/icons/tools.svg" width="16" height="16" alt="tools"> Technology Stack
 
 - **Static Site Generator:** [Hexo](https://hexo.io/)
 - **Theme:** [NexT](https://theme-next.org/) (Muse scheme)
@@ -27,7 +27,7 @@ Personal blog powered by [Hexo](https://hexo.io/) using the [NexT](https://theme
 - **Math Rendering:** MathJax
 - **Hosting:** GitHub Pages
 
-## 🚀 Local Development
+## <img src=".github/icons/rocket.svg" width="16" height="16" alt="rocket"> Local Development
 
 ### Prerequisites
 - Node.js 14+
@@ -73,9 +73,9 @@ hexo deploy  # Pushes to this repo
 - [BiDAF Paper Summary](https://foosynaptic.github.io/2019/11/19/%E8%AE%BA%E6%96%87%E6%A2%97%E6%A6%82%EF%BC%9ABi-Directional-Attention-Flow-for-Machine-Comprehension/)
 - [TensorFlow Implementation Guide](https://foosynaptic.github.io/2019/11/19/%E5%A6%82%E4%BD%95%E6%95%99%E4%BC%9A%E6%9C%BA%E5%99%A8%E5%8E%BB%E7%90%86%E8%A7%A3%E9%97%AE%E9%A2%98%E5%92%8C%E6%96%87%E6%9C%AC%E5%B9%B6%E4%B8%94%E5%9B%9E%E7%AD%94%E9%97%AE%E9%A2%98%EF%BC%88tensorflow%E5%AE%9E%E6%88%98%EF%BC%89/)
 
-## 🔧 Features
+## <img src=".github/icons/wrench.svg" width="16" height="16" alt="wrench"> Features
 
-- ✅ Responsive design for mobile and desktop
+- <img src=".github/icons/check.svg" width="16" height="16" alt="check"> Responsive design for mobile and desktop
 - ✅ Full-text search functionality
 - ✅ Math formula support (MathJax)
 - ✅ Code syntax highlighting
@@ -84,7 +84,7 @@ hexo deploy  # Pushes to this repo
 - ✅ Social media integration
 - ✅ Comment system ready
 
-## 📈 Site Statistics
+## <img src=".github/icons/trending_up.svg" width="16" height="16" alt="trending up"> Site Statistics
 
 - **Total Posts:** 17+
 - **Categories:** 2
