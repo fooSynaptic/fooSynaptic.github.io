@@ -58,7 +58,7 @@ tags:
 
 ---
 
-##  redemption
+## redemption
 
 三年后，李明被提拔为 Guardian 安全团队的负责人。
 

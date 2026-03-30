@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 220" width="600" height="220" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#f8fafc" stroke="#334155" stroke-width="1.5" x="8" y="8" width="584" height="204" rx="6"/>
+  <text x="300" y="30" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">在线 / 批处理 / 流处理</text>
+  <text x="24" y="58" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">在线服务：</text>
+  <text x="104" y="58" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">用户请求</text>
+  <line x1="160" y1="54" x2="188" y2="54" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#e2e8f0" stroke="#475569" x="192" y="42" width="72" height="24" rx="3"/><text x="228" y="58" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">服务</text>
+  <line x1="264" y1="54" x2="292" y2="54" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="298" y="58" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">响应（毫秒级）</text>
+  <text x="24" y="96" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">批处理：</text>
+  <rect fill="#fff" stroke="#334155" x="104" y="78" width="120" height="36" rx="4"/>
+  <text x="164" y="94" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">大量输入</text>
+  <text x="164" y="106" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">(TB)</text>
+  <line x1="224" y1="96" x2="252" y2="96" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#fff" stroke="#334155" x="256" y="78" width="120" height="36" rx="4"/>
+  <text x="316" y="94" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">批处理作业</text>
+  <text x="316" y="106" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">(运行数小时)</text>
+  <line x1="376" y1="96" x2="404" y2="96" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="412" y="100" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输出结果</text>
+  <text x="24" y="148" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">流处理：</text>
+  <text x="104" y="148" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">事件流</text>
+  <line x1="152" y1="144" x2="180" y2="144" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#dbeafe" stroke="#1d4ed8" x="184" y="132" width="72" height="24" rx="3"/><text x="220" y="148" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">处理</text>
+  <line x1="256" y1="144" x2="284" y2="144" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="290" y="148" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输出流（持续）</text>
+</svg>

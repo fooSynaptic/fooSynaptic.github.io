@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 100" width="560" height="100" role="img">
+  <title>一致性模型强度谱</title>
+  <text x="40" y="28" fill="#0f172a" font-size="12" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">弱</text>
+  <text x="500" y="28" text-anchor="end" fill="#0f172a" font-size="12" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">强</text>
+  <line x1="60" y1="36" x2="500" y2="36" stroke="#334155" stroke-width="2"/>
+  <line x1="100" y1="32" x2="100" y2="44" stroke="#64748b"/>
+  <line x1="220" y1="32" x2="220" y2="44" stroke="#64748b"/>
+  <line x1="340" y1="32" x2="340" y2="44" stroke="#64748b"/>
+  <line x1="460" y1="32" x2="460" y2="44" stroke="#64748b"/>
+  <text x="100" y="64" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">最终一致性</text>
+  <text x="220" y="64" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">因果一致性</text>
+  <text x="340" y="64" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">顺序一致性</text>
+  <text x="460" y="64" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">线性一致性</text>
+</svg>

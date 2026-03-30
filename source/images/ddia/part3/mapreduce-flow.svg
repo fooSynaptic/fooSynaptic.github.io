@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 200" width="560" height="200" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <text x="280" y="22" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">MapReduce 流程</text>
+  <text x="48" y="52" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">分片</text>
+  <rect x="28" y="64" width="52" height="28" rx="3" fill="#fff" stroke="#334155"/><text x="54" y="82" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">1</text><rect x="122" y="64" width="64" height="28" rx="3" fill="#e2e8f0" stroke="#475569"/><text x="154" y="82" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Map 1</text><rect x="28" y="104" width="52" height="28" rx="3" fill="#fff" stroke="#334155"/><text x="54" y="122" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">2</text><rect x="122" y="104" width="64" height="28" rx="3" fill="#e2e8f0" stroke="#475569"/><text x="154" y="122" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Map 2</text><rect x="28" y="144" width="52" height="28" rx="3" fill="#fff" stroke="#334155"/><text x="54" y="162" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">3</text><rect x="122" y="144" width="64" height="28" rx="3" fill="#e2e8f0" stroke="#475569"/><text x="154" y="162" text-anchor="middle" fill="#0f172a" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Map 3</text>
+  <line x1="80" y1="78" x2="118" y2="78" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="80" y1="118" x2="118" y2="118" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="80" y1="158" x2="118" y2="158" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="186" y1="78" x2="230" y2="100" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="186" y1="118" x2="248" y2="108" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="186" y1="158" x2="230" y2="140" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#fef3c7" stroke="#b45309" x="248" y="88" width="88" height="56" rx="4"/>
+  <text x="292" y="108" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">按键分组</text>
+  <text x="292" y="126" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">Shuffle</text>
+  <line x1="336" y1="108" x2="380" y2="88" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="336" y1="116" x2="380" y2="138" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#dcfce7" stroke="#15803d" x="384" y="72" width="80" height="32" rx="3"/><text x="424" y="92" text-anchor="middle" fill="#0f172a" font-size="10" font-family="sans-serif">Reduce 1</text>
+  <rect fill="#dcfce7" stroke="#15803d" x="384" y="124" width="80" height="32" rx="3"/><text x="424" y="144" text-anchor="middle" fill="#0f172a" font-size="10" font-family="sans-serif">Reduce 2</text>
+  <line x1="464" y1="88" x2="498" y2="88" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="464" y1="140" x2="498" y2="140" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="530" y="92" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">结果1</text>
+  <text x="530" y="144" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">结果2</text>
+  <text x="280" y="188" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输入 → Map → Shuffle → Reduce → 输出</text>
+</svg>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" width="480" height="200" role="img">
+  <title>Paxos 两阶段</title>
+  <defs>
+    <marker id="ap" markerWidth="7" markerHeight="7" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#f8fafc" stroke="#334155" stroke-width="1.5" x="6" y="6" width="468" height="188" rx="6"/>
+  <text x="20" y="28" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">阶段1（Prepare）</text>
+  <rect fill="#e2e8f0" stroke="#475569" x="24" y="40" width="72" height="28" rx="3"/><text x="60" y="58" text-anchor="middle" font-size="10" fill="#0f172a" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">提议者</text>
+  <line x1="96" y1="54" x2="288" y2="54" stroke="#334155" marker-end="url(#ap)"/>
+  <text x="188" y="48" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">Prepare(n)</text>
+  <rect fill="#fff" stroke="#334155" x="296" y="40" width="72" height="28" rx="3"/><text x="332" y="58" text-anchor="middle" font-size="10" fill="#0f172a" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">接受者</text>
+  <line x1="288" y1="76" x2="100" y2="76" stroke="#94a3b8" marker-end="url(#ap)"/>
+  <text x="190" y="88" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">Promise</text>
+  <text x="20" y="112" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">阶段2（Accept）</text>
+  <rect fill="#e2e8f0" stroke="#475569" x="24" y="122" width="72" height="28" rx="3"/><text x="60" y="140" text-anchor="middle" font-size="10" fill="#0f172a" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">提议者</text>
+  <line x1="96" y1="136" x2="288" y2="136" stroke="#334155" marker-end="url(#ap)"/>
+  <text x="188" y="130" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">Accept(n,v)</text>
+  <rect fill="#fff" stroke="#334155" x="296" y="122" width="72" height="28" rx="3"/><text x="332" y="140" text-anchor="middle" font-size="10" fill="#0f172a" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">接受者</text>
+  <line x1="288" y1="158" x2="100" y2="158" stroke="#94a3b8" marker-end="url(#ap)"/>
+  <text x="190" y="170" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">Accepted</text>
+</svg>

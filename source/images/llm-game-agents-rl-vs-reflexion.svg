@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" width="720" height="200" role="img" aria-labelledby="t">
+  <title id="t">传统 RL 与 Reflexion 对比</title>
+  <defs>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="6" y="6" width="708" height="188" rx="6"/>
+  <text x="360" y="30" text-anchor="middle" fill="#0f172a" font-size="15" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">传统 RL vs Reflexion</text>
+  <line x1="6" y1="40" x2="714" y2="40" stroke="#64748b" stroke-width="1.2"/>
+  <g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="11" fill="#0f172a">
+    <text x="20" y="62" font-weight="bold" fill="#1e293b">传统 RL</text>
+    <g transform="translate(0, 68)">
+      <rect fill="#fff" stroke="#334155" x="16" y="0" width="44" height="26" rx="3"/><text x="38" y="17" text-anchor="middle">状态</text>
+      <line x1="60" y1="13" x2="82" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="84" y="0" width="44" height="26" rx="3"/><text x="106" y="17" text-anchor="middle">动作</text>
+      <line x1="128" y1="13" x2="150" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="152" y="0" width="44" height="26" rx="3"/><text x="174" y="17" text-anchor="middle">奖励</text>
+      <line x1="196" y1="13" x2="218" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="220" y="0" width="68" height="26" rx="3"/><text x="254" y="17" text-anchor="middle">梯度更新</text>
+      <line x1="288" y1="13" x2="310" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="312" y="0" width="68" height="26" rx="3"/><text x="346" y="17" text-anchor="middle">参数变化</text>
+    </g>
+    <text x="20" y="128" font-weight="bold" fill="#1e293b">Reflexion</text>
+    <g transform="translate(0, 134)">
+      <rect fill="#fff" stroke="#334155" x="16" y="0" width="44" height="26" rx="3"/><text x="38" y="17" text-anchor="middle">状态</text>
+      <line x1="60" y1="13" x2="82" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="84" y="0" width="44" height="26" rx="3"/><text x="106" y="17" text-anchor="middle">动作</text>
+      <line x1="128" y1="13" x2="150" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="152" y="0" width="44" height="26" rx="3"/><text x="174" y="17" text-anchor="middle">反馈</text>
+      <line x1="196" y1="13" x2="218" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="220" y="0" width="68" height="26" rx="3"/><text x="254" y="17" text-anchor="middle">语言反思</text>
+      <line x1="288" y1="13" x2="310" y2="13" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fff" stroke="#334155" x="312" y="0" width="68" height="26" rx="3"/><text x="346" y="17" text-anchor="middle">记忆存储</text>
+      <line x1="346" y1="28" x2="346" y2="48" stroke="#334155" stroke-width="1.3"/>
+      <line x1="346" y1="48" x2="430" y2="48" stroke="#334155" stroke-width="1.3" marker-end="url(#m)"/>
+      <rect fill="#fef3c7" stroke="#b45309" x="432" y="35" width="72" height="26" rx="3"/><text x="468" y="52" text-anchor="middle">下次尝试</text>
+    </g>
+  </g>
+</svg>

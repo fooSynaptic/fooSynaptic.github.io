@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" width="420" height="120" role="img">
+  <title>多主复制：数据中心</title>
+  <defs>
+    <marker id="m1" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#fff" stroke="#334155" stroke-width="2" x="24" y="28" width="140" height="64" rx="6"/>
+  <text x="94" y="52" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">数据中心1</text>
+  <text x="94" y="74" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">(主节点1)</text>
+  <rect fill="#fff" stroke="#334155" stroke-width="2" x="256" y="28" width="140" height="64" rx="6"/>
+  <text x="326" y="52" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">数据中心2</text>
+  <text x="326" y="74" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">(主节点2)</text>
+  <line x1="168" y1="58" x2="244" y2="58" stroke="#334155" stroke-width="1.5" marker-end="url(#m1)"/>
+  <line x1="244" y1="62" x2="168" y2="62" stroke="#334155" stroke-width="1.5" marker-end="url(#m1)"/>
+  <text x="206" y="54" text-anchor="middle" fill="#b45309" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">异步</text>
+</svg>

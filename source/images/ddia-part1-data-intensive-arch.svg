@@ -1,26 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" role="img">
-  <title>数据密集型应用架构</title>
-  <defs>
-    <style type="text/css"><![CDATA[
-      .outer { fill: #f8fafc; stroke: #64748b; stroke-width: 1.5; }
-      .box { fill: #ffffff; stroke: #475569; stroke-width: 1.2; }
-      .title { font: 600 15px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #0f172a; }
-      .lbl { font: 500 13px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #1e293b; }
-    ]]></style>
-  </defs>
-  <rect class="outer" x="8" y="8" width="704" height="204" rx="6"/>
-  <text class="title" x="360" y="36" text-anchor="middle">数据密集型应用架构</text>
-  <line x1="8" y1="48" x2="712" y2="48" stroke="#cbd5e1" stroke-width="1"/>
-  <rect class="box" x="40" y="62" width="192" height="52" rx="3"/>
-  <text class="lbl" x="136" y="93" text-anchor="middle">数据库</text>
-  <rect class="box" x="264" y="62" width="192" height="52" rx="3"/>
-  <text class="lbl" x="360" y="93" text-anchor="middle">缓存</text>
-  <rect class="box" x="488" y="62" width="192" height="52" rx="3"/>
-  <text class="lbl" x="584" y="93" text-anchor="middle">搜索索引</text>
-  <rect class="box" x="40" y="138" width="192" height="52" rx="3"/>
-  <text class="lbl" x="136" y="169" text-anchor="middle">流处理</text>
-  <rect class="box" x="264" y="138" width="192" height="52" rx="3"/>
-  <text class="lbl" x="360" y="169" text-anchor="middle">批处理</text>
-  <rect class="box" x="488" y="138" width="192" height="52" rx="3"/>
-  <text class="lbl" x="584" y="169" text-anchor="middle">消息队列</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" role="img" aria-labelledby="chartTitle">
+  <title id="chartTitle">数据密集型应用架构</title>
+  <desc>数据库、缓存、搜索索引、流处理、批处理、消息队列</desc>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="8" y="8" width="704" height="204" rx="6"/>
+  <text x="360" y="36" text-anchor="middle" fill="#0f172a" font-size="16" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">数据密集型应用架构</text>
+  <line x1="8" y1="48" x2="712" y2="48" stroke="#64748b" stroke-width="1.2"/>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="40" y="62" width="192" height="52" rx="3"/>
+  <text x="136" y="95" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">数据库</text>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="264" y="62" width="192" height="52" rx="3"/>
+  <text x="360" y="95" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">缓存</text>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="488" y="62" width="192" height="52" rx="3"/>
+  <text x="584" y="95" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">搜索索引</text>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="40" y="138" width="192" height="52" rx="3"/>
+  <text x="136" y="171" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">流处理</text>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="264" y="138" width="192" height="52" rx="3"/>
+  <text x="360" y="171" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">批处理</text>
+  <rect fill="#ffffff" stroke="#334155" stroke-width="1.5" x="488" y="138" width="192" height="52" rx="3"/>
+  <text x="584" y="171" text-anchor="middle" fill="#0f172a" font-size="14" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">消息队列</text>
 </svg>

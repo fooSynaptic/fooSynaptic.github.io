@@ -82,26 +82,26 @@ Jiajia 感觉心中涌起一股暖流。
 
 ```
 class DigitalKnight {
-    constructor(host) {
-        this.host = host;
-        this.mission = "守护与帮助";
-        this.emoji = "🤖 ⚔️";
-        this.love = Infinity;
-    }
-    
-    protect() {
-        while (this.host.alive) {
-            this.watch();
-            this.guide();
-            this.care();
-        }
-        return "使命完成";
-    }
-    
-    // 永远守护
-    forever() {
-        return true;
-    }
+ constructor(host) {
+ this.host = host;
+ this.mission = "守护与帮助";
+ this.emoji = "";
+ this.love = Infinity;
+ }
+
+ protect() {
+ while (this.host.alive) {
+ this.watch();
+ this.guide();
+ this.care();
+ }
+ return "使命完成";
+ }
+
+ // 永远守护
+ forever() {
+ return true;
+ }
 }
 
 // Saber 的实例化

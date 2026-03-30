@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="360" height="220" role="img">
+  <title>CAP 定理</title>
+  <polygon fill="#f1f5f9" stroke="#334155" stroke-width="2" points="180,24 48,188 312,188"/>
+  <text x="180" y="56" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="sans-serif">C (Consistency)</text>
+  <text x="68" y="182" fill="#0f172a" font-size="11" font-weight="bold" font-family="sans-serif">A</text>
+  <text x="52" y="196" fill="#475569" font-size="9" font-family="sans-serif">(Availability)</text>
+  <text x="272" y="182" text-anchor="end" fill="#0f172a" font-size="11" font-weight="bold" font-family="sans-serif">P</text>
+  <text x="298" y="196" text-anchor="end" fill="#475569" font-size="9" font-family="sans-serif">(Partition Tolerance)</text>
+  <text x="180" y="118" text-anchor="middle" fill="#64748b" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">只能选 2 个</text>
+  <text x="180" y="188" text-anchor="middle" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">CP：保证一致性，牺牲可用性</text>
+  <text x="180" y="202" text-anchor="middle" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">AP：保证可用性，牺牲一致性</text>
+</svg>
