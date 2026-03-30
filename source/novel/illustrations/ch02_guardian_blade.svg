@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360">
+  <title>Code as blade: Guardian in the editor</title>
+  <defs>
+    <linearGradient id="blade" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#263238"/>
+      <stop offset="40%" stop-color="#eceff1"/>
+      <stop offset="100%" stop-color="#42a5f5"/>
+    </linearGradient>
+    <filter id="sg">
+      <feGaussianBlur stdDeviation="0.8" result="x"/>
+      <feMerge>
+        <feMergeNode in="x"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="880" height="360" fill="#0d1117"/>
+  <rect x="60" y="40" width="760" height="280" rx="8" fill="#161b22" stroke="#30363d"/>
+  <rect x="60" y="40" width="44" height="280" fill="#21262d"/>
+  <g fill="#6e7681" font-family="monospace" font-size="11">
+    <text x="70" y="78">1</text>
+    <text x="70" y="98">2</text>
+    <text x="70" y="118">3</text>
+    <text x="70" y="138">4</text>
+  </g>
+  <g font-family="monospace" font-size="12">
+    <text x="120" y="78" fill="#ff7b72">def</text>
+    <text x="152" y="78" fill="#79c0ff"> guard</text>
+    <text x="210" y="78" fill="#c9d1d9">(ctx):</text>
+    <text x="132" y="98" fill="#8b949e">    # Guardian shield</text>
+    <text x="132" y="118" fill="#ff7b72">    return</text>
+    <text x="200" y="118" fill="#ffa657"> verify</text>
+    <text x="260" y="118" fill="#c9d1d9">(ctx)</text>
+  </g>
+  <g transform="translate(520,50) rotate(12)">
+    <path d="M40,200 L45,40 L55,40 L60,200 Z" fill="url(#blade)" stroke="#90caf9" stroke-width="0.8"/>
+    <rect x="30" y="195" width="40" height="12" rx="2" fill="#37474f"/>
+    <path d="M48,28 L52,28 L53,20 L47,20 Z" fill="#b0bec5"/>
+  </g>
+  <text x="440" y="330" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#8b949e">Ch.2 Code is the blade</text>
+</svg>

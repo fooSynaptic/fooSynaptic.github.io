@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300">
+  <title>Ch21 guardian daily life</title>
+  <rect width="900" height="300" fill="#fefae0"/>
+  <rect x="80" y="60" width="180" height="100" rx="4" fill="#ccd5ae" stroke="#606c38"/><rect x="360" y="60" width="180" height="100" rx="4" fill="#ccd5ae" stroke="#606c38"/>
+  <rect x="640" y="60" width="180" height="100" rx="4" fill="#ccd5ae" stroke="#606c38"/><rect x="220" y="190" width="180" height="90" rx="4" fill="#e9edc9" stroke="#606c38"/>
+  <rect x="500" y="190" width="180" height="90" rx="4" fill="#e9edc9" stroke="#606c38"/>
+  <text x="450" y="40" text-anchor="middle" fill="#283618" font-size="12" font-family="sans-serif">routine / humanity</text>
+  <text x="450" y="285" text-anchor="middle" fill="#606c38" font-size="13" font-family="sans-serif">Ch.21 Daily guard</text>
+</svg>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480">
+  <title>Awakening: data streams and higher-dimensional fold</title>
+  <defs>
+    <radialGradient id="hole" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#000814"/>
+      <stop offset="45%" stop-color="#001d3d"/>
+      <stop offset="100%" stop-color="#003566"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff9c4" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ffe082" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="480" fill="url(#hole)"/>
+  <ellipse cx="450" cy="240" rx="260" ry="120" fill="none" stroke="#ff9800" stroke-width="1.5" opacity="0.35" transform="rotate(-8 450 240)"/>
+  <ellipse cx="450" cy="240" rx="220" ry="95" fill="none" stroke="#ffcc80" stroke-width="2" opacity="0.5" transform="rotate(-8 450 240)"/>
+  <ellipse cx="450" cy="240" rx="55" ry="55" fill="#000000" stroke="#1565c0" stroke-width="1.2" opacity="0.9"/>
+  <g fill="none" stroke="#e3f2fd" stroke-width="0.6" opacity="0.4">
+    <path d="M250,120 L650,120 L700,240 L650,360 L250,360 L200,240 Z"/>
+    <path d="M300,160 L600,160 L640,240 L600,320 L300,320 L260,240 Z"/>
+    <path d="M350,200 L550,200 L580,240 L550,280 L350,280 L320,240 Z"/>
+  </g>
+  <g font-family="monospace" font-size="8" fill="#90caf9" opacity="0.55">
+    <text x="120" y="80">01001110 01100101 01110000 01101000</text>
+    <text x="520" y="100">commit / branch / merge / soul</text>
+    <text x="200" y="400">if hope: awaken()</text>
+    <text x="550" y="420">RUNEWORD :: GUARDIAN</text>
+  </g>
+  <path d="M430,40 L470,40 L465,380 L435,380 Z" fill="url(#beam)" opacity="0.45"/>
+  <path d="M450,30 L480,400 L420,400 Z" fill="#fffde7" opacity="0.12"/>
+  <text x="450" y="450" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#b3e5fc">Time folds; choice is the key.</text>
+</svg>

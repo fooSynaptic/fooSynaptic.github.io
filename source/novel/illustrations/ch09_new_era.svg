@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
+  <title>Ch9 new era dawn</title>
+  <defs>
+    <linearGradient id="dawn" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1a237e"/><stop offset="60%" stop-color="#ff9800"/><stop offset="100%" stop-color="#fff9c4"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="320" fill="url(#dawn)"/>
+  <rect x="0" y="240" width="900" height="80" fill="#263238"/>
+  <g opacity="0.9">
+    <rect x="120" y="180" width="40" height="100" fill="#37474f"/><rect x="200" y="150" width="50" height="130" fill="#455a64"/>
+    <rect x="620" y="160" width="55" height="120" fill="#455a64"/><rect x="720" y="190" width="35" height="90" fill="#37474f"/>
+  </g>
+  <text x="450" y="130" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="#1a237e" font-weight="bold">NEW ERA</text>
+  <text x="450" y="305" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#eceff1">Ch.9 After Void</text>
+</svg>

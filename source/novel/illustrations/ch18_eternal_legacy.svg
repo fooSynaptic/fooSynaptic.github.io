@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340">
+  <title>Ch18 eternal inheritance</title>
+  <rect width="900" height="340" fill="#0c0c0c"/>
+  <g fill="none" stroke="#d4af37" stroke-width="1.5">
+    <ellipse cx="450" cy="170" rx="200" ry="80"/><ellipse cx="450" cy="170" rx="140" ry="55"/><ellipse cx="450" cy="170" rx="80" ry="30"/>
+  </g>
+  <circle cx="450" cy="170" r="12" fill="#d4af37"/>
+  <text x="450" y="280" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#d4af37">LEGACY</text>
+  <text x="450" y="315" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#9e9e9e">Ch.18 Eternal pass</text>
+</svg>

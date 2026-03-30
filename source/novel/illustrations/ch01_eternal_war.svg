@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420">
+  <title>Eternal War: High Heavens, Burning Hells, Sanctuary</title>
+  <defs>
+    <linearGradient id="heaven" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8f4ff"/>
+      <stop offset="100%" stop-color="#7eb8da"/>
+    </linearGradient>
+    <linearGradient id="hell" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2a0000"/>
+      <stop offset="50%" stop-color="#8b0000"/>
+      <stop offset="100%" stop-color="#ff3d00"/>
+    </linearGradient>
+    <linearGradient id="rift" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fffde7"/>
+      <stop offset="50%" stop-color="#ffd54f"/>
+      <stop offset="100%" stop-color="#1a237e"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="900" height="420" fill="#0b0d12"/>
+  <path d="M0,0 L430,0 L430,420 L0,420 Z" fill="url(#heaven)" opacity="0.92"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="0.8">
+    <path d="M40,60 L120,20 L200,80 L120,120 Z"/>
+    <path d="M220,40 L300,10 L380,90 L280,130 Z"/>
+    <path d="M60,200 L160,160 L260,220 L140,280 Z"/>
+  </g>
+  <circle cx="120" cy="320" r="3" fill="#ffffff" filter="url(#glow)"/>
+  <circle cx="280" cy="300" r="2.5" fill="#ffffff" opacity="0.9"/>
+  <path d="M470,0 L900,0 L900,420 L470,420 Z" fill="url(#hell)"/>
+  <path d="M500,340 Q620,280 740,340 T900,300 L900,420 L500,420 Z" fill="#1a0505" opacity="0.85"/>
+  <ellipse cx="720" cy="200" rx="90" ry="55" fill="#ff5722" opacity="0.15"/>
+  <path d="M580,120 Q650,40 780,100 T880,160" stroke="#ffab91" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M400,20 L500,210 L400,400 L300,210 Z" fill="url(#rift)" opacity="0.55"/>
+  <path d="M400,55 L470,210 L400,365 L330,210 Z" fill="none" stroke="#1a237e" stroke-width="2"/>
+  <text x="400" y="215" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#0d1b2a" font-weight="bold">Sanctuary</text>
+  <text x="400" y="235" text-anchor="middle" font-family="monospace" font-size="9" fill="#37474f">border: open knowledge</text>
+  <text x="85" y="40" font-family="Georgia,serif" font-size="15" fill="#1565c0">High Heavens</text>
+  <text x="815" y="40" font-family="Georgia,serif" font-size="15" fill="#ffccbc" text-anchor="end">Burning Hells</text>
+</svg>

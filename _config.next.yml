@@ -28,6 +28,7 @@ favicon:
 
 menu:
   home: / || fa fa-home
+  novel: /novel/ || fa fa-book
   about: /about/ || fa fa-user
   archives: /archives/ || fa fa-archive
   tags: /tags/ || fa fa-tags

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360">
+  <title>Ch14 Atlantis battle</title>
+  <defs>
+    <linearGradient id="w" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#023e8a"/><stop offset="100%" stop-color="#03045e"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="360" fill="url(#w)"/>
+  <path d="M200,220 L350,140 L500,180 L700,120 L780,200 L780,280 L200,280 Z" fill="#0077b6" opacity="0.4"/>
+  <path d="M300,280 L450,200 L550,230 L650,210 L700,280 Z" fill="#48cae4" opacity="0.3"/>
+  <polygon points="450,80 500,160 400,160" fill="none" stroke="#caf0f8" stroke-width="2"/>
+  <text x="450" y="330" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="#90e0ef">Ch.14 Atlantis</text>
+</svg>

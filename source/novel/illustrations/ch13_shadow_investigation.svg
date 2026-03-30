@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
+  <title>Ch13 shadow investigation</title>
+  <rect width="900" height="320" fill="#16151f"/>
+  <circle cx="400" cy="160" r="90" fill="none" stroke="#7c4dff" stroke-width="3"/>
+  <line x1="470" y1="230" x2="580" y2="280" stroke="#b39ddb" stroke-width="4" stroke-linecap="round"/>
+  <rect x="220" y="120" width="200" height="100" fill="#25232f" stroke="#5e35b1"/>
+  <text x="230" y="150" font-family="monospace" font-size="9" fill="#ce93d8">trace_id: ****</text>
+  <text x="230" y="170" font-family="monospace" font-size="9" fill="#ce93d8">anomaly cluster</text>
+  <text x="450" y="305" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#9575cd">Ch.13 Shadow probe</text>
+</svg>

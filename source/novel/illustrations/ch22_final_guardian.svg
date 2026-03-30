@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360">
+  <title>Ch22 final guardian</title>
+  <rect width="900" height="360" fill="#03071e"/>
+  <path d="M450,60 L520,150 L470,150 L540,220 L480,220 L450,300 L420,220 L360,220 L430,150 L380,150 Z" fill="none" stroke="#ffb703" stroke-width="2.5"/>
+  <circle cx="450" cy="175" r="40" fill="#03071e" stroke="#fb8500" stroke-width="2"/>
+  <text x="450" y="182" text-anchor="middle" font-family="monospace" font-size="9" fill="#ffba08">FINAL</text>
+  <text x="450" y="335" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#8ecae6">Ch.22 Last stand</text>
+</svg>
