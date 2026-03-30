@@ -10,12 +10,11 @@ tags:
   - 小说
 ---
 
-本站归档版本与本地目录一致，插图位于 `illustrations/` 子目录，正文与番外、存档见下方链接。
+以下为在线阅读目录；插图随各章嵌入，源文件在 `novel/illustrations/`（与正文同级目录）。
 
 ## 导读与设定
 
 - [小说概要 / 设定摘要](novel_summary.html)
-- [剧情提纲（审阅用）](小说剧情提纲_审阅用.html)
 
 ## 正篇（第一章 — 第二十二章）
 
@@ -63,7 +62,3 @@ tags:
 - [bonus_06](archive/bonus_06.html)
 - [bonus_07](archive/bonus_07.html)
 - [illustrations（旧版合集说明）](archive/illustrations.html)
-
-## 工程备注
-
-- [完稿说明（COMPLETION_REPORT）](COMPLETION_REPORT.html)
