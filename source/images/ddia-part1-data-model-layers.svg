@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 196" width="520" height="196" role="img">
+  <title>数据模型分层</title>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .frame { fill: #f8fafc; stroke: #64748b; stroke-width: 1.5; }
+      .line { stroke: #cbd5e1; stroke-width: 1; }
+      .txt { font: 500 14px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #1e293b; }
+    ]]></style>
+  </defs>
+  <rect class="frame" x="8" y="8" width="504" height="180" rx="6"/>
+  <text class="txt" x="260" y="36" text-anchor="middle">应用程序层（对象、数据结构、API）</text>
+  <line class="line" x1="8" y1="48" x2="512" y2="48"/>
+  <text class="txt" x="260" y="74" text-anchor="middle">数据模型层（表、文档、图）</text>
+  <line class="line" x1="8" y1="86" x2="512" y2="86"/>
+  <text class="txt" x="260" y="112" text-anchor="middle">存储层（字节序列、内存、磁盘）</text>
+  <line class="line" x1="8" y1="124" x2="512" y2="124"/>
+  <text class="txt" x="260" y="150" text-anchor="middle">硬件层（电信号、磁场）</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 210" width="520" height="210" role="img">
+  <title>LSM-Tree 结构</title>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .box { fill: #fff; stroke: #475569; stroke-width: 1.2; }
+      .cap { font: 600 12px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #334155; }
+      .lbl { font: 500 12px system-ui,"PingFang SC",sans-serif; fill: #1e293b; }
+      .note { font: 500 10px system-ui,"PingFang SC",sans-serif; fill: #64748b; }
+    ]]></style>
+  </defs>
+  <text class="cap" x="16" y="20">Level 0（内存）</text>
+  <rect class="box" x="160" y="28" width="200" height="44" rx="3"/>
+  <text class="lbl" x="260" y="52" text-anchor="middle">Memtable</text>
+  <text class="note" x="260" y="66" text-anchor="middle">当前写入（平衡树）</text>
+  <text class="cap" x="16" y="96">Level 1（磁盘）</text>
+  <rect class="box" x="100" y="104" width="88" height="34" rx="3"/><text class="lbl" x="144" y="125" text-anchor="middle">SS1</text>
+  <rect class="box" x="216" y="104" width="88" height="34" rx="3"/><text class="lbl" x="260" y="125" text-anchor="middle">SS2</text>
+  <rect class="box" x="332" y="104" width="88" height="34" rx="3"/><text class="lbl" x="376" y="125" text-anchor="middle">SS3</text>
+  <text class="note" x="428" y="124" text-anchor="start">较新的 SSTable</text>
+  <text class="cap" x="16" y="162">Level 2（磁盘）</text>
+  <rect class="box" x="140" y="170" width="120" height="34" rx="3"/><text class="lbl" x="200" y="191" text-anchor="middle">SS4</text>
+  <rect class="box" x="280" y="170" width="120" height="34" rx="3"/><text class="lbl" x="340" y="191" text-anchor="middle">SS5</text>
+  <text class="note" x="408" y="191" text-anchor="start">经过合并的 SSTable</text>
+</svg>

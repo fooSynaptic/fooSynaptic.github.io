@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 280" width="520" height="280" role="img">
+  <title>哈希索引</title>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .outer { fill: #f8fafc; stroke: #475569; stroke-width: 1.2; }
+      .hdr { font: 600 13px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #0f172a; }
+      .row { font: 500 12px ui-monospace,Menlo,monospace; fill: #334155; }
+      .arrow { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#m); }
+    ]]></style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748b"/></marker>
+  </defs>
+  <rect class="outer" x="10" y="8" width="500" height="118" rx="4"/>
+  <text class="hdr" x="260" y="32" text-anchor="middle">内存中的哈希表</text>
+  <line x1="10" y1="42" x2="510" y2="42" stroke="#cbd5e1"/>
+  <text class="row" x="24" y="64">key1 ──► 字节偏移量 0</text>
+  <text class="row" x="24" y="86">key2 ──► 字节偏移量 128</text>
+  <text class="row" x="24" y="108">key3 ──► 字节偏移量 256</text>
+  <path class="arrow" d="M 260 126 L 260 148"/>
+  <rect class="outer" x="10" y="152" width="500" height="110" rx="4"/>
+  <text class="hdr" x="260" y="176" text-anchor="middle">磁盘上的日志文件</text>
+  <line x1="10" y1="186" x2="510" y2="186" stroke="#cbd5e1"/>
+  <text class="row" x="24" y="208">offset 0  : key1,value1</text>
+  <text class="row" x="24" y="230">offset 128: key2,value2</text>
+  <text class="row" x="24" y="252">…</text>
+</svg>
