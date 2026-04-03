@@ -25,3 +25,7 @@ yarn-error.log*
 
 # Extract script (optional)
 extract_posts.py
+
+# Cursor / Python cache
+.cursor/
+**/__pycache__/

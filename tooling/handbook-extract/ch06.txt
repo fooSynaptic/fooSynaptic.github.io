@@ -1,0 +1,270 @@
+   Chapter 6
+
+
+   Classification with Large Language
+   Models
+
+
+  Chapter overview. Although many teams first encounter LLMs as chat systems, they
+  are also powerful classification engines. They can assign labels directly through prompting,
+  produce rationales for audits, and adapt quickly to new taxonomies. That said, not every
+  classification workload should be handed to a general-purpose generator. Some workloads
+  still favor smaller discriminative models or hybrid pipelines.
+  A strong engineering answer compares approaches rather than treating LLM classification
+  as a universal upgrade. The right choice depends on class complexity, data volume,
+  explanation needs, latency targets, and whether the label space changes frequently.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Can you choose between prompting, zero-
+  shot classification, few-shot classification, and dedicated classifiers with a clear business
+  rationale?
+  Strong answer pattern. Start from label stability and cost tolerance, then explain
+  when a generative model is enough and when a smaller supervised model is the better
+  production choice.
+  Common miss. Candidates often forget calibration, class imbalance, and schema
+  enforcement when using generative outputs for classification.
+
+
+
+
+                                            — 37 —                         AI Engineering Insider
+Language Models Interview Handbook                                                  Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+     Signal to hit           Classification design depends on label clarity, volume, drift,
+                             explainability, and price per prediction.
+     Best example            Use a prompted LLM when labels change often, but use a
+                             compact classifier when volume is huge and the label set is stable.
+     Follow-up angle         Mention confidence thresholds, structured outputs, and human
+                             review for ambiguous classes.
+     What seniors add        They distinguish product experimentation from production
+                             throughput economics.
+     Red flag                Assuming the strongest generative model is always the best
+                             classifier.
+
+
+The classification table below translates model choice into operational criteria. Read it row by row as a
+decision tool for label stability, iteration speed, and cost profile.
+
+                     Table 6.1: Choosing the right classification strategy in practice
+
+ Approach                  Best when               Operational note
+
+ Prompted LLM              Labels are evolving     Easy to iterate, but cost and consistency need
+                           or nuanced              control.
+ Few-shot LLM              Edge cases matter       Helpful for pilot phases and policy-heavy tasks.
+                           and examples
+                           improve framing
+ Fine-tuned                Labels are stable       Better throughput and cost once the taxonomy
+ classifier                and volume is high      settles.
+ Hybrid approach           You need                Useful when uncertain cases must be triaged
+                           automation plus         safely.
+                           human escalation
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “The real classification decision is not
+   only accuracy; it is how much label drift, ambiguity, scale, and governance the product
+   can tolerate.”
+
+
+
+
+                                                 — 38 —                           AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q41. How can a generative LLM perform classification?
+
+
+    Answer
+  A generative LLM can perform classification by being prompted to map an input into
+  one label from a defined set. Instead of learning a dedicated classifier head, it uses its
+  instruction-following and language understanding capability to produce the target class,
+  often along with a justification or structured output.
+  This works especially well when the classes are described in natural language, the input is
+  messy, or examples are scarce. The trade-off is that generative classification can be slower
+  and less stable than a conventional classifier unless you constrain the output carefully.
+
+
+
+
+  Q42. When should you use prompting instead of fine-tuning for
+  classification?
+
+
+    Answer
+  Use prompting when the taxonomy changes often, labeled data is limited, and you need
+  to move quickly. Prompting is also attractive when explanation quality matters, because
+  the same system can classify and justify its decision in one pass.
+  Use fine-tuning when the labels are stable, volume is high, latency matters, and you
+  need tighter consistency. In interviews, emphasize that prompting buys flexibility while
+  fine-tuning buys specialization. Neither is inherently superior; the better choice depends
+  on the operational profile of the task.
+
+
+
+
+                                           — 39 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q43. What is the difference between zero-shot and few-shot
+  classification?
+
+
+    Answer
+  Zero-shot classification gives the model only the label definitions or instructions. Few-shot
+  classification also provides a handful of examples showing how inputs should map to
+  classes. Few-shot examples help the model infer boundaries, edge cases, and formatting
+  expectations more reliably.
+  A good interview answer notes that few-shot examples are particularly helpful when
+  labels are subtle, overlapping, or organization-specific. They turn the prompt into a tiny
+  on-the-fly training signal. GPT-3 popularized this style of in-context learning, where
+  performance can improve substantially with well-chosen examples (Brown et al., 2020).
+
+
+
+
+  Q44. How should you design a label taxonomy for an LLM classifier?
+
+
+    Answer
+  The label taxonomy should be mutually understandable, operationally useful, and as
+  non-overlapping as possible. Labels should be defined with clear boundaries, inclusion
+  rules, exclusion rules, and examples. If labels are too abstract or semantically entangled,
+  the model will mirror that ambiguity.
+  A strong production answer is to treat taxonomy design as product design, not merely
+  modeling. Many classification failures come from unclear class definitions rather than
+  weak models. If humans cannot classify consistently, the LLM will not fix the ontology for
+  you.
+
+
+
+
+                                            — 40 —                          AI Engineering Insider
+Language Models Interview Handbook                                              Lamhot Siagian »
+
+
+
+
+  Q45. How do you handle class imbalance in LLM-based classification?
+
+
+    Answer
+  Class imbalance can be addressed through better examples, targeted evaluation sets, cost-
+  sensitive review policies, or fine-tuning with balanced or reweighted data. Prompt-only
+  systems may overpredict broad majority classes unless the prompt explicitly describes
+  minority cases and edge conditions.
+  In interviews, mention that imbalance is both a data problem and a decision-policy
+  problem. You may care more about minority recall in fraud, safety, or medical triage than
+  about raw overall accuracy. The right evaluation metric should reflect that priority.
+
+
+
+
+  Q46. How is multi-label classification different from single-label
+  classification?
+
+
+    Answer
+  In single-label classification, exactly one class must be chosen. In multi-label classification,
+  multiple labels may apply simultaneously. The prompt, schema, and evaluation strategy
+  must therefore change. Instead of selecting one best label, the system must decide which
+  labels cross the inclusion threshold.
+  The practical challenge is calibration. Multi-label outputs require stronger thresholding,
+  validation, and audit logic because the model can under-tag or over-tag. In interviews,
+  highlight that multi-label work is not just a small extension of single-label classification;
+  it changes the decision structure.
+
+
+
+
+                                             — 41 —                           AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q47. Which metrics matter most for classification systems built with
+  LLMs?
+
+
+    Answer
+  Accuracy is a starting point, but precision, recall, F1, confusion matrices, and calibration
+  are usually more informative. In imbalanced settings, macro-F1 or per-class recall may
+  matter far more than aggregate accuracy. For human review workflows, you may also care
+  about abstention rate and reviewer overturn rate.
+  Senior candidates stand out by connecting metrics to business risk. If a wrong false
+  negative is expensive, optimize recall. If a false positive triggers painful manual review,
+  optimize precision. The best metric is the one aligned to the cost of being wrong.
+
+
+
+
+  Q48. How do you estimate confidence for an LLM classifier?
+
+
+    Answer
+  Confidence can be estimated through constrained label probabilities, self-consistency
+  checks, secondary models, calibration sets, or agreement across prompt variants. Raw
+  verbal confidence statements from the model are not reliable enough to use as the only
+  confidence signal.
+  A good interview answer is that confidence should be measured externally whenever
+  possible. Production systems often combine model scores, retrieval evidence, schema
+  validity, and historical error patterns to decide when to auto-route versus escalate to
+  human review.
+
+
+
+
+                                           — 42 —                          AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q49. When should a classification pipeline include a human in the loop?
+
+
+    Answer
+  Human review is appropriate when the decision is high-impact, ambiguous, novel, or
+  compliance-sensitive. It is also useful when the model has low confidence, conflicting
+  evidence, or classes that are frequently confused. Human feedback from these cases can
+  become the most valuable training and evaluation data.
+  In interviews, treat human review as a precision tool rather than a sign of system weakness.
+  A mature design routes easy cases automatically and reserves scarce reviewer attention
+  for the cases where it creates the most risk reduction.
+
+
+
+
+  Q50. What are common production failure modes in LLM classification
+  systems?
+
+
+    Answer
+  Common failures include label drift after taxonomy changes, prompt brittleness, hidden
+  format errors, poor treatment of minority cases, and false confidence on ambiguous inputs.
+  Another common issue is silent degradation when upstream retrieval or preprocessing
+  changes the input the classifier sees.
+  The strongest answer is system-level: classification quality depends on prompts, data
+  definitions, evaluation sets, routing policies, and review loops. If you monitor only a single
+  accuracy number, you will miss the real reasons the system is succeeding or failing.
+
+
+
+
+                                            — 43 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+

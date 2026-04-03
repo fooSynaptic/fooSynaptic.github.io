@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#f8fafc" stroke="#334155" stroke-width="2" x="6" y="6" width="548" height="288" rx="6"/>
+  <text x="280" y="28" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">PIANO 架构</text>
+  <text x="120" y="52" fill="#64748b" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">并发模块</text>
+  <rect fill="#fff" stroke="#334155" x="48" y="60" width="100" height="28" rx="3"/><text x="98" y="78" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">记忆</text>
+  <rect fill="#fff" stroke="#334155" x="48" y="96" width="100" height="28" rx="3"/><text x="98" y="114" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">社会</text>
+  <rect fill="#fff" stroke="#334155" x="48" y="132" width="100" height="28" rx="3"/><text x="98" y="150" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">目标</text>
+  <rect fill="#fff" stroke="#334155" x="48" y="168" width="100" height="28" rx="3"/><text x="98" y="186" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">动作</text>
+  <line x1="148" y1="74" x2="220" y2="120" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="148" y1="110" x2="220" y2="130" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="148" y1="146" x2="220" y2="140" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="148" y1="182" x2="220" y2="150" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#e2e8f0" stroke="#475569" x="220" y="88" width="120" height="100" rx="4"/>
+  <text x="280" y="108" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">认知控制器</text>
+  <text x="280" y="124" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">信息综合</text>
+  <text x="280" y="142" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">↓ 高层决策</text>
+  <text x="280" y="160" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">↓ 决策广播</text>
+  <line x1="280" y1="188" x2="280" y2="212" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#fff" stroke="#334155" x="220" y="216" width="120" height="44" rx="4"/>
+  <text x="280" y="236" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输出模块</text>
+  <text x="280" y="250" text-anchor="middle" fill="#64748b" font-size="8" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">说话 / 动作 / …</text>
+  <path d="M 340 238 Q 420 260 420 200 Q 420 120 148 120" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="400" y="100" fill="#94a3b8" font-size="8" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">反馈</text>
+  <text x="400" y="52" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">(瓶颈)</text>
+</svg>

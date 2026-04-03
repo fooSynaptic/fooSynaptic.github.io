@@ -145,8 +145,10 @@ tag_icon: true
 # ---------------------------------------------------------------
 # Custom Files Settings
 # ---------------------------------------------------------------
+# head：全站 <head> 末尾注入（见 source/_data/head.njk）
 
 custom_file_path:
+  head: source/_data/head.njk
   style: source/_data/styles.styl
 
 # ---------------------------------------------------------------

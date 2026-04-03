@@ -1,0 +1,260 @@
+   Chapter 12
+
+
+   Custom Embeddings and Retrieval
+   Optimization
+
+
+  Chapter overview. Off-the-shelf embedding models are often surprisingly strong, but
+  retrieval quality can plateau when the domain language is highly specialized. Custom
+  embeddings become relevant when a system must distinguish subtle legal concepts, medical
+  terminology, internal product names, or multilingual enterprise jargon that generic models
+  only partially capture.
+  This chapter focuses on when and how to adapt representation quality: data selection,
+  negatives, multilinguality, migration, thresholds, and operational monitoring. The key
+  theme is that retrieval quality is rarely fixed; it can be systematically improved.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you know when the default embed-
+  ding model is good enough and when custom optimization is justified.
+  Strong answer pattern. Start with evaluation gaps, then explain custom embeddings,
+  domain adaptation, negative mining, reranking, and metadata-aware retrieval.
+  Common miss. Candidates often jump to training before proving that chunking, query
+  reformulation, or reranking could not solve the issue more cheaply.
+
+
+
+
+                                          — 80 —                         AI Engineering Insider
+Language Models Interview Handbook                                                 Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit            Retrieval optimization should be driven by measurable relevance
+                             gaps, not by instinct to fine-tune everything.
+    Best example             Domain jargon, abbreviations, or entity-heavy corpora often
+                             reveal when general-purpose embeddings are insufficient.
+    Follow-up angle          Mention hard negatives, reranking, metadata filters, and query
+                             expansion.
+    What seniors add         They compare quality gain against indexing complexity and
+                             maintenance burden.
+    Red flag                 Training a custom embedding model before building a
+                             trustworthy offline benchmark.
+
+
+The optimization ladder table is included to show that better retrieval usually comes from stacked
+improvements rather than a single magical tweak. Each rung represents a practical lever teams can test
+and measure.
+
+                    Table 12.1: A practical optimization ladder for retrieval quality
+
+ Step                    Example action           Why it often comes earlier
+
+ Data hygiene            Better chunking and      Cheap, high-leverage, and easy to validate.
+                         document cleanup
+ Ranking                 Add a reranker or        Often improves precision without retraining
+                         metadata-aware           embeddings.
+                         filters
+ Query strategy          Reformulate query        Helps recall on short or ambiguous queries.
+                         or add hybrid search
+ Custom training         Domain-adapt             Best once earlier levers are exhausted and
+                         embedding model          benchmarks prove the gap.
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “Custom embeddings are worth the effort
+   only after cheaper relevance levers are measured and exhausted against a benchmark that
+   reflects the real workload.”
+
+
+
+
+                                                — 81 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q101. Why would a team choose custom embeddings instead of a
+  general embedding model?
+
+
+    Answer
+  A team chooses custom embeddings when domain-specific distinctions matter more than
+  general semantic similarity. In medicine, finance, law, or internal enterprise knowledge, the
+  difference between near-synonyms may carry major consequences. A generic embedding
+  model may collapse distinctions that your application cannot afford to lose.
+  In interviews, say that custom embeddings are justified when evaluation shows repeated
+  domain misses and the value of better retrieval exceeds the cost of training, serving, and
+  migrating the index.
+
+
+
+
+  Q102. What are the main approaches to domain adaptation for
+  embeddings?
+
+
+    Answer
+  Common approaches include continued pretraining on domain text, supervised contrastive
+  training on labeled query-document pairs, hard-negative mining, and task-specific fine-
+  tuning for retrieval or similarity objectives. The right approach depends on the amount
+  and quality of supervision available.
+  A strong answer is that domain adaptation should be driven by retrieval errors you can
+  name. If the system is missing exact domain distinctions, you need data and objectives
+  that teach those distinctions explicitly.
+
+
+
+
+                                            — 82 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q103. Why are hard negatives important when training retrieval
+  embeddings?
+
+
+    Answer
+  Hard negatives are non-relevant items that look deceptively similar to the query. They
+  force the model to learn fine-grained distinctions instead of relying on superficial cues.
+  Without them, the model may learn an overly easy boundary and perform poorly in
+  realistic retrieval settings.
+  In interviews, explain that easy negatives teach separation; hard negatives teach precision.
+  The latter are usually more valuable once the basics are working.
+
+
+
+
+  Q104. Which training losses are common for embedding fine-tuning?
+
+
+    Answer
+  Contrastive, triplet, and multiple-negatives ranking losses are common because they
+  directly optimize the geometry of relevant and non-relevant pairs in embedding space.
+  The exact loss matters less than whether it aligns with the retrieval behavior you want.
+  A strong interview answer is that the loss should be evaluated through downstream ranking
+  quality, not chosen because it is fashionable. Retrieval is the target behavior, so training
+  should be judged by retrieval metrics.
+
+
+
+
+                                           — 83 —                          AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q105. How do you represent long documents when one embedding is not
+  enough?
+
+
+    Answer
+  Long documents are usually split into chunks because compressing an entire long document
+  into one vector often loses too much detail. Chunk-level retrieval preserves granularity, and
+  document-level reasoning can happen later through aggregation, reranking, or generation
+  over the selected passages.
+  In interviews, explain the hierarchy clearly: embed chunks for retrieval, then reconstruct
+  document-level understanding from the relevant pieces. That is usually more effective
+  than one-vector-per-document strategies.
+
+
+
+
+  Q106. What special considerations apply to multilingual embedding
+  systems?
+
+
+    Answer
+  Multilingual systems need representations that align related meaning across languages
+  while still preserving language-specific distinctions. You also need evaluation in each target
+  language, because strong English performance does not guarantee strong cross-lingual
+  retrieval.
+  A good interview answer mentions language coverage, script normalization, and whether
+  the application needs same-language retrieval, cross-language retrieval, or both. These are
+  different tasks with different failure modes.
+
+
+
+
+                                            — 84 —                          AI Engineering Insider
+Language Models Interview Handbook                                         Lamhot Siagian »
+
+
+
+
+  Q107. How do index compression and quantization affect retrieval
+  quality?
+
+
+    Answer
+  Compression and quantization reduce memory and improve speed, but they can slightly
+  distort vector distances. In many systems the trade-off is worthwhile, especially when the
+  recall loss is small compared with the operational gain.
+  The interview-safe answer is to frame this as engineering economics. You test whether a
+  cheaper representation still preserves enough of the ranking signal to meet product goals.
+
+
+
+
+  Q108. How should you choose similarity thresholds in retrieval systems?
+
+
+    Answer
+  Thresholds should be chosen from validation data, not intuition. The right threshold
+  depends on the embedding model, the corpus, and what happens downstream when
+  retrieval is too broad or too narrow. A threshold that maximizes offline recall may still
+  hurt answer quality if it floods the model with weak context.
+  In interviews, say that thresholds are part of the pipeline policy. They should be tuned
+  jointly with reranking, answer generation, and abstention behavior.
+
+
+
+
+                                          — 85 —                         AI Engineering Insider
+Language Models Interview Handbook                                        Lamhot Siagian »
+
+
+
+
+  Q109. How do you monitor retrieval drift after deploying custom
+  embeddings?
+
+
+    Answer
+  Monitor query distributions, nearest-neighbor patterns, recall on canary sets, click or
+  acceptance behavior, and the rate of irrelevant contexts reaching the generator. Drift
+  can come from changes in user language, data ingestion, new product terms, or updated
+  business processes.
+  A strong answer is that retrieval systems need ongoing observation because their environ-
+  ment changes even when the model does not. Representation quality is not a one-time
+  achievement.
+
+
+
+
+  Q110. What should a team plan for when migrating from one embedding
+  model to another?
+
+
+    Answer
+  Model migration usually requires re-embedding the corpus, validating new retrieval
+  behavior, and potentially recalibrating thresholds and rerankers. During the transition,
+  many teams dual-run both indexes so they can compare results and de-risk rollout.
+  In interviews, show that you think operationally. Changing the embedding model is not
+  just swapping one API call; it is a data migration and quality management exercise.
+
+
+
+
+                                          — 86 —                        AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+

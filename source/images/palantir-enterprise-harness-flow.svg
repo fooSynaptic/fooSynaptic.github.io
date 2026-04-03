@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" role="img">
+  <title>大模型与 Palantir 企业 Harness：请求链路</title>
+  <desc>用户自然语言经大模型与 Palantir 平台约束层校验、子图检索，到生成回答与审计记录的逻辑示意。</desc>
+  <defs>
+    <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#334155"/>
+    </marker>
+    <linearGradient id="brainFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="harnessFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fafaf9"/>
+      <stop offset="100%" stop-color="#f5f5f4"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="760" height="440" fill="#fafafa"/>
+  <text x="380" y="34" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" font-weight="600" fill="#1e293b">大模型 × Palantir 企业 Harness：一条请求的协作关系（逻辑示意）</text>
+  <g filter="url(#softShadow)">
+    <rect x="40" y="180" width="100" height="64" rx="10" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+  </g>
+  <text x="90" y="208" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="600" fill="#0f172a">用户</text>
+  <text x="90" y="228" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#475569">自然语言</text>
+  <g filter="url(#softShadow)">
+    <rect x="200" y="64" width="160" height="88" rx="12" fill="url(#brainFill)" stroke="#0284c7" stroke-width="1.5"/>
+  </g>
+  <text x="280" y="96" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="700" fill="#0369a1">大模型（推理侧）</text>
+  <text x="280" y="118" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#0c4a6e">意图 · 槽位 · 草稿推理</text>
+  <text x="280" y="136" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#0c4a6e">自然语言进 / 出</text>
+  <g filter="url(#softShadow)">
+    <rect x="188" y="200" width="400" height="168" rx="14" fill="url(#harnessFill)" stroke="#78716c" stroke-width="2" stroke-dasharray="6 4"/>
+  </g>
+  <text x="388" y="226" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="700" fill="#44403c">Palantir 企业 Harness（平台约束层）</text>
+  <rect x="210" y="242" width="108" height="46" rx="8" fill="#fff" stroke="#a8a29e"/>
+  <text x="264" y="262" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="600" fill="#292524">对象 / 链接</text>
+  <text x="264" y="278" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#57534e">ID · 消歧</text>
+  <rect x="332" y="242" width="108" height="46" rx="8" fill="#fff" stroke="#a8a29e"/>
+  <text x="386" y="262" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="600" fill="#292524">规则 / 流程</text>
+  <text x="386" y="278" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#57534e">版本可指</text>
+  <rect x="454" y="242" width="108" height="46" rx="8" fill="#fff" stroke="#a8a29e"/>
+  <text x="508" y="262" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="600" fill="#292524">权限 / 动作</text>
+  <text x="508" y="278" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#57534e">谁可调用</text>
+  <rect x="280" y="302" width="216" height="52" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+  <text x="388" y="324" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="600" fill="#92400e">校验：可见范围 · 合规 · 工具/数据视图白名单</text>
+  <text x="388" y="342" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#78350f">Harness 约束 Agent，非静态技能表一端</text>
+  <g filter="url(#softShadow)">
+    <rect x="188" y="384" width="400" height="44" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.2"/>
+  </g>
+  <text x="388" y="402" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="600" fill="#14532d">数据与检索：沿关系拉子图 · Graph RAG / 结构化查询</text>
+  <text x="388" y="418" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#166534">窄上下文，减少张冠李戴与幻觉式依据</text>
+  <g filter="url(#softShadow)">
+    <rect x="620" y="180" width="120" height="80" rx="10" fill="#fff" stroke="#64748b" stroke-width="1.5"/>
+  </g>
+  <text x="680" y="208" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="600" fill="#0f172a">答复</text>
+  <text x="680" y="228" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#475569">+ 审计轨迹</text>
+  <text x="680" y="246" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#475569">对象 · 规则版本</text>
+  <path d="M142 212 L218 124" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrowHead)"/>
+  <text x="168" y="158" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#64748b">① 提问</text>
+  <path d="M280 152 L280 200" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrowHead)"/>
+  <text x="288" y="178" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#64748b">② 进 Harness 校验</text>
+  <path d="M388 368 L388 382" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrowHead)"/>
+  <text x="400" y="378" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#64748b">③ 拉子图</text>
+  <path d="M388 406 L388 432 L558 432 L558 118 L318 118" fill="none" stroke="#0369a1" stroke-width="1.5" stroke-dasharray="7 4" marker-end="url(#arrowHead)"/>
+  <text x="452" y="424" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#0369a1">子图→窄上下文→模型</text>
+  <path d="M360 96 L600 96 L600 180" fill="none" stroke="#334155" stroke-width="1.8" marker-end="url(#arrowHead)"/>
+  <text x="470" y="88" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#64748b">④ 生成答复 + 写审计（挂平台对象）</text>
+  <path d="M620 220 L620 400 L180 400 L180 260" fill="none" stroke="#64748b" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#arrowHead)"/>
+  <text x="390" y="428" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="10" fill="#64748b">追问 / 下一轮：仍经②③，边界不丢</text>
+</svg>

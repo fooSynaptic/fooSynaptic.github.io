@@ -37,7 +37,7 @@ ReAct 的核心理念：**将智能体的动作空间扩展为 Â = A ∪ L**
 - **A** = 原始动作空间（与环境交互）
 - **L** = 语言空间（思想/推理轨迹）
 
-![ReAct：问题与思想、动作、观察交替直至答案](../images/llm-game-agents-react-workflow.svg)
+![ReAct：问题与思想、动作、观察交替直至答案](/images/llm-game-agents-react-workflow.svg)
 
 ### 1.2 推理轨迹类型
 
@@ -112,7 +112,7 @@ ReAct 的核心理念：**将智能体的动作空间扩展为 Â = A ∪ L**
 
 传统强化学习通过梯度更新权重学习，需要大量样本和昂贵的微调。Reflexion 提出用**语言反馈**替代梯度信号：
 
-![传统 RL 与 Reflexion：反馈回路对比](../images/llm-game-agents-rl-vs-reflexion.svg)
+![传统 RL 与 Reflexion：反馈回路对比](/images/llm-game-agents-rl-vs-reflexion.svg)
 
 ### 2.2 三大核心组件
 
@@ -134,7 +134,7 @@ ReAct 的核心理念：**将智能体的动作空间扩展为 Â = A ∪ L**
 
 核心创新：将稀疏奖励信号转化为**详细的语言化反思**
 
-![Reflexion 自我反思模块的输入与输出](../images/llm-game-agents-reflexion-reflection-io.svg)
+![Reflexion 自我反思模块的输入与输出](/images/llm-game-agents-reflexion-reflection-io.svg)
 
 ### 2.3 记忆机制
 
@@ -218,7 +218,7 @@ ReAct 的核心理念：**将智能体的动作空间扩展为 Â = A ∪ L**
 
 ### 3.2 核心架构
 
-![Generative Agents：记忆流、检索与行为生成](../images/llm-game-agents-generative-memory-arch.svg)
+![Generative Agents：记忆流、检索与行为生成](/images/llm-game-agents-generative-memory-arch.svg)
 
 ### 3.3 记忆检索公式
 
@@ -246,7 +246,7 @@ $$score = \alpha_{recency} \cdot recency + \alpha_{importance} \cdot importance 
 
 **反思树**: 叶节点=观察，非叶节点=越来越抽象的反思
 
-![反思树：观察、反思与元反思（示例）](../images/llm-game-agents-reflection-tree.svg)
+![反思树：观察、反思与元反思（示例）](/images/llm-game-agents-reflection-tree.svg)
 
 ### 3.5 规划机制
 
@@ -341,7 +341,7 @@ $$score = \alpha_{recency} \cdot recency + \alpha_{importance} \cdot importance 
 
 ### 5.1 理想组合架构
 
-![组合架构：记忆流 + ReAct + Reflexion](../images/llm-game-agents-ideal-combined-arch.svg)
+![组合架构：记忆流 + ReAct + Reflexion](/images/llm-game-agents-ideal-combined-arch.svg)
 
 ### 5.2 实现要点
 

@@ -1,0 +1,257 @@
+   Chapter 7
+
+
+   Topic Modeling, Clustering, and
+   Theme Discovery at Scale
+
+
+  Chapter overview. Topic discovery answers a different question from classification.
+  Classification maps data into known buckets; topic modeling and clustering help reveal
+  patterns you did not define in advance. Modern LLM systems often combine embeddings,
+  clustering, and summarization to discover themes in reviews, tickets, research papers, or
+  support chats.
+  The best interview answers explain both the statistical and product sides of the problem:
+  discovering clusters is only the first step; the harder part is naming them, validating them,
+  monitoring drift, and making them useful to downstream teams.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you can move from raw text to
+  interpretable themes without confusing unsupervised discovery with ground truth labeling.
+  Strong answer pattern. Explain the pipeline from representation to grouping to
+  interpretation, then describe how humans validate whether the clusters are actually useful.
+  Common miss. Do not oversell cluster names as facts. Theme discovery is exploratory
+  and depends heavily on representation quality and evaluation design.
+
+
+    INTERVIEW CHEATSHEET
+
+   Signal to hit         Theme discovery is a representation-plus-evaluation problem, not
+                         just a clustering algorithm choice.
+   Best example          Customer support tickets often need embedding-based grouping
+                         before humans name the dominant themes.
+   Follow-up angle       Mention dimensionality reduction, cluster interpretability, and
+                         stability across reruns or new data.
+   What seniors add      They separate exploratory insight generation from production
+                         taxonomy assignment.
+   Red flag              Treating unsupervised cluster labels as objective truth.
+
+
+
+
+                                           — 44 —                          AI Engineering Insider
+Language Models Interview Handbook                                               Lamhot Siagian »
+
+
+The theme-discovery figure helps connect unsupervised analysis to production workflow. It shows that
+topic modeling is strongest when labeling, validation, and iteration wrap around the clustering step.
+
+
+    Documents              Embeddings                  Clustering            Theme labeling
+
+
+
+
+                                                 Human validation
+
+       Figure 7.1: A practical theme-discovery flow from raw corpus to validated topic labels.
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “Good topic discovery pipelines treat
+   clusters as hypotheses that must be interpreted and validated, not as automatic truth
+   from the algorithm.”
+
+
+
+
+   Q51. How is topic modeling different from classification?
+
+
+      Answer
+   Classification is supervised and starts with a predefined label set. Topic modeling is
+   usually exploratory and tries to uncover latent themes from the data itself. The goal is
+   not to force every item into an existing taxonomy but to discover structure that can later
+   inform one.
+   In practice, teams often use topic discovery before building a formal taxonomy. It helps
+   reveal recurring issues, hidden subpopulations, and language used by real users. In
+   interviews, say that topic modeling is about pattern discovery, while classification is about
+   decision assignment.
+
+
+
+
+                                              — 45 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q52. Why have embedding-based clustering methods become popular
+  for topic discovery?
+
+
+    Answer
+  Embedding-based methods represent each text unit in a semantic vector space, so clustering
+  can group items that are conceptually related even if they do not share exact keywords.
+  This is especially useful for customer feedback, support logs, and research corpora where
+  people describe the same issue in many different ways.
+  The appeal is practical: embeddings give you better semantic grouping, and LLMs can
+  then summarize or name the discovered clusters. That combination is often more useful
+  to product teams than traditional topic-word lists alone.
+
+
+
+
+  Q53. What is a practical pipeline for topic discovery at scale?
+
+
+    Answer
+  A common pipeline is: clean the text, choose the unit of analysis, embed the data,
+  optionally reduce dimensionality, cluster the vectors, extract representative examples, and
+  finally use an LLM or human reviewer to label the clusters. The last steps matter because
+  raw clusters do not explain themselves.
+  In interviews, note that scalability depends on batching, approximate indexing, incremental
+  updates, and sampling strategies for review. A topic modeling system must be designed
+  like a data product, not just a notebook experiment.
+
+
+
+
+                                           — 46 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q54. Why do engineers often reduce dimensionality before clustering?
+
+
+    Answer
+  High-dimensional embedding spaces can be noisy and hard for some clustering algorithms
+  to partition cleanly. Dimensionality reduction can reveal local structure, denoise the space,
+  and make clusters easier to separate visually or algorithmically.
+  The trade-off is that reduction may distort distances if applied carelessly. A strong answer
+  is that reduction is a tool, not a default law. You use it when it improves cluster structure
+  or interpretability, then verify the result with representative examples rather than trusting
+  a plot alone.
+
+
+
+
+  Q55. How do you choose a clustering algorithm for topic discovery?
+
+
+    Answer
+  The choice depends on what you expect the data to look like. K-means assumes roughly
+  spherical clusters and requires a chosen k. Density-based methods can capture irregular
+  shapes and separate noise points, which is often useful for real text data. Hierarchical
+  methods are helpful when you want coarse-to-fine exploration.
+  In interviews, show judgment rather than brand loyalty. The right algorithm depends
+  on data distribution, scale, and the need for interpretability. No clustering method can
+  rescue weak embeddings or ill-defined units of analysis.
+
+
+
+
+                                            — 47 —                          AI Engineering Insider
+Language Models Interview Handbook                                         Lamhot Siagian »
+
+
+
+
+  Q56. How do you name clusters so business teams can actually use
+  them?
+
+
+    Answer
+  A useful cluster label should summarize the theme, not simply repeat the most frequent
+  token. Good labels usually come from a combination of top terms, representative examples,
+  and an LLM or human summarizer that sees enough evidence to describe the cluster
+  accurately.
+  The best labels are operational. ’Billing friction during checkout’ is more useful than
+  ’payment issue words.’ In interviews, mention that cluster naming is a human-factors
+  problem as much as a modeling problem.
+
+
+
+
+  Q57. How do you handle evolving topics over time?
+
+
+    Answer
+  Topics drift as products change, events occur, and new language enters the corpus. A
+  production system should therefore support periodic re-embedding, incremental clustering,
+  or time-sliced analysis so teams can see whether themes are growing, shrinking, splitting,
+  or merging.
+  This is where monitoring matters. Topic discovery is not a one-time report. In interviews,
+  show that you understand topic evolution as a temporal analytics problem, not only a
+  static NLP task.
+
+
+
+
+                                          — 48 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q58. How do you evaluate whether discovered topics are good?
+
+
+    Answer
+  Good topics are coherent internally, distinct from one another, and useful to decision-
+  makers. Automatic measures can help, but manual inspection of representative examples
+  remains essential. If a cluster contains semantically mixed examples, the label is likely
+  misleading even if a metric looks acceptable.
+  A strong answer is that evaluation should combine statistical coherence with analyst
+  usefulness. The question is not only ’Do the clusters exist?’ but ’Can a product, operations,
+  or research team act on them?’
+
+
+
+
+  Q59. How can LLMs improve topic modeling workflows?
+
+
+    Answer
+  LLMs are especially useful after clustering. They can label themes, summarize represen-
+  tative examples, compare adjacent clusters, and generate human-readable insights from
+  a large corpus. They can also help bootstrap a taxonomy once latent topics have been
+  discovered.
+  The caution is that LLM-generated summaries can sound crisp even when the underlying
+  cluster is messy. In interviews, say that LLMs improve interpretation and reporting, but
+  cluster quality must still be validated against raw examples.
+
+
+
+
+                                            — 49 —                         AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q60. What are common mistakes when teams run topic modeling at
+  scale?
+
+
+    Answer
+  Common mistakes include using the wrong unit of analysis, clustering noisy boilerplate,
+  overinterpreting weak visualizations, and treating automatically generated labels as truth.
+  Another mistake is ignoring temporal drift and assuming the same clusters remain stable
+  indefinitely.
+  The strongest interview answer is to emphasize validation. Topic discovery should be
+  treated as iterative sense-making. The goal is insight you can trust, not just an impressive
+  chart.
+
+
+
+
+                                           — 50 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+

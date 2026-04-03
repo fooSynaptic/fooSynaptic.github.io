@@ -1,0 +1,272 @@
+   Chapter 16
+
+
+   Architectures, Extensions, and
+   Practical Deployment
+
+
+  Chapter overview. By the time a team reaches production, the discussion is no longer
+  only about prompts and base models. Teams must decide whether sparse expert routing
+  is worth the operational complexity, whether structured knowledge should complement
+  retrieval, how to tune hyperparameters responsibly, and how to manage bias, privacy,
+  interpretability, and cost under real workloads. These are the topics that distinguish a
+  solid prototype from a durable system.
+  This chapter gathers concepts that frequently appear in senior interviews because they
+  force candidates to connect model architecture to product governance. It covers sparse
+  scaling through mixture-of-experts models, structured knowledge augmentation, practical
+  comparisons across model ecosystems, and the operational realities of deploying frontier
+  systems.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Can you connect frontier model choices to
+  governance, privacy, bias, evaluation, and operational constraints in production?
+  Strong answer pattern. Compare the architectural option, describe its operational
+  value, then explain what new evaluation and governance burden it creates.
+  Common miss. Avoid making the deployment discussion only about compute. Mature
+  answers include access control, auditability, privacy, and human escalation paths.
+
+
+
+
+                                         — 111 —                       AI Engineering Insider
+Language Models Interview Handbook                                              Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit          Production success depends on the whole stack: architecture,
+                           quality control, safety, privacy, and operational governance.
+    Best example           A model can benchmark well and still fail in production because
+                           permissions, freshness, or escalation rules were poorly designed.
+    Follow-up angle        Mention MoE routing, knowledge graphs, hyperparameters, bias
+                           evaluation, and privacy controls.
+    What seniors add       They separate research novelty from deployability.
+    Red flag               Assuming the biggest model or newest architecture is
+                           automatically the best production choice.
+
+
+The deployment-governance matrix is here to make production readiness explicit. It ties architecture
+decisions to policy, monitoring, incident response, and organizational ownership.
+
+              Table 16.1: A deployment governance matrix for real-world LLM systems
+
+ Area                 Example control      Why it matters
+
+ Privacy              Redaction,           Limits leakage risk when prompts or retrieved
+                      access control,      context contain sensitive data.
+                      data
+                      minimization
+ Quality              Regression sets      Detects drift before users absorb the failure.
+                      and scenario
+                      testing
+ Safety               Moderation,          Reduces harm from unsupported or unsafe behavior.
+                      refusal paths,
+                      human
+                      escalation
+ Operations           Logging, tracing,    Makes failures diagnosable instead of mysterious.
+                      rollback,
+                      versioning
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “The hardest deployment problems are
+   usually cross-layer problems, where retrieval, permissions, evaluation, and model behavior
+   fail together rather than one at a time.”
+
+
+
+
+                                             — 112 —                         AI Engineering Insider
+Language Models Interview Handbook                                         Lamhot Siagian »
+
+
+
+
+  Q142. What is a Mixture of Experts model and why is it attractive?
+
+
+    Answer
+  A Mixture of Experts, or MoE, model contains multiple expert subnetworks and a routing
+  mechanism that activates only a subset of them for each token or example. This creates a
+  sparse architecture: the total parameter count can be very large, but the compute used
+  per token remains much smaller than if all parameters were active.
+  Interviewers like this topic because it captures a core scaling idea. You can increase
+  capacity without paying the full dense-compute cost on every step. Switch Transformers
+  made this trade-off especially influential in large-scale training (Fedus et al., 2022).
+
+
+
+
+  Q143. What new failure modes do MoE systems introduce?
+
+
+    Answer
+  Sparse routing adds its own risks. Some experts may become overloaded while others are
+  underused. Training can become unstable if the router collapses onto a narrow subset of
+  experts. Debugging also becomes harder because quality regressions may reflect routing
+  behavior rather than only base-model quality.
+  A strong answer is that MoE models trade dense simplicity for conditional capacity.
+  They can be very efficient, but they need careful load balancing, routing diagnostics, and
+  serving-aware infrastructure.
+
+
+
+
+                                          — 113 —                        AI Engineering Insider
+Language Models Interview Handbook                                              Lamhot Siagian »
+
+
+
+
+  Q144. How can knowledge graphs complement language models?
+
+
+    Answer
+  Knowledge graphs represent entities and their relations in a structured form. They can
+  complement LLMs by providing explicit factual constraints, cleaner entity linking, and
+  multi-hop relational reasoning that is sometimes harder to recover from unstructured text
+  alone.
+  In practice, knowledge graphs help most when the product depends on stable entities and
+  relationships, such as products, people, regulations, scientific concepts, or enterprise assets.
+  They are especially valuable when traceability matters as much as fluency.
+
+
+
+
+  Q145. When does a knowledge graph help more than plain vector
+  retrieval?
+
+
+    Answer
+  Vector retrieval is excellent for semantic similarity over text, but it can struggle when the
+  task depends on explicit graph structure: parent-child hierarchies, ownership chains, typed
+  relations, or multi-hop constraints. A knowledge graph helps when the answer depends not
+  only on finding relevant passages but also on navigating structured links among entities.
+  The strongest interview answer is comparative rather than ideological. Many strong
+  systems use both: vector retrieval for broad evidence discovery and graph-based reasoning
+  for entity-grounded logic.
+
+
+
+
+                                            — 114 —                           AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q146. What is adaptive softmax and when is it useful?
+
+
+    Answer
+  Adaptive softmax speeds training for very large vocabularies by spending less computation
+  on rare words than on frequent words. It organizes the vocabulary into clusters so the
+  model can evaluate common tokens cheaply while still supporting a very large overall
+  vocabulary.
+  This matters most in large-vocabulary settings where the output layer becomes a compu-
+  tational bottleneck. It is less visible in interview prep than attention or LoRA, but it is a
+  good example of how systems efficiency and model math are deeply connected.
+
+
+
+
+  Q147. How do Claude-style and GPT-style ecosystems commonly differ
+  for developers?
+
+
+    Answer
+  The most interview-safe answer is that both ecosystems provide frontier language models,
+  but they often differ in packaging, product defaults, tool interfaces, context-window
+  options, and the surrounding platform ergonomics. In real work, developers compare them
+  less by brand identity and more by task fit: reasoning quality, tool use, latency, context
+  handling, pricing, safety controls, and deployment constraints.
+  A good answer stays current-aware and avoids hard-coding assumptions that can change
+  by release. The right comparison is usually empirical: benchmark the candidate models on
+  your workload, your prompts, and your latency budget instead of relying on brand-level
+  folklore.
+
+
+
+
+                                           — 115 —                         AI Engineering Insider
+Language Models Interview Handbook                                              Lamhot Siagian »
+
+
+
+
+  Q148. Why do hyperparameters matter beyond the learning rate?
+
+
+    Answer
+  Hyperparameters control much more than optimization speed. Batch size influences
+  gradient noise and hardware efficiency. Weight decay affects generalization. Sequence
+  length changes memory pressure. Decoding parameters change output quality. Retrieval
+  settings, reranker depth, and chunk size are also operational hyperparameters in real LLM
+  systems.
+  In interviews, show that you think broadly: hyperparameters are any knobs set by the
+  engineer rather than learned by the model. Good teams treat them as part of the system
+  design, not as an afterthought at the end of training.
+
+
+
+
+  Q149. How do you address biased or systematically incorrect outputs?
+
+
+    Answer
+  Start by making the failure concrete. Identify which groups, topics, or scenarios show
+  systematic problems. Then improve the stack at the appropriate layer: better data
+  curation, stronger evaluation sets, retrieval constraints, calibrated refusals, post-generation
+  validation, or targeted fine-tuning. One blanket fix rarely solves every bias or accuracy
+  issue.
+  A strong answer also includes measurement. Teams need disaggregated evaluation, rep-
+  resentative edge cases, and clear escalation policies. Otherwise “fixing bias” becomes a
+  slogan rather than an engineering process.
+
+
+
+
+                                            — 116 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q150. Why are interpretability and privacy hard in LLM deployment?
+
+
+    Answer
+  Interpretability is hard because large neural networks do not expose simple human-readable
+  rules for why a response emerged. Privacy is hard because the model may be asked to
+  process sensitive data, retrieve confidential documents, or call tools that operate on
+  protected systems. The combination creates a difficult governance challenge: you need
+  visibility and auditability without exposing more data than necessary.
+  In interviews, connect privacy to architecture. Access control, data minimization, logging
+  policy, retention, and redaction strategy are product decisions as much as model decisions.
+
+
+
+
+  Q151. What deployment bottlenecks do teams underestimate most
+  often?
+
+
+    Answer
+  Teams often underestimate evaluation maintenance, prompt and model version drift,
+  access-control complexity, long-tail latency, and the human cost of debugging failures
+  that span retrieval, tools, and model behavior. Compute cost matters, but operational
+  ambiguity is often the more painful bottleneck.
+  The strongest interview answer is honest and system-wide: production LLM work is
+  difficult because quality depends on the whole pipeline. A model that looks excellent in a
+  notebook can still fail once real documents, real permissions, and real users enter the loop.
+
+
+
+
+                                           — 117 —                         AI Engineering Insider
+Language Models Interview Handbook                                                   Lamhot Siagian »
+
+
+
+

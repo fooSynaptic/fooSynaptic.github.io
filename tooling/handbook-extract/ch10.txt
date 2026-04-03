@@ -1,0 +1,248 @@
+   Chapter 10
+
+
+   Prompting, In-Context Learning,
+   and LLM Orchestration
+
+
+  Chapter overview. Prompting is often introduced as a writing exercise, but in practice
+  it is a control interface for a probabilistic system. Good prompting structures the task,
+  reduces ambiguity, constrains outputs, and sets the model up to use context effectively. As
+  models became stronger at in-context learning and instruction following, prompt design
+  became a major engineering lever (Brown et al., 2020; Ouyang et al., 2022).
+  This chapter treats prompting as system design. Good prompts do not stand alone;
+  they interact with schema constraints, tool calling, retrieval quality, memory policy, and
+  evaluation.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you see prompting as interface
+  design for the whole system rather than clever wording in isolation.
+  Strong answer pattern. Explain the role of instructions, examples, policy, tools, and
+  output schema, then connect those to reliability and maintainability.
+  Common miss. Avoid describing prompts as magic incantations. Senior answers talk
+  about prompt versioning, evaluation, and failure mode control.
+
+
+    INTERVIEW CHEATSHEET
+
+   Signal to hit         Prompting is about shaping behavior with constraints, examples,
+                         and tooling context.
+   Best example          A structured-output task usually improves when the prompt also
+                         defines schema, boundaries, and fallback behavior.
+   Follow-up angle       Mention in-context learning, tool use, and prompt regression
+                         testing.
+   What seniors add      They treat prompts like production configuration with versions
+                         and evaluation.
+   Red flag              Saying prompt quality can be judged from a few anecdotal runs.
+
+
+
+
+                                           — 66 —                         AI Engineering Insider
+Language Models Interview Handbook                                                  Lamhot Siagian »
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “Prompting works best when it is treated
+   like system configuration: explicit policy, explicit schema, measured examples, and a
+   repeatable evaluation loop.”
+
+
+This prompting figure is here to show that good prompts are really miniature system designs. Instructions,
+evidence, tools, and output schema all work together rather than appearing as unrelated prompt fragments.
+
+
+    System policy        User task       Retrieved context          Tools         Structured output
+
+Figure 10.1: Prompting works best as orchestration across policy, task, evidence, tools, and output
+schema.
+
+
+
+
+   Q81. What roles do system, user, and tool messages play in chat-based
+   LLM systems?
+
+
+      Answer
+   The system message sets the governing behavior, constraints, and output expectations.
+   User messages contain the task request and new information. Tool or function results
+   supply external evidence or computed outputs that the model can use in its next step.
+   A good interview answer is that chat formatting is an interface contract. These roles help
+   separate policy, intent, and evidence. Clear separation makes the application easier to
+   reason about, debug, and secure.
+
+
+
+
+                                                — 67 —                            AI Engineering Insider
+Language Models Interview Handbook                                         Lamhot Siagian »
+
+
+
+
+  Q82. What makes a prompt reliably good rather than merely verbose?
+
+
+    Answer
+  A good prompt is specific about the task, the desired output format, the decision bound-
+  aries, and the available evidence. It removes ambiguity without drowning the model in
+  unnecessary text. Longer prompts are not automatically better; irrelevant detail can
+  dilute the instructions that matter most.
+  In interviews, explain prompt quality in terms of control, not eloquence. The strongest
+  prompt is the one that produces stable, useful outputs under realistic variation.
+
+
+
+
+  Q83. When does few-shot prompting materially help?
+
+
+    Answer
+  Few-shot examples help when the model needs to learn local conventions that are not
+  obvious from the instruction alone. This includes formatting rules, nuanced label bound-
+  aries, domain-specific tone, and edge-case decisions. Examples anchor the task in concrete
+  behavior.
+  The key is relevance, not quantity. A handful of well-chosen examples often beats a larger
+  set of repetitive ones. Strong candidates mention that examples should cover boundary
+  cases, not just easy positives.
+
+
+
+
+                                          — 68 —                         AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q84. How should you think about chain-of-thought prompting in a
+  product setting?
+
+
+    Answer
+  The useful principle is decomposition, not necessarily exposing long free-form reasoning.
+  If a task benefits from intermediate structure, you can ask the model to produce explicit
+  sub-results, checklists, or intermediate fields rather than relying on one undifferentiated
+  final answer.
+  In production, the goal is inspectability and task success, not maximal verbosity. A safe
+  interview answer is that decomposition can improve performance, but product systems
+  often prefer concise structured intermediates over unrestricted reasoning text.
+
+
+
+
+  Q85. How do you prompt for structured outputs?
+
+
+    Answer
+  Structured output prompting works best when you specify a schema, define field meanings
+  clearly, and validate the result after generation. Asking for ’JSON’ is not enough. The
+  model needs to know the allowed fields, value types, enum options, and what to do when
+  information is missing.
+  In interviews, mention two layers of control: prompt-level constraints and post-generation
+  validation. The best systems assume formatting can still fail and therefore parse, retry, or
+  repair rather than trusting the first response blindly.
+
+
+
+
+                                           — 69 —                          AI Engineering Insider
+Language Models Interview Handbook                                              Lamhot Siagian »
+
+
+
+
+  Q86. What is tool or function calling and why does it matter?
+
+
+    Answer
+  Tool calling lets the model select an external operation such as database lookup, API
+  request, calculator call, or workflow trigger instead of trying to generate the answer entirely
+  from its own weights. This turns the LLM into an orchestrator that can decide when
+  external computation is needed.
+  The interview-strength answer is that tool calling improves reliability by moving determin-
+  istic work out of pure language generation. The model chooses the action, but specialized
+  systems execute the action.
+
+
+
+
+  Q87. Why do prompt templates and versioning matter in engineering
+  teams?
+
+
+    Answer
+  Once prompts are part of production logic, they should be treated as versioned assets,
+  not ad hoc strings hidden in code. Teams need to know which prompt produced which
+  behavior, how changes affect metrics, and how to roll back safely if performance regresses.
+  A strong interview answer connects prompt management to software discipline: version
+  control, evaluation gates, experiment tracking, and reproducibility.
+
+
+
+
+                                             — 70 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q88. What is prompt injection and why is it dangerous?
+
+
+    Answer
+  Prompt injection happens when untrusted content instructs the model to ignore or override
+  the intended policy. This is dangerous in RAG and tool-using systems because retrieved
+  documents, web pages, or user inputs may contain text crafted to manipulate the model’s
+  behavior.
+  The important point is architectural. You cannot solve prompt injection with wording
+  alone. You need tool restrictions, trust boundaries, sanitization strategies, and defenses
+  that treat external text as untrusted data rather than privileged instructions.
+
+
+
+
+  Q89. How do you evaluate whether a prompt change is actually better?
+
+
+    Answer
+  Evaluate prompt changes on a fixed, representative test set with task-specific metrics such
+  as accuracy, groundedness, format validity, refusal correctness, or reviewer preference. Ad
+  hoc spot checks are useful for exploration but insufficient for release decisions.
+  In interviews, emphasize controlled comparison. Prompt quality should be tested the way
+  you would test any other system behavior: with baselines, datasets, acceptance criteria,
+  and rollback plans.
+
+
+
+
+                                           — 71 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q90. When do prompts stop being enough and a stronger intervention
+  become necessary?
+
+
+    Answer
+  Prompts stop being enough when the task requires domain adaptation, low latency,
+  strict consistency, or behavior that the base model repeatedly fails to internalize from
+  instructions alone. At that point, you may need better retrieval, stronger constraints,
+  fine-tuning, specialized tools, or a smaller dedicated model.
+  The senior answer is that prompt engineering is powerful but not unlimited. It is one control
+  surface among several. Mature teams know when to move the problem to architecture,
+  data, or model adaptation.
+
+
+
+
+                                            — 72 —                         AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+

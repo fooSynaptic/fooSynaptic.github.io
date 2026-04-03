@@ -125,15 +125,7 @@ $$
 
 ### LLM 架构演进
 
-```
-GPT-1 (2018) → GPT-2 → GPT-3 → ChatGPT → GPT-4
-     ↓
-BERT → RoBERTa → DeBERTa
-     ↓
-T5 → Flan-T5 → UL2
-     ↓
-LLaMA → LLaMA 2 → Mistral → Mixtral
-```
+![LLM 架构演进（家族）](/images/nlp-llm-evolution-families.svg)
 
 ### Prompt Engineering
 

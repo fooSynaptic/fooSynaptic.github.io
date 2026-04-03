@@ -37,16 +37,7 @@ toc:
 
 ## 🔧 技术栈
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                       技术栈                                 │
-├─────────────────────────────────────────────────────────────┤
-│  AI/ML:      PyTorch, TensorFlow, Transformers, LangChain   │
-│  Languages:  Python, JavaScript, C++                        │
-│  Tools:      Git, Docker, Linux                             │
-│  Frameworks: Hexo, React, FastAPI                           │
-└─────────────────────────────────────────────────────────────┘
-```
+![技术栈](/imgs/about-tech-stack.svg)
 
 ---
 

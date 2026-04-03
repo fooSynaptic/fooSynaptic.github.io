@@ -1,0 +1,335 @@
+   Chapter 2
+
+
+   Tokens, Tokenization, and Context
+   Windows
+
+
+  Chapter overview. This opening section explains how large language models convert
+  raw text into units they can process. Before a model can classify, retrieve, summarize,
+  or answer questions, it must tokenize the input, map tokens to IDs, and place them into
+  a limited context window. Those design choices influence model behavior, multilingual
+  robustness, memory footprint, latency, and price.
+  The move from word-level vocabularies to subword tokenization made modern language
+  models far more practical for open-vocabulary tasks. Subword methods such as byte-pair
+  encoding and SentencePiece improved handling of rare words, names, spelling variation,
+  and multilingual text by breaking text into reusable units rather than requiring a fixed
+  dictionary of full words (Sennrich et al., 2016; Kudo & Richardson, 2018).
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you can connect tokenization to
+  price, latency, multilingual behavior, truncation risk, and prompt design rather than
+  treating it as vocabulary trivia.
+  Strong answer pattern. Define the token as the real unit of computation, explain why
+  tokens are not equal to words, then connect token count to context budgeting, retrieval
+  chunking, and output planning.
+  Common miss. Candidates often say “the model reads words.” Strong candidates
+  mention subwords, special tokens, and the fact that output tokens consume the same
+  finite window and budget.
+
+
+
+
+                                          —8—                          AI Engineering Insider
+Language Models Interview Handbook                                                Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit           Token count controls cost, latency, truncation, and how much
+                            evidence fits beside instructions.
+    Best example            Explain why a JSON payload, source code block, or copied PDF
+                            text can consume far more tokens than a human expects.
+    Follow-up angle         Mention BPE or SentencePiece, then connect tokenization
+                            directly to chunk sizing and context-window budgeting.
+    What seniors add        They talk about reserving output budget and avoiding retrieval
+                            waste from oversized chunks.
+    Red flag                Saying “128k context” means 128k words or assuming longer
+                            prompts automatically improve answers.
+
+
+The opening visuals in this chapter stay focused on token flow, context budgeting, and prompt
+mechanics. They show where token count becomes an engineering constraint long before the
+model generates an answer.
+
+The code sample below is intentionally simple because the main lesson is budgeting. It shows how output
+reservation changes the real space left for retrieval and tool context inside a fixed window.
+
+                                                                                 Python Code
+
+  Listing 2.1: A small token-budget helper that is useful in interview demos and prompt design
+  discussions.
+   def reserve_context(total_window: int, prompt_tokens: int, output_budget: int) -> int:
+       """Return how many tokens remain for retrieval and tool context."""
+       remaining = total_window - prompt_tokens - output_budget
+       return max(remaining, 0)
+
+   window = 128000
+   prompt = 1800
+   completion_budget = 1200
+   retrieval_budget = reserve_context(window, prompt, completion_budget)
+   print({"retrieval_budget": retrieval_budget})
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “Tokenization is where human language
+   becomes model compute, so it quietly drives cost, latency, retrieval chunking, multilingual
+   robustness, and whether the final answer even fits in the window.”
+
+
+The figure below grounds the tokenization chapter in an end-to-end flow. It shows that tokenization is
+not an isolated preprocessing step; it directly shapes the context the model will actually reason over.
+
+The tokenization comparison table below is meant to sharpen trade-off language. Instead of memorizing
+names, focus on why each strategy changes vocabulary behavior, multilingual handling, and downstream
+cost.
+
+
+
+                                               —9—                              AI Engineering Insider
+Language Models Interview Handbook                                               Lamhot Siagian »
+
+
+   Raw text         Tokenizer          Token IDs          Embeddings         Context window
+
+                   subword splits                                            instructions, history,
+                     shape cost                                            retrieved evidence, and
+                     and length                                            output budget must fit
+
+                      Figure 2.1: From raw text to model-ready context.
+
+                  Table 2.1: A practical comparison of tokenization strategies
+
+ Approach          Strength                    Limitation
+Whitespace /       Simple to inspect           Breaks on rare words, morphology, and many
+word-level                                     multilingual cases
+Byte-pair          Strong open-vocabulary      Learned merges may be unintuitive to humans
+encoding           behavior with compact
+                   vocabularies
+ SentencePiece     Language-independent,       Still requires evaluation because segmentation
+                   trainable from raw text,    choices affect cost and behavior
+                   reproducible packaging
+
+
+
+
+  Q1. What is a token and why is it the real unit of computation in an
+  LLM?
+
+
+    Answer
+  A token is the unit an LLM actually reads and predicts. In practice, tokens are usually
+  not full words. They may be whole words, word pieces, punctuation, whitespace patterns,
+  or even character fragments depending on the tokenizer. The model never sees the raw
+  sentence directly; it sees a sequence of token IDs.
+  Tokens matter because almost every engineering limit is expressed in token terms: context
+  length, cost, throughput, latency, retrieval chunk sizes, and output budgets. When an API
+  says a model supports 128k context, that means 128k tokens, not 128k words. In interviews,
+  the strongest answer is to connect tokenization to both modeling and operations: it is the
+  bridge between human text and machine computation.
+
+
+
+
+                                           — 10 —                          AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q2. Why do tokens not map cleanly to words?
+
+
+    Answer
+  Human language is messy. Words contain prefixes, suffixes, punctuation, abbreviations,
+  emojis, code fragments, and multilingual patterns that do not fit a clean one-word-equals-
+  one-unit rule. A tokenizer therefore breaks text into pieces that are statistically efficient
+  for the model rather than linguistically perfect.
+  This is why a short-looking phrase can consume many tokens and a long-looking phrase
+  can consume fewer. It is also why prompts copied from PDFs, source code, JSON, or
+  languages without space-separated words can expand unexpectedly. In production, this
+  affects prompt budgets and cost estimation. In interviews, mention that tokenization
+  optimizes representational efficiency, not human readability.
+
+
+
+
+  Q3. How does byte-pair encoding help modern language models?
+
+
+    Answer
+  Byte-pair encoding, or BPE, starts from small units and repeatedly merges frequent symbol
+  pairs into larger subword units. Over time, common patterns such as ’ing’, ’tion’, or
+  domain-specific fragments become reusable vocabulary items. This lets a model represent
+  frequent text compactly while still handling rare words compositionally.
+  The key advantage is open-vocabulary behavior. Instead of failing on an unseen word, the
+  model can decompose it into known pieces. That idea was influential in neural machine
+  translation and later became standard in language model pipelines because it improved
+  handling of rare and unseen forms without exploding vocabulary size (Sennrich et al.,
+  2016).
+
+
+
+
+                                           — 11 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q4. What is SentencePiece and when is it preferable to classic
+  whitespace-based tokenization?
+
+
+    Answer
+  SentencePiece is a tokenizer framework that learns subword units directly from raw text
+  instead of assuming the text has already been split into words. That makes it useful for
+  multilingual and language-independent pipelines, especially where whitespace is unreliable
+  or absent.
+  Its practical value is reproducibility and portability. The tokenizer rules, normalization
+  behavior, and vocabulary are packaged into one model artifact, so training and inference
+  stay consistent across systems. In interviews, a strong answer is that SentencePiece is
+  helpful when you want robust, end-to-end tokenization for mixed-language corpora, noisy
+  text, or large-scale training pipelines (Kudo & Richardson, 2018).
+
+
+
+
+  Q5. What is a context window?
+
+
+    Answer
+  A context window is the maximum number of tokens the model can attend to during
+  one forward pass. It includes the system prompt, user input, retrieved context, tool
+  results, conversation history, and generated output budget. If the total exceeds the limit,
+  something must be truncated, summarized, or dropped.
+  In real systems, the context window is less like a memory palace and more like a working
+  desk: only what fits on the desk can be actively used at one time. That is why context
+  management is a first-class engineering problem in chat systems, agent loops, and RAG
+  pipelines.
+
+
+
+
+                                           — 12 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q6. Why does tokenization directly affect cost and latency?
+
+
+    Answer
+  LLM APIs generally bill per token processed or generated, and transformer attention cost
+  grows with sequence length. More tokens means more compute, more memory pressure,
+  and higher latency. Two prompts that look similar to a human can differ materially in
+  runtime because they tokenize differently.
+  This is why experienced engineers measure token counts before shipping prompts, especially
+  for long retrieval contexts, structured outputs, or chain-style workflows. A useful interview
+  point is that token efficiency is not only a finance issue; it also affects user experience,
+  throughput, and whether the system stays stable under load.
+
+
+
+
+  Q7. What happens when an input is longer than the model can accept?
+
+
+    Answer
+  If the input exceeds the context limit, the system must truncate, window, summarize,
+  compress, or retrieve selectively. If this is done badly, the model may miss crucial
+  instructions or evidence and produce confident but incomplete answers.
+  The main engineering lesson is that long context does not eliminate the need for retrieval
+  or context management. In production, you rarely want to blindly stuff everything into
+  the prompt. You want ranking, chunk selection, and memory policies so the most relevant
+  information survives within the budget.
+
+
+
+
+                                            — 13 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q8. What is the difference between truncation, sliding windows, and
+  summarization?
+
+
+    Answer
+  Truncation simply drops tokens, usually from the front or back. It is simple but risky
+  because it can remove the very instruction or evidence the model needs. Sliding windows
+  process long text in overlapping segments so the model can see local neighborhoods without
+  consuming the full document at once.
+  Summarization compresses earlier content into a shorter representation. That can preserve
+  intent better than hard truncation, but it also introduces abstraction loss. In interviews,
+  explain the trade-off clearly: truncation is cheapest, sliding windows preserve local detail,
+  and summarization preserves gist while sacrificing exact wording.
+
+
+
+
+  Q9. Why are special tokens important in model behavior?
+
+
+    Answer
+  Special tokens act like structural markers. They may indicate beginning-of-sequence,
+  end-of-sequence, padding, separator boundaries, instruction turns, image placeholders,
+  or tool-use boundaries. Even when users never see them, they shape how the model
+  interprets the sequence.
+  Many subtle bugs come from mishandling these markers during fine-tuning or inference.
+  For example, chat formatting can fail if role boundaries are not represented the way the
+  model expects. Strong interview answers mention that tokenization is not only about
+  splitting text; it is also about encoding structure.
+
+
+
+
+                                           — 14 —                          AI Engineering Insider
+Language Models Interview Handbook                                               Lamhot Siagian »
+
+
+
+
+   Q10. How should engineers budget tokens in a production LLM system?
+
+
+      Answer
+   A good token budget starts by reserving space for the most expensive and least negotiable
+   items: system instructions, required tools, guardrails, output length, and the top retrieved
+   passages. Everything else should compete for remaining space based on value. This is
+   why retrieval ranking, conversation summarization, and response length caps matter.
+   A practical rule is to design prompts backward from the maximum safe budget rather
+   than forward from an idealized prompt. In interviews, show that you think operationally:
+   estimate average and tail token usage, cap outputs, monitor overflow events, and treat
+   token budgets as a reliability control rather than an afterthought.
+
+
+This tokenizer example is included to make token counting tangible. It connects the earlier theory to
+the exact kind of inspection engineers use when prompts unexpectedly become expensive or overflow the
+model window.
+
+                                                                                Python Code
+
+                    Listing 2.2: Counting tokens with a Hugging Face tokenizer
+   from transformers import AutoTokenizer
+
+   tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+
+   text = "RAG systems trade token budget for grounding quality."
+   encoded = tokenizer(text, add_special_tokens=True)
+
+   print(encoded["input_ids"])
+   print("token_count =", len(encoded["input_ids"]))
+
+
+
+
+                                              — 15 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+

@@ -1,0 +1,290 @@
+   Chapter 15
+
+
+   Text Generation, Decoding, and
+   Serving at Scale
+
+
+  Chapter overview. Generation is the visible part of an LLM system, but good generation
+  depends on many hidden engineering choices. Decoding controls how the next token
+  is selected, while serving infrastructure controls how quickly and reliably responses are
+  delivered under load. Research on neural text degeneration showed that naive likelihood-
+  maximizing decoding can produce repetitive, low-quality text, which is why modern
+  systems carefully tune sampling strategies (Holtzman et al., 2020).
+  This chapter ties model behavior to deployment reality: throughput, latency, streaming,
+  KV caching, quantization, long-context serving, and safety controls.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you understand that decoding
+  quality and serving reliability are coupled decisions.
+  Strong answer pattern. Explain decoding controls, latency trade-offs, batching, stream-
+  ing, caching, and observability as one serving system.
+  Common miss. Candidates often answer only with temperature and top-p. Senior
+  answers include throughput, queueing, safety, and monitoring.
+
+
+    INTERVIEW CHEATSHEET
+
+   Signal to hit        Decoding is not purely stylistic; it changes quality, determinism,
+                        speed, and user experience.
+   Best example         The right decoding setup for deterministic extraction is very
+                        different from exploratory brainstorming or creative writing.
+   Follow-up angle      Mention streaming, batching, cache reuse, and service-level
+                        objectives.
+   What seniors add     They describe how generation controls interact with
+                        infrastructure cost.
+   Red flag             Treating serving as separate from model behavior.
+
+
+
+
+                                         — 104 —                         AI Engineering Insider
+Language Models Interview Handbook                                                  Lamhot Siagian »
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “A good generation service balances
+   decoding quality, streaming responsiveness, and infrastructure efficiency because users feel
+   all three at once.”
+
+This generation-service figure closes the loop from model output to user delivery. It helps the chapter
+discuss decoding, serving, and monitoring as one operational path instead of three separate concerns.
+
+
+         Request       Assembly        Inference      Streaming       Moderate       Logs / evals
+
+         Figure 15.1: A simplified generation service path from request to monitored delivery.
+
+
+The decoding-controls table keeps the generation chapter operational. It shows that sampling settings are
+user-experience and safety levers, not merely academic parameters.
+
+                               Table 15.1: Common decoding controls
+
+ Control              Primary effect         Practical note
+ Temperature          Changes                Lower for determinism, higher for diversity
+                      randomness of the
+                      next-token
+                      distribution
+ Top-k                Restricts              Useful as a hard cap on tail exploration
+                      candidates to the
+                      top k tokens
+ Top-p                Samples from a         Often a strong default for natural text generation
+                      cumulative-
+                      probability
+                      nucleus
+ Max tokens           Caps output            Important for cost and latency control
+                      length
+
+
+
+
+                                               — 105 —                           AI Engineering Insider
+Language Models Interview Handbook                                                 Lamhot Siagian »
+
+
+
+
+   Q132. How do temperature, top-k, and top-p change model outputs?
+
+
+      Answer
+   Temperature rescales the token probability distribution, making outputs more deterministic
+   when lowered and more diverse when raised. Top-k limits sampling to the k highest-
+   probability tokens. Top-p, or nucleus sampling, limits sampling to the smallest set of
+   tokens whose cumulative probability exceeds p.
+   In interviews, explain these as decoding controls, not as magical creativity knobs. They
+   change the trade-off between determinism, diversity, and risk of error. Nucleus sampling
+   became especially important because it helps avoid low-probability tail tokens that can
+   degrade text quality (Holtzman et al., 2020).
+
+
+
+
+   Q133. How does beam search compare with greedy decoding?
+
+
+      Answer
+   Greedy decoding always picks the single highest-probability next token at each step. Beam
+   search keeps several candidate continuations alive and expands them in parallel, which
+   gives the system a chance to recover from locally attractive but globally poor choices.
+   This can improve coherence in tasks such as translation or constrained generation.
+   The trade-off is that beam search costs more compute and still optimizes a narrow
+   probability objective, so it is not automatically better for all open-ended tasks. In
+   interviews, say that generation is a search problem: greedy decoding is the cheapest search,
+   while beam search is a broader but still limited search over candidate continuations.
+
+The sampling snippet below belongs in the serving chapter because decoding choices are product controls.
+It shows how one generation call exposes temperature, top-p, and token-budget decisions at the API edge.
+
+                                                                                  Python Code
+
+                    Listing 15.1: Sampling controls in a text-generation pipeline
+   from transformers import pipeline
+
+   generator = pipeline("text-generation", model="gpt2")
+
+   result = generator(
+       "Explain retrieval-augmented generation in simple terms:",
+
+
+
+
+                                              — 106 —                           AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+      max_new_tokens=120,
+      temperature=0.7,
+      top_k=40,
+      top_p=0.9,
+      do_sample=True
+  )
+
+  print(result[0]["generated_text"])
+
+
+
+
+  Q134. Why is streaming generation important in user-facing systems?
+
+
+      Answer
+  Streaming lets the system return tokens incrementally instead of waiting for the full
+  response. This improves perceived latency, keeps users engaged, and allows interfaces to
+  feel responsive even when the total generation time is significant.
+  In interviews, mention both UX and systems implications. Streaming also changes
+  cancellation behavior, error handling, and partial-output policies, so it is not merely a
+  frontend trick.
+
+
+
+
+  Q135. How do batching and concurrency improve serving efficiency?
+
+
+      Answer
+  Batching allows multiple requests to share accelerator work, improving hardware utilization.
+  Concurrency strategies help the server manage many active sessions without starving
+  some users. Together they can raise throughput substantially, especially for high-volume
+  inference.
+  The trade-off is latency. Larger batches improve efficiency but may delay individual
+  requests. Strong interview answers frame serving as a balance between tail latency and
+  cluster utilization.
+
+
+
+
+                                          — 107 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q136. What is the KV cache and why does it matter for autoregressive
+  decoding?
+
+
+    Answer
+  In autoregressive decoding, the model repeatedly attends over prior tokens. The KV cache
+  stores previously computed key and value tensors so the system does not recompute them
+  for every generated token. This makes generation much faster, especially for long prompts
+  and long outputs.
+  In interviews, say that the KV cache is one of the most important serving optimizations
+  for decoder-only models. It converts redundant repeated computation into reusable state.
+
+
+
+
+  Q137. How does quantization help deploy large models?
+
+
+    Answer
+  Quantization reduces the numerical precision of model weights and sometimes activations,
+  which lowers memory usage and can improve inference speed. This can make large models
+  fit on cheaper hardware or increase the number of concurrent requests a server can handle.
+  The interview-safe answer is that quantization is an engineering trade-off. It often delivers
+  major efficiency gains, but quality must be validated because aggressive compression can
+  degrade output fidelity on some tasks.
+
+
+
+
+                                           — 108 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q138. How should engineers think about throughput versus latency?
+
+
+    Answer
+  Throughput measures how much total work the system can do over time, while latency
+  measures how long one request takes. Optimizing one can hurt the other. A highly batched
+  cluster may be throughput-efficient while still feeling slow to users.
+  In interviews, say that the right objective depends on the product. Internal batch workloads
+  may prioritize throughput; interactive copilots may prioritize first-token latency and tail
+  latency.
+
+
+
+
+  Q139. What makes long-context serving difficult?
+
+
+    Answer
+  Long-context serving is difficult because memory and attention costs grow with sequence
+  length, prompts are more expensive to process, and the risk of context dilution rises. Even
+  when a model supports long context, using all of it on every request can be wasteful or
+  harmful.
+  A strong answer connects this back to retrieval and context design. Longer context is a
+  capability, not a default operating mode.
+
+
+
+
+                                           — 109 —                         AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q140. How do safety and moderation fit into generation pipelines?
+
+
+    Answer
+  Safety controls can be applied before, during, and after generation. Inputs may be
+  screened, tools may be permission-gated, decoding may be constrained, and outputs may
+  be moderated or validated before delivery. In sensitive applications, unsafe or unsupported
+  generations should trigger refusal or human review.
+  In interviews, explain safety as a pipeline property rather than a single classifier. Reliable
+  systems layer multiple controls because no single mechanism catches everything.
+
+
+
+
+  Q141. How would you describe a scalable LLM generation service in
+  system-design terms?
+
+
+    Answer
+  A scalable generation service usually includes request routing, authentication, prompt
+  assembly, retrieval or tool orchestration, model serving, streaming delivery, logging, caching,
+  safety checks, and evaluation feedback loops. It may also use tiered model routing so
+  simple tasks go to cheaper models and harder tasks go to stronger ones.
+  The best interview answer is architectural. Show that you can connect model behavior to
+  queues, autoscaling, observability, guardrails, and rollback strategy. That is what turns
+  model access into a product service.
+
+
+
+
+                                            — 110 —                          AI Engineering Insider
+Language Models Interview Handbook                                        Lamhot Siagian »
+
+
+
+

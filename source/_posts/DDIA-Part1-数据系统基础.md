@@ -20,7 +20,7 @@ tags:
 
 现代数据密集型应用通常由多个组件组合：
 
-![数据密集型应用架构：数据库、缓存、搜索索引、流处理、批处理、消息队列](../images/ddia-part1-data-intensive-arch.svg)
+![数据密集型应用架构：数据库、缓存、搜索索引、流处理、批处理、消息队列](/images/ddia-part1-data-intensive-arch.svg)
 
 | 类型 | 特点 | 主要瓶颈 | 典型场景 |
 |------|------|----------|----------|
@@ -93,7 +93,7 @@ tags:
 
 ### 2.1 数据模型分层
 
-![数据模型分层：应用层、数据模型层、存储层、硬件层](../images/ddia-part1-data-model-layers.svg)
+![数据模型分层：应用层、数据模型层、存储层、硬件层](/images/ddia-part1-data-model-layers.svg)
 
 ### 2.2 关系模型
 
@@ -160,7 +160,7 @@ RETURN fof.name
 
 ### 2.5 数据模型选择指南
 
-![数据模型选择：关系复杂度与结构形态决策](../images/ddia-part1-model-selection-flowchart.svg)
+![数据模型选择：关系复杂度与结构形态决策](/images/ddia-part1-model-selection-flowchart.svg)
 
 ---
 
@@ -175,13 +175,13 @@ RETURN fof.name
 
 ### 3.2 哈希索引
 
-![哈希索引：内存哈希表与磁盘日志文件](../images/ddia-part1-hash-index.svg)
+![哈希索引：内存哈希表与磁盘日志文件](/images/ddia-part1-hash-index.svg)
 
 **局限**：所有键必须在内存中、范围查询慢
 
 ### 3.3 LSM-Tree（Log-Structured Merge-Tree）
 
-![LSM-Tree：Memtable 与多级 SSTable](../images/ddia-part1-lsm-tree.svg)
+![LSM-Tree：Memtable 与多级 SSTable](/images/ddia-part1-lsm-tree.svg)
 
 **优化技术**：
 - **布隆过滤器**：快速判断键是否存在（避免无效磁盘读取）
@@ -189,7 +189,7 @@ RETURN fof.name
 
 ### 3.4 B-Tree
 
-![B-Tree：根、内部节点与叶子示意](../images/ddia-part1-btree.svg)
+![B-Tree：根、内部节点与叶子示意](/images/ddia-part1-btree.svg)
 
 | 特性 | B-Tree | LSM-Tree |
 |------|--------|----------|
@@ -219,7 +219,7 @@ RETURN fof.name
 
 ### 4.1 兼容性概念
 
-![后向兼容与前向兼容：新旧代码读写数据关系](../images/ddia-part1-encoding-compatibility.svg)
+![后向兼容与前向兼容：新旧代码读写数据关系](/images/ddia-part1-encoding-compatibility.svg)
 
 **滚动升级**：不停机部署新版本，同时运行新旧版本代码
 

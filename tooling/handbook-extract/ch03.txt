@@ -1,0 +1,300 @@
+
+   Chapter 3
+
+
+   Embeddings and Semantic
+   Representations
+
+
+  Chapter overview. Embeddings convert discrete text into dense vectors that place
+  semantically similar items near one another in vector space. They are the backbone of
+  semantic search, clustering, reranking, recommendation, and many retrieval-augmented
+  generation systems. While tokenization answers ’how do we split text?’, embeddings
+  answer ’how do we represent meaning numerically?’
+  The practical literature on representation learning showed that useful semantic vectors can
+  be trained so that related sentences, documents, or image-text pairs occupy nearby regions
+  in embedding space. Sentence-BERT made sentence-level similarity search dramatically
+  more efficient than pairwise cross-encoding, while later multimodal work such as CLIP
+  extended the same idea across text and images (Reimers & Gurevych, 2019; Radford et
+  al., 2021).
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you understand that embeddings are
+  numerical representations optimized for geometry and task utility, not just fancy vectors
+  you call from an API.
+  Strong answer pattern. Explain what an embedding captures, why similarity is
+  geometric rather than lexical, and how that affects search, clustering, recommendation,
+  reranking, and evaluation.
+  Common miss. Do not imply that all embedding models are interchangeable. Mention
+  task mismatch, domain drift, and the difference between retrieval quality and generation
+  quality.
+
+
+
+
+                                           — 16 —                         AI Engineering Insider
+Language Models Interview Handbook                                                   Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+     Signal to hit           Embeddings compress semantic relationships into vector space so
+                             distance can stand in for meaning.
+     Best example            A retrieval query should retrieve relevant documents even when
+                             the wording differs from the source text.
+     Follow-up angle         Mention cosine similarity, dense retrieval, and why embedding
+                             quality depends on the training objective and domain fit.
+     What seniors add        They distinguish first-stage recall from second-stage reranking
+                             and evaluation.
+     Red flag                Treating vector search as a guaranteed truth mechanism instead
+                             of a probabilistic relevance stage.
+
+
+This embedding figure is included to make the semantic-search pipeline concrete. The important point is
+that vector space is only useful because later stages such as search, clustering, and ranking can operate
+on it efficiently.
+
+
+        Text              Embedding model                Vector space             Similarity search
+
+
+
+
+                                                    Clustering / ranking
+
+          Figure 3.1: How semantic representations turn text into retrieval-ready geometry.
+
+
+The cosine-similarity snippet below keeps the embedding discussion concrete. It demonstrates that semantic
+search eventually reduces to numerical comparison, even when the upstream model is sophisticated.
+
+                                                                                    Python Code
+
+            Listing 3.1: A minimal semantic-similarity example using normalized vectors.
+   from math import sqrt
+
+   def cosine(a, b):
+       dot = sum(x * y for x, y in zip(a, b))
+       na = sqrt(sum(x * x for x in a))
+       nb = sqrt(sum(y * y for y in b))
+       return dot / (na * nb)
+
+   query = [0.30, 0.22, 0.91]
+   doc_a = [0.28, 0.20, 0.89]
+   doc_b = [0.10, 0.77, 0.14]
+   print(cosine(query, doc_a), cosine(query, doc_b))
+
+
+
+
+                                                — 17 —                            AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+    What Strong Candidates Sound Like
+  One sentence you can say in an interview. “Embeddings are useful because they
+  make semantic proximity measurable, which lets retrieval, clustering, and recommendation
+  systems scale beyond exact keyword overlap.”
+
+
+
+
+  Q11. What is an embedding?
+
+
+    Answer
+  An embedding is a dense numerical vector that represents a token, sentence, document,
+  image, or other object in a way that preserves useful relationships. Instead of treating text
+  as an ID lookup, the model maps it into a continuous space where distance and direction
+  can encode semantic similarity.
+  In plain terms, embeddings let machines compare meaning without relying only on exact
+  keyword matches. That is why they are central to semantic search and retrieval. A strong
+  interview answer explains both levels: embeddings are learned numerical representations,
+  and their value comes from turning semantic comparison into vector operations.
+
+
+
+
+  Q12. Why do embeddings make semantic search possible?
+
+
+    Answer
+  Semantic search works because relevant items do not need to share the exact same words
+  if their embeddings land close together. A query about ’physician salary growth’ can still
+  retrieve content written about ’doctor compensation trends’ because the vectors encode
+  related meaning rather than strict lexical overlap.
+  This makes embeddings especially useful for question answering, support search, and
+  long-tail user phrasing. The caveat is that dense similarity can also retrieve conceptually
+  adjacent but wrong content, so embedding search is powerful but not automatically precise.
+  That is why production systems often add metadata filters, lexical matching, or reranking.
+
+
+
+
+                                            — 18 —                         AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q13. What is the difference between token embeddings, sentence
+  embeddings, and document embeddings?
+
+
+    Answer
+  Token embeddings represent individual token identities at the model input layer. They
+  are part of the model’s internal processing and are not usually used directly for search.
+  Sentence embeddings compress a whole sentence into one vector designed for semantic
+  comparison. Document embeddings do the same at larger scope, often using pooling or
+  chunk-level aggregation.
+  The important interview point is to match the representation to the task. Token embed-
+  dings are great for internal language modeling, but they are not the same as retrieval
+  embeddings. For search and clustering, you usually want sentence or chunk embeddings
+  that are explicitly trained to preserve semantic similarity at that level.
+
+
+
+
+  Q14. Why do engineers often L2-normalize embeddings?
+
+
+    Answer
+  Normalization scales vectors to unit length so similarity depends mainly on direction
+  rather than raw magnitude. This makes cosine similarity and dot-product behavior more
+  consistent and often improves retrieval stability, especially when vector norms vary widely
+  across examples.
+  In practice, normalization also simplifies index behavior and thresholding. Without it,
+  one vector can dominate comparisons because of size rather than meaning. In interviews,
+  mention that normalization is not magic; it is a design choice that can improve compara-
+  bility, but the right choice depends on how the embedding model was trained and how
+  the index computes similarity.
+
+
+
+
+                                           — 19 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q15. When should you use cosine similarity instead of dot product?
+
+
+    Answer
+  Core idea. Use cosine similarity when you want similarity to reflect semantic direction
+  rather than raw vector magnitude. Cosine compares the angle between vectors, while dot
+  product mixes angle and length, so high-norm vectors can win even when they are not
+  truly the closest match in meaning.
+  When cosine is usually the safer choice. Prefer cosine when your embedding norms
+  vary across examples, when the model documentation recommends cosine-based retrieval,
+  or when you want ranking behavior that is less sensitive to scale differences introduced
+  during training or preprocessing.
+  Expert note. If embeddings are L2-normalized, cosine similarity and dot product become
+  equivalent for ranking because every vector has unit length. In production, the real rule is
+  consistency: use the metric your embedding model, vector index, and offline evaluation
+  pipeline are designed around. A mismatch can quietly change retrieval quality even though
+  the embeddings themselves never changed.
+
+
+
+
+  Q16. What are hubness and anisotropy in embedding spaces?
+
+
+    Answer
+  Hubness refers to the tendency of some vectors to appear as nearest neighbors for too many
+  queries. Anisotropy means the vector space is unevenly distributed, so many embeddings
+  crowd into similar directions. Together, these effects can reduce retrieval quality because
+  the index keeps surfacing generic items.
+  You do not need to over-theorize this in interviews. A clear answer is that not all embedding
+  spaces are equally healthy for nearest-neighbor search. If you see over-retrieval of broad
+  or repetitive documents, investigate normalization, fine-tuning quality, negative sampling,
+  and reranking rather than assuming the vector database is at fault.
+
+
+
+
+                                            — 20 —                         AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q17. What is the difference between dense and sparse representations?
+
+
+    Answer
+  Dense representations are continuous vectors where most dimensions carry nonzero val-
+  ues. Sparse representations are high-dimensional signals where only a small number of
+  dimensions are active, as in bag-of-words or BM25-style lexical matching. Dense methods
+  capture semantic similarity better; sparse methods preserve exact term evidence better.
+  In production, this is not a philosophical choice. It is usually a recall-and-precision
+  trade-off. Dense search can find conceptually related text, while sparse search protects
+  against missing exact terminology, names, codes, or product IDs. That is why hybrid
+  retrieval has become the default in many enterprise systems.
+
+
+
+
+  Q18. What is the difference between a bi-encoder and a cross-encoder?
+
+
+    Answer
+  A bi-encoder encodes the query and candidate text independently, then compares their
+  vectors. This makes retrieval fast and scalable because candidate vectors can be precom-
+  puted. A cross-encoder processes query and candidate together, allowing richer interaction
+  but at much higher inference cost.
+  A useful mental model is that the bi-encoder is a fast librarian who pulls a shortlist,
+  while the cross-encoder is a careful reviewer who reads each shortlisted item alongside the
+  query. In interviews, emphasize the common pattern: use a bi-encoder for recall and a
+  cross-encoder for reranking.
+
+
+
+
+                                           — 21 —                         AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q19. How does embedding dimension affect system design?
+
+
+    Answer
+  Higher-dimensional embeddings can capture richer distinctions, but they also increase
+  storage, memory bandwidth, and index cost. Lower-dimensional embeddings are cheaper
+  and faster but may lose retrieval fidelity, especially in complex domains.
+  The right dimension is therefore a system decision, not just a model choice. In interviews,
+  mention the full trade-off: vector size affects index footprint, latency, cache efficiency, and
+  re-embedding migration cost. A strong engineer does not ask only ’what is most accurate?’
+  but also ’what scales under real traffic?’
+
+
+
+
+  Q20. How do you evaluate an embedding model before using it in
+  production?
+
+
+    Answer
+  Evaluate embeddings on the task they will actually support. For retrieval, measure recall at
+  k, mean reciprocal rank, normalized discounted cumulative gain, and downstream answer
+  quality. For clustering, check purity or manual interpretability. For recommendation,
+  assess whether neighbors are meaningfully relevant rather than only numerically close.
+  The strongest interview answer is that offline vector similarity alone is not enough.
+  Embeddings should be tested inside the full pipeline they will power. Sentence-level
+  benchmarks are useful, but the final question is always whether the embeddings improve
+  business-relevant retrieval or decision quality (Reimers & Gurevych, 2019).
+
+
+
+
+                                            — 22 —                           AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+

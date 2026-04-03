@@ -1,0 +1,365 @@
+   Chapter 13
+
+
+   Fine-Tuning, PEFT, and Adaptation
+   Strategies
+
+
+  Chapter overview. Foundation models start broad, but production systems often need
+  narrower behavior: better instruction following, domain adaptation, lower latency, or
+  more stable outputs. Fine-tuning is one route to that specialization, but it exists on a
+  spectrum that includes supervised fine-tuning, instruction tuning, preference optimization,
+  and parameter-efficient adaptation such as LoRA (Ouyang et al., 2022; Hu et al., 2021).
+  The strongest interview answers separate what fine-tuning can fix from what it cannot.
+  Fine-tuning is powerful for behavior shaping and specialization, but it does not replace
+  retrieval quality, evaluation discipline, or product-level control.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Can you compare prompt engineering, PEFT,
+  LoRA, QLoRA, and full fine-tuning with a budget-aware engineering lens?
+  Strong answer pattern. Start with the behavior gap you need to close, then discuss
+  adaptation strength, data quality, compute cost, portability, and operational risk.
+  Common miss. Do not present LoRA or QLoRA as universally superior. They are
+  strong trade-offs, not universal answers.
+
+
+
+
+                                           — 87 —                         AI Engineering Insider
+Language Models Interview Handbook                                                 Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit           Adaptation strategy should match behavior gap, compute budget,
+                            latency target, and deployment flexibility.
+    Best example            Use prompt and retrieval improvements first, then PEFT when
+                            you need persistent behavior change with moderate cost.
+    Follow-up angle         Mention catastrophic forgetting, evaluation sets, and rollback
+                            strategy.
+    What seniors add        They discuss deployment and governance, not only training
+                            mechanics.
+    Red flag                Fine-tuning before proving the issue is not actually a retrieval or
+                            prompt-design problem.
+
+
+This adaptation-choice table belongs here because interviewers often ask for the boundary between
+prompting, PEFT, and full fine-tuning. The rows help turn that answer into a principled decision instead
+of a preference statement.
+
+               Table 13.1: Choosing among prompt changes, PEFT, and full fine-tuning
+
+ Option                Best when               Trade-off
+
+ Prompt and            Behavior gap is         Fastest and safest, but limited for deeper style or
+ retrieval updates     mostly instruction      policy adaptation.
+                       or evidence related
+ LoRA                  You need persistent     Good balance of quality and efficiency for many
+                       behavior change         enterprise cases.
+                       with manageable
+                       compute
+ QLoRA                 Hardware is             Attractive for experimentation, but still requires
+                       constrained and         disciplined evaluation.
+                       memory matters
+ Full fine-tuning      Task is critical and    Highest cost and operational complexity.
+                       adaptation must
+                       be deep
+
+
+This PEFT configuration snippet is useful because interviews often expect the vocabulary of adapters,
+rank, alpha, and target modules. The code anchors those terms in a real configuration shape.
+
+                                                                                  Python Code
+
+   Listing 13.1: A compact PEFT configuration snippet often discussed in adaptation interviews.
+   from peft import LoraConfig
+
+   config = LoraConfig(
+       r=16,
+       lora_alpha=32,
+       lora_dropout=0.05,
+
+
+
+                                               — 88 —                            AI Engineering Insider
+Language Models Interview Handbook                                                 Lamhot Siagian »
+
+
+
+       bias="none",
+       target_modules=["q_proj", "v_proj"],
+       task_type="CAUSAL_LM",
+   )
+
+
+       What Strong Candidates Sound Like
+   One sentence you can say in an interview. “The right adaptation method is the
+   cheapest one that reliably closes the measured behavior gap without creating governance
+   and maintenance pain.”
+
+
+This adaptation figure frames fine-tuning as a ladder of intervention. It reminds the reader that prompt
+changes, adapters, and full-weight updates are different operating points, not interchangeable defaults.
+
+
+        Base model        SFT / instruction tune       Preference tune       Policy-ready model
+
+
+                          full tune or PEFT / LoRA
+
+
+                Figure 13.1: One simplified view of model adaptation and alignment.
+
+
+The second adaptation table compares strategies in a more applied way. Use it to discuss infrastructure
+load, data requirements, and deployment implications side by side.
+
+                            Table 13.2: Adaptation strategies in practice
+
+ Method                 Best for                Main trade-off
+ Prompting              Fast iteration and      Less consistent on hard repeated tasks
+                        changing tasks
+ Retrieval              Knowledge               Quality depends on evidence selection
+                        grounding and
+                        freshness
+ LoRA / PEFT            Efficient domain or     Still needs data, evaluation, and model
+                        task adaptation         management
+ Full fine-tuning       Maximum                 Highest compute and maintenance cost
+                        specialization
+
+
+
+
+                                               — 89 —                            AI Engineering Insider
+Language Models Interview Handbook                                                Lamhot Siagian »
+
+
+
+
+   Q111. What is the difference between full fine-tuning and
+   parameter-efficient fine-tuning?
+
+
+      Answer
+   Full fine-tuning updates all or most model weights, which can deliver strong adaptation
+   but is expensive in compute, memory, and deployment complexity. Parameter-efficient
+   methods update only a small subset of parameters or add lightweight trainable modules,
+   making adaptation much cheaper.
+   In interviews, say that PEFT methods are attractive when you need many task variants,
+   faster iteration, or lower serving overhead. Full fine-tuning is still valuable when maximal
+   task adaptation is required and resources allow it.
+
+
+
+
+   Q112. What are LoRA and QLoRA, and how do they differ?
+
+
+      Answer
+   LoRA, or Low-Rank Adaptation, freezes the base model and learns small low-rank update
+   matrices that modify selected transformer weights efficiently. QLoRA keeps the same
+   basic adapter idea but combines it with low-bit quantization of the frozen base model so
+   much larger models can be fine-tuned within limited memory budgets.
+   The practical difference is that LoRA focuses on reducing trainable parameters, while
+   QLoRA also focuses aggressively on reducing memory footprint during training. That is
+   why QLoRA became so useful for adapting large open models on modest hardware (Hu et
+   al., 2021; Dettmers et al., 2023).
+
+
+The LoRA example expands the configuration idea into a minimal workflow. It helps the reader see the
+path from adapter setup to trainable-parameter selection without getting lost in framework boilerplate.
+
+                                                                                 Python Code
+
+                     Listing 13.2: A small PEFT example with LoRA adapters
+   from transformers import AutoModelForCausalLM
+   from peft import LoraConfig, get_peft_model
+
+   base_model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.1-8B")
+
+   config = LoraConfig(
+
+
+
+
+                                               — 90 —                           AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+      r=16,
+      lora_alpha=32,
+      lora_dropout=0.05,
+      target_modules=["q_proj", "v_proj"]
+  )
+
+  model = get_peft_model(base_model, config)
+  model.print_trainable_parameters()
+
+
+
+
+  Q113. What is the difference between supervised fine-tuning, instruction
+  tuning, and preference optimization?
+
+
+      Answer
+  Supervised fine-tuning teaches the model from input-output pairs. Instruction tuning is a
+  specialization of that idea where tasks are framed as natural-language instructions so the
+  model becomes better at following requests across tasks. Preference optimization uses
+  ranked or comparative feedback to push the model toward outputs humans prefer.
+  A strong answer is that these methods shape different aspects of behavior. SFT teaches
+  task patterns, instruction tuning broadens usability, and preference methods improve
+  helpfulness, safety, or style beyond plain imitation (Ouyang et al., 2022).
+
+
+
+
+  Q114. What is model distillation and when is it useful?
+
+
+      Answer
+  Model distillation trains a smaller student model to imitate a larger teacher model, often
+  by learning from the teacher’s soft probability distribution rather than only from hard
+  labels. The goal is to preserve much of the teacher’s behavior while reducing latency,
+  memory use, and deployment cost.
+  Distillation is useful when the production constraint is not only accuracy but also efficiency.
+  It is common in mobile, edge, or high-throughput systems where a frontier model is too
+  expensive to serve directly. In interviews, distinguish distillation from PEFT: distillation
+  creates a new smaller model, while PEFT adapts an existing large model more cheaply
+  (Hinton et al., 2015).
+
+
+
+
+                                            — 91 —                           AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q115. When is fine-tuning actually worth the effort?
+
+
+    Answer
+  Fine-tuning is worth it when prompting and retrieval have plateaued, the task is stable,
+  labeled data is available, and the business case rewards tighter consistency or lower cost
+  per request. It is especially compelling when the same behavior must be repeated at scale.
+  In interviews, show restraint. Fine-tuning is not automatically the next step after a weak
+  prompt. Sometimes the real issue is poor data, bad chunking, or missing tools.
+
+
+
+
+  Q116. What makes a fine-tuning dataset high quality?
+
+
+    Answer
+  High-quality fine-tuning data is clear, representative, correctly labeled, diverse across edge
+  cases, and aligned to the exact behavior you want in production. A small clean dataset is
+  often more valuable than a large noisy one because the model will faithfully learn your
+  inconsistencies too.
+  The best interview answer is that data quality defines the ceiling. Fine-tuning amplifies
+  the pattern in the data; it does not invent a better target than the one you provide.
+
+
+
+
+                                            — 92 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q117. What is catastrophic forgetting and why does it matter?
+
+
+    Answer
+  Catastrophic forgetting happens when fine-tuning pushes the model so strongly toward a
+  new domain or task that it loses useful general capabilities it previously had. This matters
+  when the product still relies on broad reasoning, style range, or knowledge outside the
+  fine-tuned examples.
+  In interviews, mention mitigation strategies such as balanced data mixes, lighter adaptation
+  methods, and evaluation across both new and retained capabilities. Good specialization
+  should not unnecessarily destroy general competence.
+
+
+
+
+  Q118. How should you evaluate a fine-tuned model before release?
+
+
+    Answer
+  Evaluate both target-task gains and unintended regressions. That includes task accuracy,
+  safety behavior, formatting stability, refusal correctness, latency, and generalization to
+  realistic prompts rather than only training-like examples.
+  A mature answer is that evaluation should compare the fine-tuned model against the
+  baseline model and the cheapest non-fine-tuned alternative. Otherwise you cannot tell
+  whether fine-tuning truly earned its complexity.
+
+
+
+
+                                           — 93 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q119. How does alignment relate to fine-tuning?
+
+
+    Answer
+  Alignment refers to shaping the model so its behavior better matches human intent,
+  safety requirements, and product policy. Fine-tuning is one mechanism for alignment, but
+  alignment also depends on preference data, guardrails, tools, retrieval constraints, and
+  evaluation methods.
+  In interviews, explain that alignment is broader than politeness or refusal. It is about
+  steering the model toward useful, appropriate, and policy-consistent behavior in the
+  context of real applications.
+
+
+
+
+  Q120. What are the main cost trade-offs in fine-tuning projects?
+
+
+    Answer
+  The main costs include data creation, training compute, evaluation effort, model storage,
+  serving complexity, and operational maintenance across versions. These costs are justified
+  only if the fine-tuned model delivers measurable gains in quality, speed, or cost efficiency
+  over prompting alone.
+  A strong answer is that fine-tuning has both upfront and lifecycle costs. Teams sometimes
+  focus on training cost and forget the long-term burden of managing multiple adapted
+  models.
+
+
+
+
+                                           — 94 —                          AI Engineering Insider
+Language Models Interview Handbook                                       Lamhot Siagian »
+
+
+
+
+  Q121. When should a team avoid fine-tuning altogether?
+
+
+    Answer
+  A team should avoid fine-tuning when the task changes rapidly, the dataset is weak, the
+  behavior is mostly knowledge retrieval rather than skill adaptation, or the product can
+  be solved with better prompting, retrieval, or tool use. Fine-tuning can add complexity
+  without solving the actual bottleneck.
+  In interviews, this answer signals discipline. Good engineers do not optimize the wrong
+  layer of the stack.
+
+
+
+
+                                         — 95 —                        AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+

@@ -1,0 +1,272 @@
+   Chapter 4
+
+
+   Transformer Architecture, Attention,
+   and Positional Reasoning
+
+
+  Chapter overview. The transformer is the architectural backbone behind modern
+  large language models. Its central insight is that sequence modeling can be built around
+  attention rather than recurrence, allowing training to be parallelized while still modeling
+  long-range dependencies. That change reshaped NLP and later influenced multimodal,
+  vision, and audio systems as well (Vaswani et al., 2017).
+  Understanding the transformer means understanding how token embeddings are mixed
+  through self-attention, feed-forward blocks, residual connections, and positional informa-
+  tion. Interviews often test whether candidates can explain the architecture at multiple
+  levels: intuitive, mathematical, and systems-oriented.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Can you explain attention clearly enough that
+  a team trusts you to reason about model behavior, context mixing, and scaling trade-offs?
+  Strong answer pattern. Describe self-attention as weighted information routing,
+  then connect it to parallel sequence processing, long-range dependencies, and positional
+  encoding.
+  Common miss. Avoid mystical wording such as “the model understands everything at
+  once.” Explain the mechanism and then describe the engineering consequence.
+
+
+
+
+                                           — 23 —                         AI Engineering Insider
+Language Models Interview Handbook                                               Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit          Attention lets each token build a context-aware representation by
+                           weighting other tokens dynamically.
+    Best example           The relevance of a pronoun or a negation often depends on
+                           tokens several positions earlier.
+    Follow-up angle        Mention multi-head attention, positional encoding, and why
+                           sequence length affects memory and compute.
+    What seniors add       They explain attention as both a modeling concept and a
+                           systems bottleneck.
+    Red flag               Confusing attention weights with complete interpretability or
+                           treating them as causal explanations by default.
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “Attention is powerful because it lets each
+   token compute a context-sensitive view of the sequence, but that flexibility also makes
+   long contexts expensive to serve.”
+
+
+The attention diagram below simplifies what the transformer is doing at a systems level. It should be
+read as a flow of information mixing, not as every matrix operation shown in research notation.
+
+
+     Token states      Q/K/V           Attention scores      Weighted mix        Updated states
+
+                                        each token asks:
+                                          who matters
+                                        most right now?
+
+
+         Figure 4.1: A simplified self-attention view of how transformer layers mix context.
+
+
+
+
+                                              — 24 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q21. Why was the transformer such a major breakthrough?
+
+
+    Answer
+  Before transformers, many sequence models relied on recurrence, which processed tokens
+  step by step. That made training slower and made long-range dependency tracking harder.
+  The transformer replaced recurrence with attention, allowing each token to directly weigh
+  other relevant tokens in the sequence while enabling far more parallel computation.
+  The breakthrough was therefore both algorithmic and operational. It improved modeling
+  power and hardware utilization at the same time. In interviews, do not answer only
+  ’because of attention.’ Say that the architecture scaled better, trained faster on modern
+  accelerators, and generalized into the foundation of current LLMs (Vaswani et al., 2017).
+
+
+
+
+  Q22. What is self-attention in simple terms?
+
+
+    Answer
+  Self-attention is a mechanism that lets each token look at other tokens in the same sequence
+  and decide which ones matter most for building its representation. A token representing
+  the word ’bank’ can attend to ’river’ or ’loan’ nearby and shift its meaning accordingly.
+  A good mental model is that every token asks, ’Which other tokens should I consult
+  before I update my understanding?’ This is why self-attention is so powerful for ambiguity
+  resolution, co-reference, and long-distance dependencies. In interviews, clarity beats
+  jargon: explain that attention builds context-sensitive meaning.
+
+
+
+
+                                           — 25 —                          AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q23. What roles do query, key, and value vectors play in attention?
+
+
+    Answer
+  Queries represent what the current token is looking for. Keys represent what each token
+  offers as an addressable signal. Values represent the content that gets mixed once relevance
+  has been determined. The attention score comes from matching queries to keys, and the
+  weighted combination of values becomes the new representation.
+  In practical terms, query-key similarity decides who matters, and values decide what
+  information gets copied forward. Interviewers like this question because it reveals whether
+  you truly understand attention or only memorize vocabulary. The best answer explains
+  both the matching step and the content aggregation step.
+
+
+
+
+  Q24. Why do transformers use multiple attention heads?
+
+
+    Answer
+  Multiple heads allow the model to learn several types of relationships in parallel. One head
+  may focus on local syntax, another on entity references, another on discourse structure,
+  and another on positional patterns. Each head gets its own projection space, so the model
+  is not forced into one universal notion of relevance.
+  The key idea is specialization. Multi-head attention increases representational richness
+  without requiring one monolithic attention pattern to do all the work. In interviews,
+  avoid saying ’more heads is always better.’ More heads increase flexibility, but their value
+  depends on model size, task, and training quality.
+
+
+
+
+                                           — 26 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q25. Why do transformers need positional encodings or positional
+  embeddings?
+
+
+    Answer
+  Attention alone is permutation-invariant. If you remove position information, the model
+  knows which tokens are present but not the order in which they appear. Positional
+  encodings inject sequence order so the model can distinguish ’dog bites man’ from ’man
+  bites dog.’
+  Modern systems use different positional strategies, including learned embeddings and
+  rotary position embeddings. The interview-safe answer is that position signals are required
+  because attention by itself does not encode order. Without them, the model would lose
+  one of the central structures of language (Su et al., 2021).
+
+
+
+
+  Q26. What is the difference between encoder-only, decoder-only, and
+  encoder-decoder transformers?
+
+
+    Answer
+  Encoder-only models are optimized for understanding tasks such as classification or
+  retrieval because they can use bidirectional attention over the input. Decoder-only models
+  generate text autoregressively by predicting the next token from previous tokens. Encoder-
+  decoder models separate input encoding from output generation and are common in
+  translation and sequence-to-sequence tasks.
+  In interviews, a good answer maps architecture to workload. BERT is encoder-style,
+  GPT-style models are decoder-only, and T5 is encoder-decoder. The point is not just
+  taxonomy; it is understanding why the attention pattern changes what the model is best
+  suited to do (Devlin et al., 2019; Raffel et al., 2020).
+
+
+
+
+                                           — 27 —                         AI Engineering Insider
+Language Models Interview Handbook                                           Lamhot Siagian »
+
+
+
+
+  Q27. What do the feed-forward block, residual path, and layer
+  normalization contribute?
+
+
+    Answer
+  Self-attention mixes information across tokens, but the position-wise feed-forward network
+  transforms each token representation nonlinearly after that mixing. Residual connections
+  preserve gradient flow and help stabilize deep networks by letting each block learn
+  refinements instead of full replacements. Layer normalization improves training stability
+  by keeping activations in a manageable range.
+  A strong answer is that the transformer is not just attention. It is attention plus repeated
+  stabilization and transformation machinery. Interviewers often ask this to see whether
+  you understand why the architecture works as a stack rather than as one clever attention
+  trick.
+
+
+
+
+  Q28. Why do transformers scale well but become expensive on long
+  sequences?
+
+
+    Answer
+  Transformers scale well because attention can be computed in parallel across tokens,
+  which maps efficiently to modern hardware. But standard self-attention compares tokens
+  with one another pairwise, so computation and memory grow quickly as sequence length
+  increases.
+  That is why long context is not free. Engineers pay for it in latency, throughput, and
+  memory pressure. In interviews, connect architecture to systems: the same design that
+  made transformers dominant also created strong incentives for context optimization, sparse
+  attention ideas, batching strategies, and KV caching.
+
+
+
+
+                                           — 28 —                          AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q29. What is the difference between causal masking and bidirectional
+  attention?
+
+
+    Answer
+  Causal masking prevents a token from attending to future tokens, which is essential for
+  next-token prediction in autoregressive generation. Bidirectional attention allows a token
+  to use both left and right context, which is useful for understanding tasks such as masked
+  language modeling or classification.
+  The deeper point is that the mask defines the information flow. Changing the attention
+  mask changes what the model is allowed to know during training and inference. That is
+  why architecture and objective are tightly coupled in transformer design.
+
+
+
+
+  Q30. What are common transformer failure modes engineers should
+  understand?
+
+
+    Answer
+  Common failure modes include attention diffusion on long contexts, positional degradation,
+  context dilution from noisy prompts, hallucination when retrieval is weak, and unstable
+  outputs when decoding is poorly configured. None of these mean the transformer is broken;
+  they mean the surrounding system must manage its limitations well.
+  In interviews, this is where senior candidates stand out. Do not stop at architecture
+  diagrams. Explain how transformer behavior interacts with token budgets, retrieval quality,
+  training data, and serving constraints. That shows system-level understanding rather
+  than only model trivia.
+
+
+
+
+                                           — 29 —                         AI Engineering Insider
+Language Models Interview Handbook                                        Lamhot Siagian »
+
+
+
+

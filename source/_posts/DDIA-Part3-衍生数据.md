@@ -24,7 +24,7 @@ tags:
 | **批处理系统** | 处理大量数据，高吞吐 | MapReduce、Spark |
 | **流处理系统** | 实时处理数据流 | Kafka Streams、Flink |
 
-![在线服务、批处理与流处理对比](../images/ddia/part3/system-types-comparison.svg)
+![在线服务、批处理与流处理对比](/images/ddia/part3/system-types-comparison.svg)
 
 ### 10.2 Unix 工具的批处理
 
@@ -45,7 +45,7 @@ cat access.log |
 
 ### 10.3 MapReduce
 
-![MapReduce：分片、Map、Shuffle、Reduce](../images/ddia/part3/mapreduce-flow.svg)
+![MapReduce：分片、Map、Shuffle、Reduce](/images/ddia/part3/mapreduce-flow.svg)
 
 #### 词频统计示例
 
@@ -101,11 +101,11 @@ def reduce(word, counts):
 
 **代表**：RabbitMQ, ActiveMQ, Amazon SQS
 
-![传统消息队列：单消费者与消费后删除](../images/ddia/part3/message-queue-traditional.svg)
+![传统消息队列：单消费者与消费后删除](/images/ddia/part3/message-queue-traditional.svg)
 
 #### 日志型消息系统（Kafka）
 
-![Kafka 分区与消费者映射示意](../images/ddia/part3/kafka-partitions-consumers.svg)
+![Kafka 分区与消费者映射示意](/images/ddia/part3/kafka-partitions-consumers.svg)
 
 特点：
 
@@ -115,13 +115,13 @@ def reduce(word, counts):
 
 ### 11.3 Kafka 架构
 
-![Kafka 集群、Topic 分区与消费者组](../images/ddia/part3/kafka-cluster-topic.svg)
+![Kafka 集群、Topic 分区与消费者组](/images/ddia/part3/kafka-cluster-topic.svg)
 
 ### 11.4 变更数据捕获（CDC）
 
 > 捕获数据库的变更，将其转换为事件流
 
-![CDC：数据库变更经工具进入 Kafka](../images/ddia/part3/cdc-pipeline.svg)
+![CDC：数据库变更经工具进入 Kafka](/images/ddia/part3/cdc-pipeline.svg)
 
 **应用场景**：
 - 同步搜索索引、缓存
@@ -130,7 +130,7 @@ def reduce(word, counts):
 
 ### 11.5 事件溯源（Event Sourcing）
 
-![传统状态更新与事件溯源对比](../images/ddia/part3/event-sourcing-vs-traditional.svg)
+![传统状态更新与事件溯源对比](/images/ddia/part3/event-sourcing-vs-traditional.svg)
 
 ### 11.6 时间语义
 
@@ -148,7 +148,7 @@ def reduce(word, counts):
 | **滑动窗口** | 固定大小，可重叠 |
 | **会话窗口** | 按活动间隙分割 |
 
-![滚动窗口与滑动窗口示意](../images/ddia/part3/stream-windows.svg)
+![滚动窗口与滑动窗口示意](/images/ddia/part3/stream-windows.svg)
 
 ---
 
@@ -158,17 +158,17 @@ def reduce(word, counts):
 
 > 将多个系统的数据统一管理
 
-![数据集成：多源汇聚事件日志再分发](../images/ddia/part3/data-integration-arch.svg)
+![数据集成：多源汇聚事件日志再分发](/images/ddia/part3/data-integration-arch.svg)
 
 ### 12.2 Lambda 架构
 
-![Lambda：批处理层与速度层在服务层合并](../images/ddia/part3/lambda-architecture.svg)
+![Lambda：批处理层与速度层在服务层合并](/images/ddia/part3/lambda-architecture.svg)
 
 **问题**：需要维护两套代码
 
 ### 12.3 Kappa 架构
 
-![Kappa：日志 + 流处理 + 服务层](../images/ddia/part3/kappa-architecture.svg)
+![Kappa：日志 + 流处理 + 服务层](/images/ddia/part3/kappa-architecture.svg)
 
 统一批流处理：重放日志即可重新计算
 

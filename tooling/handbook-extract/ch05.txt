@@ -1,0 +1,284 @@
+   Chapter 5
+
+
+   Pretraining Objectives, Model
+   Families, and Classical Comparisons
+
+
+  Chapter overview. Modern language models did not appear fully formed. They
+  emerged from a sequence of design shifts: moving from n-gram statistics to distributed
+  representations, from recurrent sequence models to transformers, and from narrow task
+  models to broadly pretrained foundation models. Understanding the pretraining objective
+  matters because it shapes what the model becomes naturally good at. BERT-style
+  objectives emphasize bidirectional representation learning, while GPT-style objectives
+  emphasize next-token generation and open-ended continuation (Devlin et al., 2019; Brown
+  et al., 2020).
+  This chapter also clarifies model-family language that often gets mixed up in interviews.
+  Terms such as autoregressive, masked, generative, discriminative, sequence-to-sequence,
+  and foundation model refer to different axes of comparison. Strong answers keep those
+  axes separate instead of treating them as interchangeable labels.
+
+
+    Interview Anchor
+  What the interviewer is really testing. Whether you can compare model families by
+  objective and use case instead of by brand names alone.
+  Strong answer pattern. Explain the pretraining objective, describe the type of behavior
+  it encourages, and then connect that to downstream strengths, weaknesses, and adaptation
+  options.
+  Common miss. Avoid treating autoregressive and masked models as better or worse in
+  the abstract. Tie them to task fit.
+
+
+
+
+                                          — 30 —                        AI Engineering Insider
+Language Models Interview Handbook                                                Lamhot Siagian »
+
+
+      INTERVIEW CHEATSHEET
+
+    Signal to hit           The objective shapes what the model learns efficiently:
+                            continuation, bidirectional context use, instruction following, or
+                            transfer behavior.
+    Best example            Compare GPT-style next-token prediction with BERT-style
+                            masked prediction and explain why they shine in different
+                            settings.
+    Follow-up angle         Mention T5-style text-to-text framing when discussing task
+                            unification.
+    What seniors add        They compare training objective, inference behavior, and
+                            adaptation cost in one answer.
+    Red flag                Using company-specific names when the question is really about
+                            architecture or training objective.
+
+
+      What Strong Candidates Sound Like
+   One sentence you can say in an interview. “A model family is easier to compare
+   when you start from its learning objective, because the objective quietly determines what
+   the model is efficient at during downstream use.”
+
+
+This model-family table gives the pretraining chapter a compact reference point. It helps the reader
+compare objective choice and architecture family before the interview questions drill into the details.
+
+                         Table 5.1: A compact map of major model families
+
+ Family idea            Typical objective     Best mental model
+ Autoregressive         Predict the next      Excellent for free-form generation and continuation
+ LM                     token
+ Masked LM              Recover hidden        Strong for representation learning and
+                        tokens from           understanding tasks
+                        surrounding
+                        context
+ Seq2Seq model          Map one sequence      Useful when input and output roles are clearly
+                        into another          distinct
+ Foundation model       Broad pretraining,    A general base model reused across many
+                        then adaptation       downstream tasks
+
+
+
+
+                                               — 31 —                           AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q31. What defines a language model and why is it called “large”?
+
+
+    Answer
+  A language model estimates the probability of token sequences. In simple terms, it learns
+  which token is likely to come next or which token best fits a context, depending on the
+  training objective. It is called large because modern versions are trained with very large
+  parameter counts, datasets, and compute budgets, allowing them to internalize broad
+  statistical regularities about language and many downstream tasks.
+  A strong interview answer connects size to capability but also to cost. “Large” does not
+  only mean more parameters. It also implies longer training runs, more sophisticated
+  infrastructure, bigger context-management problems, and new failure modes such as
+  hallucination, distribution shift, and high deployment cost.
+
+
+
+
+  Q32. How do autoregressive and masked models differ?
+
+
+    Answer
+  Autoregressive models learn to predict the next token given prior tokens. They read
+  text left-to-right during generation and are naturally suited to completion, dialogue,
+  summarization, and coding assistance. Masked models instead hide some tokens and
+  learn to recover them from both left and right context. That makes them strong for
+  representation learning, classification, and retrieval-oriented understanding tasks.
+  The cleanest way to explain the difference is to separate generation from representation.
+  Autoregressive objectives train the model to continue sequences. Masked objectives train
+  the model to build rich internal representations of context. Both are powerful, but they
+  prepare the model for different default strengths.
+
+
+
+
+                                          — 32 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+
+  Q33. What is masked language modeling and what does it teach the
+  model?
+
+
+    Answer
+  Masked language modeling, or MLM, randomly hides a subset of tokens and asks the model
+  to predict them from surrounding context. Because the hidden token can depend on words
+  that appear before and after it, the model learns bidirectional contextual representations
+  rather than a purely left-to-right generation policy.
+  In interviews, say that MLM is valuable because it teaches contextual understanding
+  instead of only next-token continuation. That is why BERT-style pretraining proved so
+  effective for search, ranking, classification, and sentence-pair tasks (Devlin et al., 2019).
+
+
+
+
+  Q34. What is next sentence prediction and why does it matter
+  historically?
+
+
+    Answer
+  Next sentence prediction, or NSP, is a pretraining task where the model decides whether
+  one sentence naturally follows another. In the original BERT formulation, it helped the
+  model learn coarse discourse relationships between sentence pairs, which was especially
+  useful for tasks such as natural language inference and question answering (Devlin et al.,
+  2019).
+  Today, NSP matters less as a universal recipe than as a historical milestone. Later work
+  showed that some sentence-level tasks can be learned without a separate NSP loss, but
+  interviewers still ask about it because it illustrates how pretraining objectives shape
+  downstream behavior.
+
+
+
+
+                                            — 33 —                          AI Engineering Insider
+Language Models Interview Handbook                                         Lamhot Siagian »
+
+
+
+
+  Q35. How do language models handle out-of-vocabulary words?
+
+
+    Answer
+  Modern language models usually avoid a hard out-of-vocabulary problem by using subword
+  tokenization. Instead of requiring every full word to exist in the vocabulary, they break
+  unfamiliar words into smaller known pieces. A rare biomedical term or a new product
+  name can therefore still be processed as a sequence of familiar subword units.
+  The practical lesson is that OOV handling moved from dictionary design to tokenization
+  design. The model may not know the meaning of a new term very well, but it can
+  still ingest and manipulate the text because the tokenizer can decompose it into known
+  fragments.
+
+
+
+
+  Q36. What is a sequence-to-sequence model and where is it most useful?
+
+
+    Answer
+  A sequence-to-sequence, or Seq2Seq, model maps one sequence into another, often with
+  different lengths and different surface forms. Translation, summarization, and structured
+  transformation tasks are classic examples because they have a clear source sequence and a
+  clear target sequence.
+  The interview-quality answer is that Seq2Seq is a task framing, not a single architecture.
+  Older Seq2Seq systems used recurrent networks with attention; newer ones often use
+  encoder-decoder transformers. The core idea is still to transform an input sequence into a
+  target sequence while preserving the right information.
+
+
+
+
+                                          — 34 —                         AI Engineering Insider
+Language Models Interview Handbook                                             Lamhot Siagian »
+
+
+
+
+  Q37. Why did transformers replace many RNN-based Seq2Seq systems?
+
+
+    Answer
+  Transformers displaced many recurrent Seq2Seq models because self-attention handles
+  long-range dependencies better and allows much more parallel computation during training.
+  Recurrent models must process tokens step by step, which slows training and makes long-
+  distance signal propagation harder. Transformers let every token attend to every other
+  relevant token in the same layer, which improved both scale and performance (Vaswani et
+  al., 2017).
+  In interviews, link this to operations as well as accuracy. Faster parallel training made it
+  possible to exploit much larger datasets and models, which was essential for the rise of
+  foundation-scale systems.
+
+
+
+
+  Q38. What is the difference between a foundation model and a
+  task-specific model?
+
+
+    Answer
+  A foundation model is pretrained broadly on large and diverse corpora so it can later
+  be adapted to many tasks. A task-specific model is usually trained or fine-tuned for a
+  narrower job such as sentiment classification, entity extraction, or domain-specific retrieval.
+  The trade-off is breadth versus specialization.
+  A strong answer is that foundation models shift effort from repeated task-by-task training
+  toward adaptation, prompting, retrieval, or lightweight tuning. They are powerful precisely
+  because one base model can support many products, but that breadth also creates
+  challenges in control, safety, and cost.
+
+
+
+
+                                            — 35 —                           AI Engineering Insider
+Language Models Interview Handbook                                          Lamhot Siagian »
+
+
+
+
+  Q39. What is the difference between generative and discriminative
+  models?
+
+
+    Answer
+  Generative models learn to model or approximate how the data itself is produced, which
+  allows them to generate new samples such as text continuations. Discriminative models
+  focus on mapping inputs to labels or decisions, such as predicting whether a review is
+  positive or negative. In practice, the line is not always absolute because a powerful
+  generative model can often perform discriminative tasks through prompting.
+  The clean interview answer is that generative models are usually more flexible, while
+  discriminative models are often more efficient and easier to calibrate for narrow tasks.
+  Which one is preferable depends on whether the product needs open-ended generation or
+  tightly controlled prediction.
+
+
+
+
+  Q40. How do LLMs differ from traditional statistical language models?
+
+
+    Answer
+  Traditional statistical language models such as n-gram models estimate probabilities from
+  local token counts and typically depend on short fixed histories. Large language models
+  instead learn distributed representations and use deep architectures that can capture
+  much longer and richer context. This lets them generalize beyond memorized counts and
+  transfer across many tasks.
+  A helpful interview framing is that classical language models are mostly lookup-based
+  with smoothing, while modern LLMs are representation learners. Classical systems remain
+  interpretable and inexpensive, but they cannot match the contextual flexibility, reasoning
+  behaviors, and transfer learning capacity of transformer-based LLMs.
+
+
+
+
+                                          — 36 —                         AI Engineering Insider
+Language Models Interview Handbook                                            Lamhot Siagian »
+
+
+
+

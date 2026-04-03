@@ -12,22 +12,7 @@ tags:
 
 ## 发展时间线
 
-```
-2015-2016: 注意力机制兴起
-    └── Attentive Reader, Impatient Reader, BiDAF
-
-2017-2018: 深度交互与预训练
-    └── R-Net, QANet, BERT
-
-2019-2020: 大规模预训练
-    └── RoBERTa, ALBERT, T5
-
-2021-2023: 大语言模型时代
-    └── GPT-3, ChatGPT, GPT-4, LLaMA
-
-2024-: 检索增强与多模态
-    └── RAG, Vision-Language Models
-```
+![神经网络 MRC 发展时间线](/images/mrc-neural-timeline.svg)
 
 ## 核心技术演进
 

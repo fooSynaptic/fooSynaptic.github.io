@@ -26,7 +26,7 @@ tags:
 
 ### 5.2 主从复制
 
-![主从复制：Leader、复制日志与多个 Follower](../images/ddia/part2/leader-follower-replication.svg)
+![主从复制：Leader、复制日志与多个 Follower](/images/ddia/part2/leader-follower-replication.svg)
 
 ### 同步复制 vs 异步复制
 
@@ -58,7 +58,7 @@ tags:
 
 ### 5.4 多主复制
 
-![多主复制：两数据中心异步互连](../images/ddia/part2/multi-datacenter-multi-master.svg)
+![多主复制：两数据中心异步互连](/images/ddia/part2/multi-datacenter-multi-master.svg)
 
 **冲突解决策略**：
 - 最后写入胜出（LWW）
@@ -168,7 +168,7 @@ W + R = 4 > N = 3 → 保证读到最新值
 
 #### 两阶段提交（2PC）
 
-![两阶段提交 2PC：准备阶段与提交阶段](../images/ddia/part2/two-phase-commit.svg)
+![两阶段提交 2PC：准备阶段与提交阶段](/images/ddia/part2/two-phase-commit.svg)
 
 **问题**：协调者故障时参与者阻塞
 
@@ -208,17 +208,17 @@ W + R = 4 > N = 3 → 保证读到最新值
 
 ### 9.1 一致性模型
 
-![一致性模型：从弱到强的光谱](../images/ddia/part2/consistency-spectrum.svg)
+![一致性模型：从弱到强的光谱](/images/ddia/part2/consistency-spectrum.svg)
 
 ### 9.2 线性一致性
 
 > 系统表现得好像只有一个数据副本，所有操作都是原子的
 
-![线性一致性：写入后所有后续读须见新值](../images/ddia/part2/linearizability-timeline.svg)
+![线性一致性：写入后所有后续读须见新值](/images/ddia/part2/linearizability-timeline.svg)
 
 ### 9.3 CAP 定理
 
-![CAP：一致性、可用性、分区容忍三者不可兼得](../images/ddia/part2/cap-theorem.svg)
+![CAP：一致性、可用性、分区容忍三者不可兼得](/images/ddia/part2/cap-theorem.svg)
 
 ### 9.4 共识算法
 
@@ -232,7 +232,7 @@ W + R = 4 > N = 3 → 保证读到最新值
 
 ### 9.5 Raft 算法
 
-![Raft：Leader 向 Follower 复制日志](../images/ddia/part2/raft-leader-followers.svg)
+![Raft：Leader 向 Follower 复制日志](/images/ddia/part2/raft-leader-followers.svg)
 
 **选举流程**：
 1. 跟随者超时未收到心跳
@@ -242,7 +242,7 @@ W + R = 4 > N = 3 → 保证读到最新值
 
 ### 9.6 Paxos 算法
 
-![Paxos：Prepare / Promise 与 Accept / Accepted](../images/ddia/part2/paxos-two-phases.svg)
+![Paxos：Prepare / Promise 与 Accept / Accepted](/images/ddia/part2/paxos-two-phases.svg)
 
 ### Raft vs Paxos
 
