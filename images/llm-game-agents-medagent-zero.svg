@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 280" width="440" height="280" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#f8fafc" stroke="#334155" stroke-width="2" x="6" y="6" width="428" height="268" rx="6"/>
+  <text x="220" y="30" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">MedAgent-Zero 进化流程</text>
+  <text x="220" y="52" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">1. 治疗患者智能体</text>
+  <line x1="220" y1="56" x2="220" y2="72" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="220" y="88" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">2. 患者反馈（康复 / 未康复）</text>
+  <line x1="220" y1="92" x2="220" y2="108" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#dcfce7" stroke="#15803d" x="48" y="116" width="160" height="56" rx="4"/>
+  <text x="128" y="136" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">成功案例</text>
+  <text x="128" y="154" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">存储参考 · 检索</text>
+  <rect fill="#fee2e2" stroke="#b91c1c" x="232" y="116" width="160" height="56" rx="4"/>
+  <text x="312" y="136" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">失败案例</text>
+  <text x="312" y="154" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">反思经验 · 避免重复</text>
+  <line x1="220" y1="172" x2="220" y2="196" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="220" y="212" text-anchor="middle" fill="#475569" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">3. 阅读医学教材巩固</text>
+  <line x1="220" y1="216" x2="220" y2="228" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="220" y="248" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">4. 能力持续提升</text>
+</svg>

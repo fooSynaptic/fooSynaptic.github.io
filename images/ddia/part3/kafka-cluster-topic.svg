@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 250" width="520" height="250" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="40" y="12" width="440" height="118" rx="6"/>
+  <text x="260" y="32" text-anchor="middle" fill="#0f172a" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Kafka Cluster · Topic: orders</text>
+  <rect fill="#fff" stroke="#64748b" x="56" y="44" width="188" height="72" rx="4"/>
+  <text x="150" y="62" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Partition 0</text>
+  <text x="150" y="76" text-anchor="middle" fill="#475569" font-size="9" font-family="monospace">[0][1][2]…</text>
+  <text x="150" y="92" text-anchor="middle" fill="#64748b" font-size="8" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Leader: B1 Replica: B2</text>
+  <rect fill="#fff" stroke="#64748b" x="276" y="44" width="188" height="72" rx="4"/>
+  <text x="370" y="62" text-anchor="middle" fill="#1e293b" font-size="10" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Partition 1</text>
+  <text x="370" y="76" text-anchor="middle" fill="#475569" font-size="9" font-family="monospace">[0][1][2]…</text>
+  <text x="370" y="92" text-anchor="middle" fill="#64748b" font-size="8" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Leader: B2 Replica: B1</text>
+  <text x="260" y="112" text-anchor="middle" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Broker 1 / Broker 2</text>
+  <line x1="150" y1="130" x2="120" y2="168" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="260" y1="130" x2="260" y2="168" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="370" y1="130" x2="400" y2="168" stroke="#334155" marker-end="url(#ar)"/>
+  <text x="120" y="188" text-anchor="middle" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">C1 / Group A</text>
+  <text x="260" y="188" text-anchor="middle" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">C2 / Group A</text>
+  <text x="400" y="188" text-anchor="middle" fill="#475569" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">C3 / Group B</text>
+</svg>

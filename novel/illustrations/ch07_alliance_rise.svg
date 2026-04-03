@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
+  <title>Ch7 alliance rise map</title>
+  <rect width="900" height="320" fill="#102a43"/>
+  <polyline points="80,240 180,200 280,220 400,140 520,160 640,100 820,80" fill="none" stroke="#f0b429" stroke-width="2"/>
+  <circle cx="180" cy="200" r="8" fill="#00d9ff"/><circle cx="400" cy="140" r="8" fill="#00d9ff"/>
+  <circle cx="640" cy="100" r="8" fill="#00d9ff"/><circle cx="820" cy="80" r="8" fill="#00d9ff"/>
+  <text x="450" y="45" text-anchor="middle" font-family="monospace" font-size="13" fill="#bcccdc">GLOBAL_DEPLOY ++</text>
+  <text x="450" y="300" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#829ab1">Ch.7 Alliance rising</text>
+</svg>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="先把话说人话：Palantir 到底是干啥的把它想成一家卖「运营级数据操作系统」的软件公司，而不是「又一个做大数据或 BI 的」。外行可以把握三条，就够理解后面说的 Harness。  接烂摊子数据：企业里永远是 Oracle 一张表、Kafka 一串日志、Excel 几个部门私有副本、CRM 里又一堆客户号。Palantir 那一套（业内常说 Foundry 偏商用、Gotham 偏防务等场景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Palantir：大模型的骨架">
+<meta property="og:url" content="https://foosynaptic.github.io/2026/03/31/Palantir%EF%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%AA%A8%E6%9E%B6/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="先把话说人话：Palantir 到底是干啥的把它想成一家卖「运营级数据操作系统」的软件公司，而不是「又一个做大数据或 BI 的」。外行可以把握三条，就够理解后面说的 Harness。  接烂摊子数据：企业里永远是 Oracle 一张表、Kafka 一串日志、Excel 几个部门私有副本、CRM 里又一堆客户号。Palantir 那一套（业内常说 Foundry 偏商用、Gotham 偏防务等场景">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foosynaptic.github.io/images/palantir-enterprise-harness-flow.svg">
+<meta property="article:published_time" content="2026-03-30T20:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T03:49:20.596Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="Foundry">
+<meta property="article:tag" content="Harness">
+<meta property="article:tag" content="Palantir">
+<meta property="article:tag" content="企业 AI">
+<meta property="article:tag" content="大模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foosynaptic.github.io/images/palantir-enterprise-harness-flow.svg">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2026/03/31/Palantir%EF%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%AA%A8%E6%9E%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2026/03/31/Palantir%EF%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%AA%A8%E6%9E%B6/","path":"2026/03/31/Palantir：大模型的骨架/","title":"Palantir：大模型的骨架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Palantir：大模型的骨架 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E6%8A%8A%E8%AF%9D%E8%AF%B4%E4%BA%BA%E8%AF%9D%EF%BC%9APalantir-%E5%88%B0%E5%BA%95%E6%98%AF%E5%B9%B2%E5%95%A5%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">先把话说人话：Palantir 到底是干啥的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E4%BE%8B%E5%AD%90%EF%BC%9A%E9%93%B6%E8%A1%8C%E5%94%AE%E5%90%8E%E5%B2%97%E9%97%AE-AI"><span class="nav-number">2.</span> <span class="nav-text">一个最小例子：银行售后岗问 AI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%95%A5%E5%B8%B8%E6%8B%BF-Palantir-%E8%AE%B2%E3%80%8CLLM-%E4%BC%81%E4%B8%9A-Harness%E3%80%8D%E2%80%94%E2%80%94%E4%B8%8D%E6%98%AF%E8%AF%B4%E5%8F%AA%E6%9C%89%E5%AE%83%E8%83%BD%E5%81%9A%E5%B9%B3%E5%8F%B0"><span class="nav-number">3.</span> <span class="nav-text">为啥常拿 Palantir 讲「LLM + 企业 Harness」——不是说只有它能做平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B-%C3%97-%E4%BC%81%E4%B8%9A-Harness%EF%BC%9A%E5%88%86%E5%B7%A5%E8%A1%A8-%E4%B8%80%E6%9D%A1%E3%80%8C%E8%AF%B7%E6%B1%82%E6%80%8E%E4%B9%88%E8%B5%B0%E3%80%8D"><span class="nav-number">4.</span> <span class="nav-text">大模型 × 企业 Harness：分工表 + 一条「请求怎么走」</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%BE%E7%A4%BA%EF%BC%88SVG%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">逻辑图示（SVG）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%BB%93%E8%AE%BA%EF%BC%88%E6%94%B6%E6%9D%9F%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">一句话结论（收束）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9A%E4%B8%BA%E4%BD%95%E3%80%8C%E6%AE%8A%E9%80%94%E5%90%8C%E5%BD%92%E3%80%8D"><span class="nav-number">6.</span> <span class="nav-text">背景：为何「殊途同归」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B2%A1%E6%9C%89-Harness-%E4%B9%8B%E5%89%8D%EF%BC%9A%E4%B8%89%E7%B1%BB%E3%80%8C%E9%B8%BF%E6%B2%9F%E3%80%8D%EF%BC%88%E5%8F%AF%E8%A7%82%E6%B5%8B%E8%A7%86%E8%A7%92%E5%BD%92%E7%BA%B3%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">没有 Harness 之前：三类「鸿沟」（可观测视角归纳）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Harness-%E9%87%8C%E3%80%8C%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7%E3%80%8D%EF%BC%88%E5%85%B7%E8%B1%A1%E5%8C%96%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">Harness 里「长什么样」（具象化）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E3%80%8C%E8%A1%80%E8%82%89%E3%80%8D%EF%BC%9AGraph-RAG-%E4%B8%8E%E6%B8%90%E8%BF%9B%E5%8A%A0%E8%BD%BD"><span class="nav-number">9.</span> <span class="nav-text">「血肉」：Graph RAG 与渐进加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E9%9A%BE%E7%82%B9%E5%BE%80%E5%BE%80%E4%B8%8D%E6%98%AF%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%80%8C%E6%98%AF%E3%80%8C%E9%9A%90%E6%80%A7%E7%9F%A5%E8%AF%86%E3%80%8D"><span class="nav-number">10.</span> <span class="nav-text">最大难点往往不是代码，而是「隐性知识」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E5%85%A5%E8%A1%8C%E8%80%85%EF%BC%9A%E7%AC%AC%E4%B8%80%E4%BB%B6%E8%AF%A5%E5%81%9A-vs-%E4%B8%8D%E8%AF%A5%E5%81%9A"><span class="nav-number">11.</span> <span class="nav-text">给入行者：第一件该做 vs 不该做</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2026/03/31/Palantir%EF%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%AA%A8%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/jojo_median.ico">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Palantir：大模型的骨架 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Palantir：大模型的骨架
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-31 04:00:00" itemprop="dateCreated datePublished" datetime="2026-03-31T04:00:00+08:00">2026-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="先把话说人话：Palantir-到底是干啥的"><a href="#先把话说人话：Palantir-到底是干啥的" class="headerlink" title="先把话说人话：Palantir 到底是干啥的"></a>先把话说人话：Palantir 到底是干啥的</h2><p>把它想成一家<strong>卖「运营级数据操作系统」的软件公司</strong>，而不是「又一个做大数据或 BI 的」。外行可以把握三条，就够理解后面说的 <strong>Harness</strong>。</p>
+<ol>
+<li><p><strong>接烂摊子数据</strong>：企业里永远是 Oracle 一张表、Kafka 一串日志、Excel 几个部门私有副本、CRM 里又一堆客户号。Palantir 那一套（业内常说 <strong>Foundry</strong> 偏商用、<strong>Gotham</strong> 偏防务等场景）干的头一件事，往往是：<strong>把这些异构数据接进同一个平台</strong>，能跑流水线、有权限、有血缘，而不是只做一个漂亮看板。</p>
+</li>
+<li><p><strong>对象化，而不是只有 SQL</strong>：平台里核心业务常常落成<strong>有类型的对象</strong>——比如「客户」「授信申请」「服务器」「工单」，对象之间有<strong>固定含义的链接</strong>（依赖、归属、审批链、父子订单）。这不是可有可无的锦上添花：<strong>权限、审计、自动化动作</strong>往往挂在对象/链接上，而不是挂在「某张无名宽表」上——这正是 <strong>Harness 要挂住的东西</strong>。</p>
+</li>
+<li><p><strong>让人在真实工作流里用</strong>：搜索和图探索、告警、预案（Runbook）、回写业务系统——偏<strong>运营与决策闭环</strong>，不是只给分析师做月报。</p>
+</li>
+</ol>
+<p>财经稿里「大模型是大脑，××是骨架」的接地气版，换成 Harness 说法是：<strong>大模型负责听懂人话、凑推理；Palantir 卖的那套平台，负责告诉你「这句人话落在哪个客户、哪笔单、哪条规则上」，谁在什么权限下能触发什么动作，并且留下能过审计的痕迹。</strong> 下面用一个极小例子把「Harness」落到动作上，而不是停留在概念层。</p>
+<hr>
+<h2 id="一个最小例子：银行售后岗问-AI"><a href="#一个最小例子：银行售后岗问-AI" class="headerlink" title="一个最小例子：银行售后岗问 AI"></a>一个最小例子：银行售后岗问 AI</h2><p><strong>场景</strong>：客户经理对着 Copilot 说——「帮我看看客户王总上个月那笔经营贷，为啥放款变慢了，现在能不能补件？」</p>
+<ul>
+<li><p><strong>没有企业 Harness 的 LLM 只能靠「瞎搜」</strong>：RAG 从制度 PDF、邮件、会议纪要里捞出几段像那么回事的文字，模型拼成一段回答。用户看到「可能和资料不齐有关」，但不知道指的是<strong>哪次补件</strong>、<strong>卡在哪个岗位</strong>、<strong>触发了哪条风控规则</strong>——合规一问就傻眼，模型也可能张冠李戴另一家「王总」。</p>
+</li>
+<li><p><strong>有 Palantir 式 Harness 之后在干什么（逻辑上多三步）</strong>：  </p>
+<ol>
+<li><strong>消歧</strong>：系统里「王总」被绑成唯一客户 ID（对象），上月那笔贷款是另一个对象，中间是「申请—审批—放款」链路上的链接。  </li>
+<li><strong>可追溯</strong>：慢在哪个节点，是流程里的哪一步；哪条业务规则被满足，<strong>可指向具体规则版本</strong>，而不是飘在空中的自然语言。  </li>
+<li><strong>行动有边界</strong>：LLM 可以生成「建议补哪些材料」的草稿，但是否允许一键触发补件、抄送给谁，由 <strong>Harness 里配置的动作 + 权限</strong>收紧——网友常说的「Agent 胡来」，在这里是第一公民问题，不是事后补丁。</li>
+</ol>
+</li>
+</ul>
+<p>圆桌里金融侧那句大白话仍可沿用：<strong>没有这层「平台语义 + 治理」，机器难稳定「识义」</strong>；RAG 只给你「片段事实」，给不了<strong>这幅业务画面在合规上成不成立</strong>。</p>
+<hr>
+<h2 id="为啥常拿-Palantir-讲「LLM-企业-Harness」——不是说只有它能做平台"><a href="#为啥常拿-Palantir-讲「LLM-企业-Harness」——不是说只有它能做平台" class="headerlink" title="为啥常拿 Palantir 讲「LLM + 企业 Harness」——不是说只有它能做平台"></a>为啥常拿 Palantir 讲「LLM + 企业 Harness」——不是说只有它能做平台</h2><p>理性地讲：<strong>任何大公司都能做自己的数据平台、对象层、权限与审计</strong>（自研、买套件、知识图谱项目都在同一谱系里）。Palantir 被拿来做叙事，通常有三条「可讲故事」的理由：</p>
+<ol>
+<li><p><strong>产品形态就是「对象—关系—动作」一体化</strong>：它不是近两年才蹭 Graph RAG；客户买到的是<strong>把领域对象和运营动作写进软件的交付</strong>，而不只是「买一个图表工具」。话题转到 LLM 时，很自然把「已有平台层」说成 <strong>Harness</strong>，把「模型推理」说成外挂的推理引擎——<strong>叙事连续</strong>。</p>
+</li>
+<li><p><strong>权限、审计、多租户是硬需求</strong>：防务、大金融、关键基础设施这类客户，不能只在 demo 里「模型好像懂」；要能做到<strong>这次查询触及了哪些敏感对象、谁批的、依据哪条规则</strong>。平台层提供 <strong>挂权限与审计钩子的把手</strong>——这和只做向量库 + prompt 的轻量栈不是同一种痛苦。</p>
+</li>
+<li><p><strong>AIP 等产品把话说穿</strong>：公开材料里把自然语言、自动化与既有的 <strong>流水线 / 对象层</strong>绑在一起讲——本质是<strong>降低 Harness 冷启动与运维成本</strong>（例如用模型从文档、代码里抽规则草案），同时用平台<strong>约束</strong>模型可调用的工具与数据视图。你听到的「大脑 / 骨架 / 记忆」三分法，可视作同一套商业叙事的口语版；本文统一收成 <strong>推理模型 + 企业 Harness</strong>。</p>
+</li>
+</ol>
+<p>一句话：<strong>不是 Palantir 垄断了「平台」；而是它长期卖的东西，刚好和 LLM 落地缺的「语义、治理与可执行边界」卡在同一痛点上</strong>，所以文章爱用它当抓手。</p>
+<hr>
+<h2 id="大模型-×-企业-Harness：分工表-一条「请求怎么走」"><a href="#大模型-×-企业-Harness：分工表-一条「请求怎么走」" class="headerlink" title="大模型 × 企业 Harness：分工表 + 一条「请求怎么走」"></a>大模型 × 企业 Harness：分工表 + 一条「请求怎么走」</h2><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>干什么</th>
+<th>不干什么（理想形态）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>大模型</strong></td>
+<td>听懂问法、归纳、草稿、多跳推理、把非结构化材料对齐成「像结构化」的提议</td>
+<td>不天然保证「指对的实体」、不自带企业级权限与审计</td>
+</tr>
+<tr>
+<td><strong>Palantir Harness</strong></td>
+<td>实体是谁、关系怎连、规则/流程版本、谁能动什么、数据血缘与流水线</td>
+<td>不替你做开放域闲聊或通识百科</td>
+</tr>
+</tbody></table>
+<p><strong>一条极简链路（可与上面银行例子对照）</strong>：</p>
+<ol>
+<li>用户自然语言进场 → <strong>大模型</strong>做意图与槽位抽取（要查谁、什么时间范围、要什么动作）。  </li>
+<li><strong>Harness</strong>校验：实体 ID、链接是否允许该角色看见、是否跨法人/跨条线违规。  </li>
+<li><strong>Graph RAG / 结构化查询</strong>：沿关系拉子图，把「和这次问答真正相关的」窄上下文交给模型，而不是整库向量 Top-K。  </li>
+<li><strong>大模型</strong>生成答复与建议步骤；<strong>平台/工作流</strong>记录：触达对象、引用规则版本、是否进入人工复核。</li>
+</ol>
+<p>讨论里提到的 <strong>「反射式能力」<strong>可理解为：<strong>Agent 不是只盯着静态工具清单</strong>，而是先看「当前操作对象在平台上</strong>允许哪些动作与数据视图」</strong>，再决定调用啥——减少越权与乱调接口。</p>
+<h3 id="逻辑图示（SVG）"><a href="#逻辑图示（SVG）" class="headerlink" title="逻辑图示（SVG）"></a>逻辑图示（SVG）</h3><p>下图浓缩上文的「四步链路」：<strong>大模型</strong>负责语言与推理；<strong>Palantir 企业 Harness</strong>负责指对谁、能看什么、能动用哪条规则/哪个动作；<strong>子图检索</strong>收窄上下文；最后<strong>答复 + 审计</strong>落回可追责对象与规则版本。</p>
+<p><img src="/images/palantir-enterprise-harness-flow.svg" alt="大模型与 Palantir 企业 Harness：请求链路"></p>
+<hr>
+<h2 id="一句话结论（收束）"><a href="#一句话结论（收束）" class="headerlink" title="一句话结论（收束）"></a>一句话结论（收束）</h2><p><strong>大模型是「推理发动机」。Palantir 在长期交付里扮演的角色，是把数据集成、对象化、规则与权限、可审计动作编成一层企业 Harness——让 AI 在复杂系统里有轨可行、有据可查。</strong> 近年产品与资本市场叙事里常见的 <strong>AIP</strong> 等，多半也是「降低 Harness 搭建成本 + 用 Harness 约束模型」这一方向上的商业化说法（具体以官方为准）。</p>
+<hr>
+<h2 id="背景：为何「殊途同归」"><a href="#背景：为何「殊途同归」" class="headerlink" title="背景：为何「殊途同归」"></a>背景：为何「殊途同归」</h2><ul>
+<li><strong>云可观测</strong>：数据海量、异构、动态；单靠「收数再推理」接近困难的逆向工程。<strong>现象 ≠ 本质</strong>，缺口往往在<strong>系统建模与统一对象视图</strong>而不只是更多数据。</li>
+<li><strong>银行风控</strong>：监管要求强，AI 必须<strong>可解释、可追溯</strong>；没有结构化的业务—技术语义，RAG 召回也易造成「看似有事实、却不知场景与因果」的幻觉式决策依据。</li>
+<li><strong>共同点</strong>：在噪声里缺一张让机器与用户共同认账的<strong>运营级世界模型</strong>——Harness 要承载的就是这层「可执行、可审计」的语义底座。</li>
+</ul>
+<h2 id="没有-Harness-之前：三类「鸿沟」（可观测视角归纳）"><a href="#没有-Harness-之前：三类「鸿沟」（可观测视角归纳）" class="headerlink" title="没有 Harness 之前：三类「鸿沟」（可观测视角归纳）"></a>没有 Harness 之前：三类「鸿沟」（可观测视角归纳）</h2><ol>
+<li><strong>数据鸿沟</strong>：原始数据碎、噪多；故障时告警分散在指标 / 日志 / 链路等多系统，人工拼剧情、高度依赖专家经验。  </li>
+<li><strong>模型鸿沟</strong>：模型黑箱、幻觉；缺先验结构时易把<strong>时间相关</strong>误判为<strong>因果</strong>（如 A、B 同因于底层依赖 C，却判成 A 导致 B）。  </li>
+<li><strong>工程鸿沟</strong>：PB–EB 级采集、清洗、存储、成本与安全。</li>
+</ol>
+<p>金融侧补充：<strong>没有平台语义层时，机器难以稳定「识义」</strong>；RAG 容易停在「片面事实」层面，难以回答「描绘了什么业务场景、是否合规」。</p>
+<h2 id="Harness-里「长什么样」（具象化）"><a href="#Harness-里「长什么样」（具象化）" class="headerlink" title="Harness 里「长什么样」（具象化）"></a>Harness 里「长什么样」（具象化）</h2><ul>
+<li><strong>图视角</strong>：对象是节点、关系是边；<strong>不仅是表或原始数据，而是带语义约束的运营图</strong>（谁依赖谁、观测挂在哪个实体上等）。故障时可沿边做根因扩散与自动化排查。  </li>
+<li><strong>业务 vs 技术</strong>：<strong>业务语义</strong>澄清条款与业务含义；<strong>技术对接</strong>连系统、API、库表。  </li>
+<li><strong>可拆层次（圆桌里的嘉宾框架，改写成 Harness 语言）</strong>  <ul>
+<li>实体模型（客户、授信申请等）  </li>
+<li>流程模型（如五级：领域 → 价值链 → 活动 → 任务 → 步骤）  </li>
+<li>行为模型（实体可执行动作）  </li>
+<li>规则模型（从代码 if/else 中抽出可治理规则）  </li>
+<li>数据模型（映射仓库与核心系统接口）<br><strong>流程若没在 Harness 里钉死，AI 就容易越界</strong>，与金融行业「每一步可审计」冲突。</li>
+</ul>
+</li>
+</ul>
+<h2 id="「血肉」：Graph-RAG-与渐进加载"><a href="#「血肉」：Graph-RAG-与渐进加载" class="headerlink" title="「血肉」：Graph RAG 与渐进加载"></a>「血肉」：Graph RAG 与渐进加载</h2><ul>
+<li><strong>Graph RAG</strong>：图关系 + 检索，为模型补<strong>语境</strong>；与纯向量召回互补。  </li>
+<li><strong>渐进加载</strong>：对象与规则规模大时先暴露「目录」，按需深入，避免一次性灌满上下文。</li>
+</ul>
+<h2 id="最大难点往往不是代码，而是「隐性知识」"><a href="#最大难点往往不是代码，而是「隐性知识」" class="headerlink" title="最大难点往往不是代码，而是「隐性知识」"></a>最大难点往往不是代码，而是「隐性知识」</h2><ul>
+<li><strong>认知隔阂</strong>：专家经验模糊（「一般不会挂，除非数据库…」），要落成可计算、可链路化的模型，需大量沟通与抽象。  </li>
+<li><strong>隐性依赖</strong>：只存在于老员工脑子里的依赖，文档与 CMDB 里都没有。  </li>
+<li><strong>金融领域案例</strong>：资深审批「一眼有问题」，但难以立刻结构化描述症结。  </li>
+<li><strong>落地策略（归纳）</strong>  <ul>
+<li><strong>硬</strong>：标准 schema / 行业模板、可视化建模（降低冷启动成本）。  </li>
+<li><strong>软</strong>：<strong>不要一步到位</strong>；先核心实体与关系，<strong>一个高痛场景 MVP 闭环</strong>，用缩短排障/审批时间等<strong>可感知收益</strong>带动共建。  </li>
+<li><strong>人与激励</strong>：业务侧承担大部分梳理工作；Wiki 式荣誉激励；用大模型辅助从制度文档、代码中<strong>抽取</strong>规则草案以节省专家时间。</li>
+</ul>
+</li>
+</ul>
+<h2 id="给入行者：第一件该做-vs-不该做"><a href="#给入行者：第一件该做-vs-不该做" class="headerlink" title="给入行者：第一件该做 vs 不该做"></a>给入行者：第一件该做 vs 不该做</h2><p><strong>不要</strong>：一上来「全盘建模」；<strong>为平台而平台</strong>（RAG 或现有工具已够则勿过度设计）。</p>
+<p><strong>要先</strong>：选<strong>最痛、最高价值</strong>场景，建<strong>最小可用 Harness（对象 + 权限 + 一条闭环）</strong>，跑通 <strong>MVP</strong>；业务深度参与概念对齐，避免技术闭门造车。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> 大模型</a>
+              <a href="/tags/Palantir/" rel="tag"><i class="fa fa-tag"></i> Palantir</a>
+              <a href="/tags/Harness/" rel="tag"><i class="fa fa-tag"></i> Harness</a>
+              <a href="/tags/%E4%BC%81%E4%B8%9A-AI/" rel="tag"><i class="fa fa-tag"></i> 企业 AI</a>
+              <a href="/tags/Foundry/" rel="tag"><i class="fa fa-tag"></i> Foundry</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/30/LLM-Interview-Handbook-%E7%AC%AC1%E7%AB%A0-%E5%AF%BC%E8%AE%BA%E4%B8%8E%E8%81%8C%E4%B8%9A%E8%B7%AF%E7%BA%BF%E5%9B%BE-%E5%85%A8%E8%AF%91%E6%96%87/" rel="prev" title="《LLM Interview Handbook》第 1 章：导论、基础与 LLM 职业路线图（全译文）">
+                  <i class="fa fa-angle-left"></i> 《LLM Interview Handbook》第 1 章：导论、基础与 LLM 职业路线图（全译文）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/31/LCM%EF%BC%88Lossless%20Context%20Management%EF%BC%89%20%E6%97%A0%E6%8D%9F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/" rel="next" title="LCM（Lossless Context Management）无损上下文管理">
+                  LCM（Lossless Context Management）无损上下文管理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

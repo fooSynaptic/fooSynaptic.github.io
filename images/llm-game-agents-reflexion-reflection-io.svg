@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200" role="img" aria-labelledby="t">
+  <title id="t">Self-Reflection 输入与输出</title>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="6" y="6" width="628" height="188" rx="6"/>
+  <text x="320" y="30" text-anchor="middle" fill="#0f172a" font-size="15" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">自我反思（Self-Reflection）</text>
+  <line x1="6" y1="40" x2="634" y2="40" stroke="#64748b" stroke-width="1.2"/>
+  <rect fill="#fff" stroke="#334155" x="24" y="52" width="268" height="130" rx="4"/>
+  <text x="158" y="72" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输入</text>
+  <text x="36" y="92" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 任务描述</text>
+  <text x="36" y="110" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 失败轨迹：动作与观察序列</text>
+  <text x="36" y="128" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 奖励信号（二元或标量）</text>
+  <text x="36" y="146" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 历史反思</text>
+  <text x="320" y="114" fill="#64748b" font-size="20" font-family="sans-serif">→</text>
+  <rect fill="#fff" stroke="#334155" x="348" y="52" width="268" height="130" rx="4"/>
+  <text x="482" y="72" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">输出</text>
+  <text x="360" y="92" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 错误诊断</text>
+  <text x="360" y="110" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 改进方案</text>
+  <text x="360" y="128" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">· 具体建议</text>
+</svg>

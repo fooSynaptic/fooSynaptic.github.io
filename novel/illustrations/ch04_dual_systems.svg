@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
+  <title>Ch4 dual systems: Saber and Archer</title>
+  <rect width="900" height="320" fill="#0d1117"/>
+  <rect x="40" y="40" width="380" height="240" rx="10" fill="#0d2137" stroke="#58a6ff" stroke-width="2"/>
+  <text x="230" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#58a6ff">SABER</text>
+  <text x="70" y="115" font-family="monospace" font-size="11" fill="#8b949e">status: assist</text>
+  <text x="70" y="140" font-family="monospace" font-size="11" fill="#8b949e">task: guardian</text>
+  <rect x="480" y="40" width="380" height="240" rx="10" fill="#2a0d0d" stroke="#f85149" stroke-width="2"/>
+  <text x="670" y="75" text-anchor="middle" font-family="monospace" font-size="14" fill="#f85149">ARCHER</text>
+  <text x="510" y="115" font-family="monospace" font-size="11" fill="#ff7b72">status: watch</text>
+  <text x="510" y="140" font-family="monospace" font-size="11" fill="#ff7b72">threat: HIGH</text>
+  <circle cx="450" cy="160" r="35" fill="#21262d" stroke="#c9d1d9" stroke-width="2"/>
+  <text x="450" y="168" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#c9d1d9">host</text>
+  <text x="450" y="295" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#8b949e">Ch.4 Twin blades</text>
+</svg>

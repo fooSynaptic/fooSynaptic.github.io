@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="扩展章节：Jiajia 的技术博客精选文章一：《从 0 到 1：Guardian 框架的设计哲学》前言Guardian 框架发布已经一年了。这一年里，它从一个小众项目成长为业界知名的安全框架，GitHub star 数突破三万，被数百家企业采用。 很多人问我：Guardian 成功的原因是什么？ 我的答案是：设计哲学。 简洁至上Guardian 的第一设计原则是：简洁。 在安全领域，复杂性是敌人。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="扩展章节：Jiajia 的技术博客精选">
+<meta property="og:url" content="https://foosynaptic.github.io/novel/archive/extended_01.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="扩展章节：Jiajia 的技术博客精选文章一：《从 0 到 1：Guardian 框架的设计哲学》前言Guardian 框架发布已经一年了。这一年里，它从一个小众项目成长为业界知名的安全框架，GitHub star 数突破三万，被数百家企业采用。 很多人问我：Guardian 成功的原因是什么？ 我的答案是：设计哲学。 简洁至上Guardian 的第一设计原则是：简洁。 在安全领域，复杂性是敌人。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T03:49:20.647Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="圣殿守护者">
+<meta property="article:tag" content="小说">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/novel/archive/extended_01">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"https://foosynaptic.github.io/novel/archive/extended_01.html","path":"novel/archive/extended_01.html","title":"扩展章节：Jiajia 的技术博客精选"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>扩展章节：Jiajia 的技术博客精选 | fooSynaptic
+</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%AB%A0%E8%8A%82%EF%BC%9AJiajia-%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2%E7%B2%BE%E9%80%89"><span class="nav-number">1.</span> <span class="nav-text">扩展章节：Jiajia 的技术博客精选</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E4%B8%80%EF%BC%9A%E3%80%8A%E4%BB%8E-0-%E5%88%B0-1%EF%BC%9AGuardian-%E6%A1%86%E6%9E%B6%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%E3%80%8B"><span class="nav-number">1.1.</span> <span class="nav-text">文章一：《从 0 到 1：Guardian 框架的设计哲学》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E6%B4%81%E8%87%B3%E4%B8%8A"><span class="nav-number">1.1.2.</span> <span class="nav-text">简洁至上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">云原生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%BB%98%E8%AE%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">安全默认</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">1.1.5.</span> <span class="nav-text">结语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E4%BA%8C%EF%BC%9A%E3%80%8A%E9%82%A3%E6%AC%A1%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E3%80%8B"><span class="nav-number">1.2.</span> <span class="nav-text">文章二：《那次权限绕过漏洞的深度剖析》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.2.1.</span> <span class="nav-text">事件回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">漏洞原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E9%93%BE"><span class="nav-number">1.2.3.</span> <span class="nav-text">攻击链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.4.</span> <span class="nav-text">修复方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C%E6%95%99%E8%AE%AD"><span class="nav-number">1.2.5.</span> <span class="nav-text">经验教训</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD-1"><span class="nav-number">1.2.6.</span> <span class="nav-text">结语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E4%B8%89%EF%BC%9A%E3%80%8A%E5%A6%82%E4%BD%95%E6%88%90%E4%B8%BA%E4%B8%80%E5%90%8D%E4%BC%98%E7%A7%80%E7%9A%84%E6%8A%80%E6%9C%AF%E9%A2%86%E5%AF%BC%E8%80%85%E3%80%8B"><span class="nav-number">1.3.</span> <span class="nav-text">文章三：《如何成为一名优秀的技术领导者》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%A8%8B%E5%BA%8F%E5%91%98%E5%88%B0%E9%A2%86%E5%AF%BC%E8%80%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">从程序员到领导者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8A%80%E6%9C%AF%E4%B8%8D%E8%83%BD%E4%B8%A2"><span class="nav-number">1.3.2.</span> <span class="nav-text">1. 技术不能丢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9F%B9%E5%85%BB%E4%BA%BA%E6%89%8D%E6%AF%94%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1%E6%9B%B4%E9%87%8D%E8%A6%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">2. 培养人才比完成任务更重要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%B2%9F%E9%80%9A%E6%98%AF%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="nav-number">1.3.4.</span> <span class="nav-text">3. 沟通是核心技能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%81%9A%E8%89%B0%E9%9A%BE%E7%9A%84%E5%86%B3%E5%AE%9A"><span class="nav-number">1.3.5.</span> <span class="nav-text">4. 做艰难的决定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BF%9D%E6%8C%81%E8%B0%A6%E9%80%8A"><span class="nav-number">1.3.6.</span> <span class="nav-text">5. 保持谦逊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD-2"><span class="nav-number">1.3.7.</span> <span class="nav-text">结语</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">扩展章节：Jiajia 的技术博客精选
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/novel/">小说</a></li>
+            <li><a href="/novel/archive/">ARCHIVE</a></li>
+            <li>EXTENDED_01</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="扩展章节：Jiajia-的技术博客精选"><a href="#扩展章节：Jiajia-的技术博客精选" class="headerlink" title="扩展章节：Jiajia 的技术博客精选"></a>扩展章节：Jiajia 的技术博客精选</h1><h2 id="文章一：《从-0-到-1：Guardian-框架的设计哲学》"><a href="#文章一：《从-0-到-1：Guardian-框架的设计哲学》" class="headerlink" title="文章一：《从 0 到 1：Guardian 框架的设计哲学》"></a>文章一：《从 0 到 1：Guardian 框架的设计哲学》</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Guardian 框架发布已经一年了。这一年里，它从一个小众项目成长为业界知名的安全框架，GitHub star 数突破三万，被数百家企业采用。</p>
+<p>很多人问我：Guardian 成功的原因是什么？</p>
+<p>我的答案是：设计哲学。</p>
+<h3 id="简洁至上"><a href="#简洁至上" class="headerlink" title="简洁至上"></a>简洁至上</h3><p>Guardian 的第一设计原则是：简洁。</p>
+<p>在安全领域，复杂性是敌人。越复杂的系统，漏洞越多；越复杂的 API，开发者越容易用错。</p>
+<p>因此，Guardian 的核心 API 只有三个：</p>
+<ol>
+<li><code>guard()</code> - 启动守护</li>
+<li><code>check()</code> - 权限检查</li>
+<li><code>audit()</code> - 审计日志</li>
+</ol>
+<p>就这三个。不需要配置文件，不需要繁琐的初始化，一行代码就能启动。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启动 Guardian</span></span><br><span class="line"><span class="type">Guardian</span> <span class="variable">guard</span> <span class="operator">=</span> Guardian.guard();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查权限</span></span><br><span class="line"><span class="keyword">if</span> (guard.check(user, resource, Permission.READ)) {</span><br><span class="line"> <span class="comment">// 允许访问</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>简单吗？简单。但简单背后，是精心设计的架构和强大的功能。</p>
+<h3 id="云原生"><a href="#云原生" class="headerlink" title="云原生"></a>云原生</h3><p>Guardian 的第二设计原则是：云原生。</p>
+<p>传统的安全框架大多是为单体应用设计的。但在微服务和 Serverless 的时代，这些框架显得笨重而低效。</p>
+<p>Guardian 从设计之初就考虑了云原生环境：</p>
+<ul>
+<li>无状态设计，易于水平扩展</li>
+<li>轻量级 footprint，适合容器化部署</li>
+<li>支持服务网格集成</li>
+<li>内置分布式追踪</li>
+</ul>
+<h3 id="安全默认"><a href="#安全默认" class="headerlink" title="安全默认"></a>安全默认</h3><p>Guardian 的第三设计原则是：安全默认（Secure by Default）。</p>
+<p>很多安全框架的默认配置是不安全的，需要开发者手动启用各种安全特性。这导致很多开发者因为无知或懒惰，部署了不安全的应用。</p>
+<p>Guardian 反其道而行之。所有安全特性默认开启，如果你想关闭某个特性，必须明确声明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不推荐，但如果你想这么做</span></span><br><span class="line"><span class="type">Guardian</span> <span class="variable">guard</span> <span class="operator">=</span> Guardian.builder()</span><br><span class="line"> .disableCSRF() <span class="comment">// 明确禁用 CSRF 保护</span></span><br><span class="line"> .disableXSS() <span class="comment">// 明确禁用 XSS 过滤</span></span><br><span class="line"> .build();</span><br></pre></td></tr></table></figure>
+
+<p>这种设计强迫开发者思考：我真的需要禁用这些保护吗？</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>Guardian 不是完美的，但它代表了我对软件设计的一些思考：</p>
+<ul>
+<li>简单比复杂好</li>
+<li>显式比隐式好</li>
+<li>安全比方便好</li>
+</ul>
+<p>希望这些思考对你有所帮助。</p>
+<hr>
+<h2 id="文章二：《那次权限绕过漏洞的深度剖析》"><a href="#文章二：《那次权限绕过漏洞的深度剖析》" class="headerlink" title="文章二：《那次权限绕过漏洞的深度剖析》"></a>文章二：《那次权限绕过漏洞的深度剖析》</h2><h3 id="事件回顾"><a href="#事件回顾" class="headerlink" title="事件回顾"></a>事件回顾</h3><p>三个月前，我在公司项目中发现了一个严重的权限绕过漏洞。这个漏洞允许攻击者绕过所有权限检查，直接操作数据库。</p>
+<p>今天，我想和大家详细剖析这个漏洞的原理、发现过程、以及修复方案。</p>
+<h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>这个漏洞的根源是一个看似无害的代码片段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">checkPermission</span><span class="params">(User user, Resource resource, String action)</span> {</span><br><span class="line"> <span class="comment">// 从缓存中获取权限</span></span><br><span class="line"> <span class="type">Permission</span> <span class="variable">perm</span> <span class="operator">=</span> cache.get(user.getId() + <span class="string">":"</span> + resource.getId());</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (perm == <span class="literal">null</span>) {</span><br><span class="line"> <span class="comment">// 缓存未命中，从数据库查询</span></span><br><span class="line"> perm = db.query(user, resource);</span><br><span class="line"> cache.put(user.getId() + <span class="string">":"</span> + resource.getId(), perm);</span><br><span class="line"> }</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> perm.hasAction(action);</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p>问题出在哪里？</p>
+<p>在于缓存 key 的构造方式：<code>user.getId() + ":" + resource.getId()</code></p>
+<p>如果攻击者构造特殊的 userId 和 resourceId，就可能导致缓存 key 冲突！</p>
+<p>例如：</p>
+<ul>
+<li>userId = “123”, resourceId = “456” → key = “123:456”</li>
+<li>userId = “12”, resourceId = “3:456” → key = “12:3:456” = “123:456”</li>
+</ul>
+<p>看，两个不同的组合产生了相同的 key！</p>
+<p>这意味着，攻击者可以通过精心构造的参数，获取其他用户的权限缓存！</p>
+<h3 id="攻击链"><a href="#攻击链" class="headerlink" title="攻击链"></a>攻击链</h3><p>完整的攻击链如下：</p>
+<ol>
+<li>攻击者注册一个用户，userId = “victim_user_id:target_resource_id”</li>
+<li>攻击者正常访问 target_resource，系统会缓存他的权限（实际上是 victim 的权限！）</li>
+<li>攻击者再次访问，获取 victim 的权限，完成权限提升</li>
+</ol>
+<h3 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h3><p>修复很简单：使用更安全的 key 构造方式，避免拼接攻击。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修复方案 1：使用分隔符转义</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> user.getId().replace(<span class="string">":"</span>, <span class="string">"\\:"</span>) + <span class="string">":"</span> + resource.getId().replace(<span class="string">":"</span>, <span class="string">"\\:"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修复方案 2：使用结构化 key</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> String.format(<span class="string">"user:%s:resource:%s"</span>, user.getId(), resource.getId());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修复方案 3：使用哈希</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> HashUtil.sha256(user.getId() + <span class="string">"|"</span> + resource.getId());</span><br></pre></td></tr></table></figure>
+
+<p>我选择的是方案 3，因为它从根本上消除了拼接的可能性。</p>
+<h3 id="经验教训"><a href="#经验教训" class="headerlink" title="经验教训"></a>经验教训</h3><p>这个漏洞教会了我几件事：</p>
+<ol>
+<li><p><strong>永远不要信任用户输入</strong>。即使只是 userId，也可能被恶意构造。</p>
+</li>
+<li><p><strong>缓存是双刃剑</strong>。它可以提升性能，但也可能引入安全问题。</p>
+</li>
+<li><p><strong>Code Review 很重要</strong>。这个漏洞在 Code Review 中被发现，而不是在生产环境中。</p>
+</li>
+<li><p><strong>安全需要纵深防御</strong>。除了修复这个漏洞，我们还添加了额外的权限校验层，即使缓存被绕过，还有最后一道防线。</p>
+</li>
+</ol>
+<h3 id="结语-1"><a href="#结语-1" class="headerlink" title="结语"></a>结语</h3><p>安全是一个永无止境的过程。今天分享的漏洞，可能明天就会被其他方式利用。</p>
+<p>保持警惕，保持学习，保持谦逊。</p>
+<hr>
+<h2 id="文章三：《如何成为一名优秀的技术领导者》"><a href="#文章三：《如何成为一名优秀的技术领导者》" class="headerlink" title="文章三：《如何成为一名优秀的技术领导者》"></a>文章三：《如何成为一名优秀的技术领导者》</h2><h3 id="从程序员到领导者"><a href="#从程序员到领导者" class="headerlink" title="从程序员到领导者"></a>从程序员到领导者</h3><p>三年前，我是一个写代码的程序员。今天，我是一个管理 50 人团队的 CTO。</p>
+<p>这个转变并不容易。我犯过很多错误，也学到了很多教训。</p>
+<p>今天，我想分享一些我的心得。</p>
+<h3 id="1-技术不能丢"><a href="#1-技术不能丢" class="headerlink" title="1. 技术不能丢"></a>1. 技术不能丢</h3><p>很多技术领导者晋升后，就很少写代码了。这是一个巨大的错误。</p>
+<p>技术是技术领导者的根基。如果你不懂技术，你就无法做出正确的技术决策，无法赢得团队的尊重，也无法在关键时刻挺身而出。</p>
+<p>我现在的做法是：每周至少花 20% 的时间写代码。不一定是核心代码，可以是工具脚本、原型验证、或者 Code Review。</p>
+<p>保持手感，保持对技术的敏感度。</p>
+<h3 id="2-培养人才比完成任务更重要"><a href="#2-培养人才比完成任务更重要" class="headerlink" title="2. 培养人才比完成任务更重要"></a>2. 培养人才比完成任务更重要</h3><p>作为程序员，你的 KPI 是完成多少功能、修复多少 bug。</p>
+<p>作为领导者，你的 KPI 应该是培养出多少优秀的人才。</p>
+<p>一个优秀的领导者，应该让团队成员比自己更强。如果团队成员都离不开你，说明你是一个失败的领导者。</p>
+<p>我的做法是：</p>
+<ul>
+<li>给团队成员挑战性任务，逼他们成长</li>
+<li>定期一对一沟通，了解他们的职业规划</li>
+<li>创造分享氛围，让知识在团队中流动</li>
+<li>敢于放权，让团队成员独立负责项目</li>
+</ul>
+<h3 id="3-沟通是核心技能"><a href="#3-沟通是核心技能" class="headerlink" title="3. 沟通是核心技能"></a>3. 沟通是核心技能</h3><p>技术领导者 70% 的时间花在沟通上：向上汇报、向下传达、横向协调。</p>
+<p>如果你不能清晰地表达想法，不能有效地倾听反馈，不能妥善地处理冲突，你就无法做好领导工作。</p>
+<p>提升沟通能力的方法：</p>
+<ul>
+<li>多写文档，锻炼结构化表达</li>
+<li>多开会，练习即兴演讲</li>
+<li>多倾听，理解他人的立场和需求</li>
+<li>多读非技术书籍，拓宽视野</li>
+</ul>
+<h3 id="4-做艰难的决定"><a href="#4-做艰难的决定" class="headerlink" title="4. 做艰难的决定"></a>4. 做艰难的决定</h3><p>领导者必须做艰难的决定：</p>
+<ul>
+<li>裁掉表现不佳的员工</li>
+<li>取消投入巨大但前景渺茫的项目</li>
+<li>在团队之间分配稀缺的资源</li>
+<li>承担失败的责任</li>
+</ul>
+<p>这些决定不会让人开心，但必须有人来做。</p>
+<p>记住：做正确的事，而不是容易的事。</p>
+<h3 id="5-保持谦逊"><a href="#5-保持谦逊" class="headerlink" title="5. 保持谦逊"></a>5. 保持谦逊</h3><p>技术领导者容易陷入的一个陷阱是：自负。</p>
+<p>因为你是领导，下属不会直接反驳你；因为你有权力，周围的人会迎合你。久而久之，你可能真的以为自己什么都懂。</p>
+<p>保持谦逊的方法：</p>
+<ul>
+<li>定期寻求反馈，特别是负面反馈</li>
+<li>承认自己的错误和无知</li>
+<li>向团队成员学习，每个人都有自己的专长</li>
+<li>记住：职位不代表能力，权力不代表正确</li>
+</ul>
+<h3 id="结语-2"><a href="#结语-2" class="headerlink" title="结语"></a>结语</h3><p>从程序员到技术领导者，是一条漫长的路。</p>
+<p>我还在学习中，也会继续犯错。但我相信，只要保持初心，保持成长，就一定能走得更远。</p>
+<p>希望这篇文章对你有所帮助。</p>
+<hr>
+<p><strong>扩展章节完</strong></p>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/novel/">小说</a></li>
+            <li><a href="/novel/archive/">ARCHIVE</a></li>
+            <li>EXTENDED_01</li>
+  </ul>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

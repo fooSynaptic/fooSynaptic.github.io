@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="520" height="120" role="img">
+  <title>Schema compatibility</title>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .t { font: 500 13px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #1e293b; }
+      .mono { font: 500 12px ui-monospace,Menlo,monospace; fill: #334155; }
+      .ok { font: 600 12px system-ui,"PingFang SC",sans-serif; fill: #047857; }
+      .arr { stroke: #64748b; stroke-width: 1.5; fill: none; marker-end: url(#mk); }
+    ]]></style>
+    <marker id="mk" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#64748b"/></marker>
+  </defs>
+  <text class="t" x="16" y="26">后向兼容：新代码能读取旧代码写的数据</text>
+  <text class="mono" x="40" y="52">v3 代码</text>
+  <path class="arr" d="M 100 48 L 200 48"/>
+  <text class="mono" x="210" y="52">读取</text>
+  <path class="arr" d="M 260 48 L 320 48"/>
+  <text class="mono" x="330" y="52">v1 数据</text>
+  <text class="ok" x="420" y="52">成立</text>
+  <text class="t" x="16" y="88">前向兼容：旧代码能读取新代码写的数据</text>
+  <text class="mono" x="40" y="114">v1 代码</text>
+  <path class="arr" d="M 100 110 L 200 110"/>
+  <text class="mono" x="210" y="114">读取</text>
+  <path class="arr" d="M 260 110 L 320 110"/>
+  <text class="mono" x="330" y="114">v3 数据</text>
+  <text class="ok" x="420" y="114">成立</text>
+</svg>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 200" width="520" height="200" role="img">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#334155"/></marker>
+  </defs>
+  <rect fill="#fff" stroke="#334155" x="24" y="24" width="88" height="36" rx="4"/><text x="68" y="46" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">应用</text>
+  <line x1="112" y1="42" x2="138" y2="42" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#fff" stroke="#334155" x="142" y="24" width="88" height="36" rx="4"/><text x="186" y="46" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">数据库</text>
+  <rect fill="#fef3c7" stroke="#b45309" x="280" y="24" width="100" height="44" rx="4"/>
+  <text x="330" y="42" text-anchor="middle" fill="#0f172a" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">CDC</text>
+  <text x="330" y="56" text-anchor="middle" fill="#64748b" font-size="8" font-family="sans-serif">Debezium</text>
+  <line x1="230" y1="42" x2="272" y2="42" stroke="#334155" marker-end="url(#ar)"/>
+  <line x1="186" y1="60" x2="186" y2="100" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#e2e8f0" stroke="#64748b" x="142" y="104" width="88" height="32" rx="3"/><text x="186" y="124" text-anchor="middle" fill="#475569" font-size="9" font-family="sans-serif">binlog</text>
+  <text x="248" y="115" fill="#64748b" font-size="8" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">变更日志</text>
+  <line x1="330" y1="68" x2="330" y2="104" stroke="#334155" marker-end="url(#ar)"/>
+  <rect fill="#dcfce7" stroke="#15803d" x="286" y="108" width="88" height="36" rx="4"/><text x="330" y="132" text-anchor="middle" fill="#0f172a" font-size="10" font-family="sans-serif">Kafka</text>
+  <text x="400" y="90" fill="#64748b" font-size="9" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">事件流</text>
+</svg>

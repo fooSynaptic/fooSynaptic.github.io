@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300">
+  <title>Ch17 ten year preparation</title>
+  <rect width="900" height="300" fill="#212529"/>
+  <g stroke="#495057" stroke-width="2">
+    <line x1="80" y1="220" x2="820" y2="220"/><line x1="80" y1="220" x2="80" y2="80"/><line x1="820" y1="220" x2="820" y2="80"/>
+  </g>
+  <polyline points="80,180 200,160 340,140 500,100 680,90 820,70" fill="none" stroke="#20c997" stroke-width="3"/>
+  <text x="450" y="50" text-anchor="middle" font-family="monospace" font-size="12" fill="#adb5bd">10Y_PREP / readiness</text>
+  <text x="450" y="280" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#6c757d">Ch.17 Ten years ready</text>
+</svg>

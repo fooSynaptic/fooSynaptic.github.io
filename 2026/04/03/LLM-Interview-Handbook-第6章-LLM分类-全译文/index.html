@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="译本说明原文出自 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）。个人学习用途中文全译；转载请注明出处，勿用于商业再发行。本章图与表：自原书 PDF 按页导出 PNG（source&#x2F;images&#x2F;llm-interview-handbook&#x2F;chapters&#x2F;ch06-p-*.pn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《LLM Interview Handbook》第 6 章：基于大语言模型的分类（全译文）">
+<meta property="og:url" content="https://foosynaptic.github.io/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC6%E7%AB%A0-LLM%E5%88%86%E7%B1%BB-%E5%85%A8%E8%AF%91%E6%96%87/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="译本说明原文出自 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）。个人学习用途中文全译；转载请注明出处，勿用于商业再发行。本章图与表：自原书 PDF 按页导出 PNG（source&#x2F;images&#x2F;llm-interview-handbook&#x2F;chapters&#x2F;ch06-p-*.pn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch06-p-037.png">
+<meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch06-p-038.png">
+<meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch06-p-039.png">
+<meta property="article:published_time" content="2026-04-02T22:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T03:49:20.595Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="分类">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch06-p-037.png">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC6%E7%AB%A0-LLM%E5%88%86%E7%B1%BB-%E5%85%A8%E8%AF%91%E6%96%87/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC6%E7%AB%A0-LLM%E5%88%86%E7%B1%BB-%E5%85%A8%E8%AF%91%E6%96%87/","path":"2026/04/03/LLM-Interview-Handbook-第6章-LLM分类-全译文/","title":"《LLM Interview Handbook》第 6 章：基于大语言模型的分类（全译文）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《LLM Interview Handbook》第 6 章：基于大语言模型的分类（全译文） | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-6-%E7%AB%A0-%E5%9F%BA%E4%BA%8E%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">第 6 章　基于大语言模型的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-%E9%9D%A2%E8%AF%95%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　面试锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-%E9%9D%A2%E8%AF%95%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　面试速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88%E5%8E%9F%E4%B9%A6%E7%BC%96%E5%8F%B7-Q41%E2%80%93Q50%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（原书编号 Q41–Q50）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q41-%E7%94%9F%E6%88%90%E5%BC%8F-LLM-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%86%E7%B1%BB%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q41. 生成式 LLM 如何做分类？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q42-%E5%88%86%E7%B1%BB%E4%BB%BB%E5%8A%A1%E4%BD%95%E6%97%B6%E8%AF%A5%E7%94%A8%E6%8F%90%E7%A4%BA%EF%BC%8C%E4%BD%95%E6%97%B6%E8%AF%A5%E7%94%A8%E5%BE%AE%E8%B0%83%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q42. 分类任务何时该用提示，何时该用微调？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q43-%E9%9B%B6%E6%A0%B7%E6%9C%AC%E5%88%86%E7%B1%BB%E4%B8%8E%E5%B0%91%E6%A0%B7%E6%9C%AC%E5%88%86%E7%B1%BB%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q43. 零样本分类与少样本分类有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q44-%E9%9D%A2%E5%90%91-LLM-%E5%88%86%E7%B1%BB%E5%99%A8%EF%BC%8C%E5%BA%94%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E6%A0%87%E7%AD%BE%E4%BD%93%E7%B3%BB%EF%BC%88taxonomy%EF%BC%89%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q44. 面向 LLM 分类器，应如何设计标签体系（taxonomy）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q45-%E5%9F%BA%E4%BA%8E-LLM-%E7%9A%84%E5%88%86%E7%B1%BB%E9%87%8C%EF%BC%8C%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E7%B1%BB%E5%88%AB%E4%B8%8D%E5%B9%B3%E8%A1%A1%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q45. 基于 LLM 的分类里，如何处理类别不平衡？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q46-%E5%A4%9A%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB%E4%B8%8E%E5%8D%95%E6%A0%87%E7%AD%BE%E5%88%86%E7%B1%BB%E6%9C%89%E4%BD%95%E4%B8%8D%E5%90%8C%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q46. 多标签分类与单标签分类有何不同？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q47-%E7%94%A8-LLM-%E6%90%AD%E5%BB%BA%E7%9A%84%E5%88%86%E7%B1%BB%E7%B3%BB%E7%BB%9F%EF%BC%8C%E5%93%AA%E4%BA%9B%E6%8C%87%E6%A0%87%E6%9C%80%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q47. 用 LLM 搭建的分类系统，哪些指标最重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q48-%E5%A6%82%E4%BD%95%E4%BC%B0%E8%AE%A1-LLM-%E5%88%86%E7%B1%BB%E5%99%A8%E7%9A%84%E7%BD%AE%E4%BF%A1%E5%BA%A6%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q48. 如何估计 LLM 分类器的置信度？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q49-%E5%88%86%E7%B1%BB%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%BD%95%E6%97%B6%E5%BA%94%E5%8C%85%E5%90%AB%E4%BA%BA%E5%B7%A5%E5%8F%82%E4%B8%8E%EF%BC%88human-in-the-loop%EF%BC%89%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q49. 分类流水线何时应包含人工参与（human in the loop）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q50-LLM-%E5%88%86%E7%B1%BB%E7%B3%BB%E7%BB%9F%E5%9C%A8%E7%94%9F%E4%BA%A7%E9%87%8C%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%B1%E6%95%88%E6%A8%A1%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q50. LLM 分类系统在生产里常见的失效模式有哪些？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC6%E7%AB%A0-LLM%E5%88%86%E7%B1%BB-%E5%85%A8%E8%AF%91%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/jojo_median.ico">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="《LLM Interview Handbook》第 6 章：基于大语言模型的分类（全译文） | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《LLM Interview Handbook》第 6 章：基于大语言模型的分类（全译文）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-03 06:00:00" itemprop="dateCreated datePublished" datetime="2026-04-03T06:00:00+08:00">2026-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><strong>译本说明</strong><br>原文出自 <em>Language Models Interview Handbook</em>（© 2026 Lamhot Siagian, AI Engineering Insider）。<br>个人学习用途中文全译；转载请注明出处，勿用于商业再发行。<br><strong>本章图与表</strong>：自原书 PDF 按页导出 PNG（<code>source/images/llm-interview-handbook/chapters/ch06-p-*.png</code>），与纸版对齐。</p>
+</blockquote>
+<hr>
+<h2 id="第-6-章-基于大语言模型的分类"><a href="#第-6-章-基于大语言模型的分类" class="headerlink" title="第 6 章　基于大语言模型的分类"></a>第 6 章　基于大语言模型的分类</h2><h3 id="本章概述"><a href="#本章概述" class="headerlink" title="本章概述"></a>本章概述</h3><p>尽管许多团队最初是把 LLM 当作<strong>对话系统</strong>来用，它们同样也是强有力的<strong>分类引擎</strong>：可以通过提示直接把输入映射到标签、为审计生成<strong>理由（rationales）</strong>，并快速适配新的<strong>分类体系（taxonomy）</strong>。话虽如此，并非每一种分类负载都适合交给<strong>通用生成模型</strong>；有些场景仍更适合<strong>更小的判别式模型</strong>或<strong>混合流水线</strong>。</p>
+<p>扎实的工程回答会<strong>比较不同方案</strong>，而不是把「用 LLM 做分类」当成<strong>放之四海皆准的升级</strong>。正确选择取决于<strong>类别复杂度</strong>、<strong>数据量</strong>、<strong>可解释性需求</strong>、<strong>延迟目标</strong>，以及<strong>标签空间是否频繁变化</strong>。</p>
+<hr>
+<h3 id="Interview-Anchor-面试锚点"><a href="#Interview-Anchor-面试锚点" class="headerlink" title="Interview Anchor　面试锚点"></a>Interview Anchor　面试锚点</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>面试官真正想测的</strong></td>
+<td>能否在<strong>提示（prompting）</strong>、<strong>零样本分类</strong>、<strong>少样本分类</strong>与<strong>专用分类器</strong>之间做出选择，并给出清晰的<strong>业务理由</strong>。</td>
+</tr>
+<tr>
+<td><strong>高质量回答套路</strong></td>
+<td>从<strong>标签稳定性</strong>与<strong>成本承受度</strong>出发，说明何时<strong>生成式模型</strong>够用，何时<strong>更小的监督学习模型</strong>才是更好的生产选型。</td>
+</tr>
+<tr>
+<td><strong>常见低分答法</strong></td>
+<td>用生成式输出做分类时，忘了<strong>校准</strong>、<strong>类别不平衡</strong>与<strong>模式约束（schema enforcement）</strong>。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="INTERVIEW-CHEATSHEET-面试速记条"><a href="#INTERVIEW-CHEATSHEET-面试速记条" class="headerlink" title="INTERVIEW CHEATSHEET　面试速记条"></a>INTERVIEW CHEATSHEET　面试速记条</h3><table>
+<thead>
+<tr>
+<th>项</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>要表达的亮点</strong></td>
+<td>分类方案设计取决于<strong>标签清晰度</strong>、<strong>数据量</strong>、<strong>漂移</strong>、<strong>可解释性</strong>与<strong>单次预测价格</strong>。</td>
+</tr>
+<tr>
+<td><strong>最佳举例</strong></td>
+<td>标签<strong>经常变</strong>时用带提示的 LLM；<strong>体量巨大</strong>且<strong>标签集合稳定</strong>时用紧凑的分类器。</td>
+</tr>
+<tr>
+<td><strong>可追问方向</strong></td>
+<td>提到<strong>置信度阈值</strong>、<strong>结构化输出</strong>以及对<strong>模糊类别</strong>的<strong>人工复核</strong>。</td>
+</tr>
+<tr>
+<td><strong>资深补充</strong></td>
+<td>区分<strong>产品实验</strong>与<strong>生产吞吐下的经济账</strong>。</td>
+</tr>
+<tr>
+<td><strong>切忌这样说</strong></td>
+<td>预设<strong>最强的生成模型</strong>永远是<strong>最好的分类器</strong>。</td>
+</tr>
+</tbody></table>
+<p><em>译注：<strong>Red flag</strong> 在面试英语里常指「减分点 / 危险答法」，不是中文里「红旗」一词的其它含义。</em></p>
+<hr>
+<p>下面的分类表把<strong>模型选型</strong>翻译成<strong>可运维的判据</strong>。请<strong>逐行</strong>阅读，把它当作关于<strong>标签稳定性</strong>、<strong>迭代速度</strong>与<strong>成本画像</strong>的决策工具。</p>
+<p><strong>图 6.1 及表 6.1 所在版面（原书约第 37 页）</strong>——自原书 PDF 导出：</p>
+<p><img src="/images/llm-interview-handbook/chapters/ch06-p-037.png" alt="图 6.1 / 表 6.1 与面试速记条（原书页导出）"></p>
+<p><strong>表 6.1</strong>（<em>Choosing the right classification strategy in practice</em>）译文：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>最适用</th>
+<th>运维备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>带提示的 LLM（Prompted LLM）</strong></td>
+<td>标签仍在<strong>演进</strong>，或类别<strong>细腻、需自然语言界定</strong></td>
+<td><strong>易迭代</strong>，但<strong>成本</strong>与<strong>一致性</strong>需要管控。</td>
+</tr>
+<tr>
+<td><strong>少样本 LLM（Few-shot LLM）</strong></td>
+<td><strong>边界情况</strong>重要，且<strong>示例</strong>能改善对任务的理解与输出格式</td>
+<td>适合<strong>试点阶段</strong>与<strong>强政策/合规</strong>类任务。</td>
+</tr>
+<tr>
+<td><strong>微调分类器（Fine-tuned classifier）</strong></td>
+<td>标签<strong>已稳定</strong>，且<strong>数据量/调用量</strong>大</td>
+<td>一旦分类法<strong>定型</strong>，在<strong>吞吐</strong>与<strong>成本</strong>上往往更优。</td>
+</tr>
+<tr>
+<td><strong>混合方案（Hybrid approach）</strong></td>
+<td>既要<strong>自动化</strong>，又要<strong>人工升级/复核</strong></td>
+<td>当<strong>不确定样本</strong>必须被<strong>安全分流</strong>时特别有用。</td>
+</tr>
+</tbody></table>
+<h3 id="What-Strong-Candidates-Sound-Like"><a href="#What-Strong-Candidates-Sound-Like" class="headerlink" title="What Strong Candidates Sound Like"></a>What Strong Candidates Sound Like</h3><blockquote>
+<p><strong>一句话口述（原书）</strong>：「真正的分类决策<strong>不只是准确率</strong>；而是产品在<strong>标签漂移、歧义、规模与治理</strong>上<strong>能承受多少</strong>。」（译文）</p>
+</blockquote>
+<p><strong>原书「强候选人怎么说」段落所在页（约第 38 页）</strong>——自原书 PDF 导出：</p>
+<p><img src="/images/llm-interview-handbook/chapters/ch06-p-038.png" alt="What Strong Candidates Sound Like 等版面（原书页导出）"></p>
+<p><strong>问答开篇所在页（约第 39 页）</strong>——自原书 PDF 导出：</p>
+<p><img src="/images/llm-interview-handbook/chapters/ch06-p-039.png" alt="Q41 起版面（原书页导出）"></p>
+<p>若需与纸版<strong>逐页</strong>对照排版，后续页可能承载更多问答版面；<strong>本文据原书全文摘录整理</strong>，问答以正文为准。</p>
+<hr>
+<h2 id="问答（原书编号-Q41–Q50）"><a href="#问答（原书编号-Q41–Q50）" class="headerlink" title="问答（原书编号 Q41–Q50）"></a>问答（原书编号 Q41–Q50）</h2><h3 id="Q41-生成式-LLM-如何做分类？"><a href="#Q41-生成式-LLM-如何做分类？" class="headerlink" title="Q41. 生成式 LLM 如何做分类？"></a>Q41. 生成式 LLM 如何做分类？</h3><p><strong>答。</strong> 生成式 LLM 可以通过提示，把输入映射到<strong>预先定义集合中的某一个标签</strong>来完成分类。它不必单独学一个专用<strong>分类头（classifier head）</strong>，而是借助<strong>指令遵循</strong>与<strong>语言理解</strong>能力产出目标类别，并常常附带<strong>理由</strong>或<strong>结构化输出</strong>。</p>
+<p>这在类别用<strong>自然语言</strong>即可描述、输入<strong>杂乱</strong>，或<strong>标注样本稀缺</strong>时特别好用。代价是：除非你对输出<strong>约束得当</strong>，否则生成式分类往往比传统分类器<strong>更慢</strong>、<strong>更不稳定</strong>。</p>
+<hr>
+<h3 id="Q42-分类任务何时该用提示，何时该用微调？"><a href="#Q42-分类任务何时该用提示，何时该用微调？" class="headerlink" title="Q42. 分类任务何时该用提示，何时该用微调？"></a>Q42. 分类任务何时该用提示，何时该用微调？</h3><p><strong>答。</strong> <strong>用提示</strong>：分类体系<strong>经常变</strong>、<strong>有标注数据有限</strong>、需要<strong>快速推进</strong>时。若<strong>解释质量</strong>很重要，提示也很有吸引力——同一套系统可以<strong>一次</strong>完成分类并给出<strong>依据</strong>。</p>
+<p><strong>用微调</strong>：标签<strong>稳定</strong>、<strong>体量</strong>大、<strong>延迟</strong>敏感，且需要<strong>更紧的一致性</strong>时。面试里要强调：提示买的是<strong>灵活性</strong>，微调买的是<strong>专精</strong>。二者没有<strong>天然谁更优</strong>；更好选择取决于任务的<strong>运维画像</strong>。</p>
+<hr>
+<h3 id="Q43-零样本分类与少样本分类有何区别？"><a href="#Q43-零样本分类与少样本分类有何区别？" class="headerlink" title="Q43. 零样本分类与少样本分类有何区别？"></a>Q43. 零样本分类与少样本分类有何区别？</h3><p><strong>答。</strong> <strong>零样本分类</strong>只给模型<strong>标签定义</strong>或<strong>任务说明</strong>。<strong>少样本分类</strong>还会提供<strong>少量示例</strong>，展示输入应如何映射到各类别。少样本示例有助于模型更可靠地推断<strong>边界</strong>、<strong>边界情况</strong>与<strong>格式预期</strong>。</p>
+<p>好的面试回答会指出：当标签<strong>细微</strong>、<strong>彼此重叠</strong>或<strong>高度组织化/专有</strong>时，少样本示例尤其有用——它们把提示变成一丁点<strong>即时上下文里的训练信号</strong>。<strong>GPT-3</strong> 推广了这种**上下文学习（in-context learning）**风格：选好示例后，性能可以显著提升（Brown et al., 2020）。</p>
+<hr>
+<h3 id="Q44-面向-LLM-分类器，应如何设计标签体系（taxonomy）？"><a href="#Q44-面向-LLM-分类器，应如何设计标签体系（taxonomy）？" class="headerlink" title="Q44. 面向 LLM 分类器，应如何设计标签体系（taxonomy）？"></a>Q44. 面向 LLM 分类器，应如何设计标签体系（taxonomy）？</h3><p><strong>答。</strong> 标签体系应<strong>彼此可理解</strong>、<strong>在业务上可用</strong>，并尽可能<strong>互不重叠</strong>。每个标签要用<strong>清晰边界</strong>、<strong>纳入规则</strong>、<strong>排除规则</strong>与<strong>示例</strong>来定义。若标签过于抽象或语义上<strong>缠在一起</strong>，模型会<strong>复刻</strong>这种模糊性。</p>
+<p>有力的生产向回答是：把<strong>分类体系设计</strong>当成<strong>产品设计</strong>，而不只是建模问题。许多分类失败来自<strong>类别定义不清</strong>，而不是模型太弱。若<strong>人</strong>都无法稳定一致地打标，LLM 也<strong>不会</strong>替你修好本体论。</p>
+<hr>
+<h3 id="Q45-基于-LLM-的分类里，如何处理类别不平衡？"><a href="#Q45-基于-LLM-的分类里，如何处理类别不平衡？" class="headerlink" title="Q45. 基于 LLM 的分类里，如何处理类别不平衡？"></a>Q45. 基于 LLM 的分类里，如何处理类别不平衡？</h3><p><strong>答。</strong> 可通过<strong>更好的示例</strong>、<strong>有针对性的评测集</strong>、<strong>代价敏感</strong>的复核策略，或用<strong>平衡或重加权</strong>数据做微调来缓解。纯提示系统往往会<strong>过预测</strong>宽泛的多数类，除非提示<strong>明确</strong>描述少数类与边界情形。</p>
+<p>面试里应提到：不平衡既是<strong>数据问题</strong>，也是<strong>决策策略问题</strong>。在欺诈、安全或医疗分诊等场景，你可能更在意<strong>少数类召回</strong>，而不是<strong>总体准确率</strong>。<strong>对的评测指标</strong>应反映这一优先级。</p>
+<hr>
+<h3 id="Q46-多标签分类与单标签分类有何不同？"><a href="#Q46-多标签分类与单标签分类有何不同？" class="headerlink" title="Q46. 多标签分类与单标签分类有何不同？"></a>Q46. 多标签分类与单标签分类有何不同？</h3><p><strong>答。</strong> <strong>单标签分类</strong>必须且只能选一个类。<strong>多标签分类</strong>则允许<strong>多个标签同时成立</strong>。因此提示、<strong>模式（schema）<strong>与</strong>评测策略</strong>都要改：不是选「一个最佳标签」，而是要判断<strong>哪些标签</strong>越过<strong>纳入阈值</strong>。</p>
+<p>实务难点在<strong>校准</strong>。多标签输出需要更强的<strong>阈值设定</strong>、<strong>校验</strong>与<strong>审计逻辑</strong>，因为模型可能<strong>少标</strong>或<strong>多标</strong>。面试里要强调：多标签工作<strong>不只是</strong>单标签的小扩展——它改变了<strong>决策结构</strong>。</p>
+<hr>
+<h3 id="Q47-用-LLM-搭建的分类系统，哪些指标最重要？"><a href="#Q47-用-LLM-搭建的分类系统，哪些指标最重要？" class="headerlink" title="Q47. 用 LLM 搭建的分类系统，哪些指标最重要？"></a>Q47. 用 LLM 搭建的分类系统，哪些指标最重要？</h3><p><strong>答。</strong> <strong>准确率</strong>可以是起点，但<strong>精确率、召回率、F1、混淆矩阵与校准</strong>往往信息量更大。在<strong>不平衡</strong>场景下，<strong>宏平均 F1</strong>或<strong>逐类召回</strong>可能比<strong>总体准确率</strong>重要得多。对<strong>人工复核</strong>工作流，你可能还关心<strong>弃权率</strong>与<strong>复核员推翻率</strong>。</p>
+<p>资深候选人会把指标<strong>连到业务风险</strong>：若<strong>假阴性</strong>代价高，就优化<strong>召回</strong>；若<strong>假阳性</strong>会触发繁重人工审核，就优化<strong>精确率</strong>。<strong>最好的指标</strong>是与<strong>犯错成本</strong>对齐的那一个。</p>
+<hr>
+<h3 id="Q48-如何估计-LLM-分类器的置信度？"><a href="#Q48-如何估计-LLM-分类器的置信度？" class="headerlink" title="Q48. 如何估计 LLM 分类器的置信度？"></a>Q48. 如何估计 LLM 分类器的置信度？</h3><p><strong>答。</strong> 可通过<strong>受约束的标签概率</strong>、<strong>自洽性（self-consistency）检查</strong>、<strong>二级模型</strong>、<strong>校准集</strong>，或<strong>多种提示变体之间的一致性</strong>来估计。<strong>模型口头说的「我很自信」<strong>不足以作为</strong>唯一</strong>置信信号。</p>
+<p>好的面试回答是：只要可能，置信度应<strong>在外部</strong>度量。生产系统常把<strong>模型分数</strong>、<strong>检索证据</strong>、<strong>模式合法性</strong>与<strong>历史错误模式</strong>组合起来，决定是<strong>自动路由</strong>还是<strong>升级人工复核</strong>。</p>
+<hr>
+<h3 id="Q49-分类流水线何时应包含人工参与（human-in-the-loop）？"><a href="#Q49-分类流水线何时应包含人工参与（human-in-the-loop）？" class="headerlink" title="Q49. 分类流水线何时应包含人工参与（human in the loop）？"></a>Q49. 分类流水线何时应包含人工参与（human in the loop）？</h3><p><strong>答。</strong> 当决策<strong>影响大</strong>、<strong>模糊</strong>、<strong>新颖</strong>或<strong>合规敏感</strong>时，适合人工复核。当模型<strong>置信度低</strong>、证据<strong>冲突</strong>，或某些类<strong>经常被混淆</strong>时也有用。来自这些案例的人工反馈，往往能成为最有价值的<strong>训练与评测数据</strong>。</p>
+<p>面试里应把人工复核当成<strong>提高精度的手段</strong>，而不是系统<strong>软弱</strong>的标志。成熟设计会<strong>自动处理简单案例</strong>，把稀缺的复核资源留给<strong>最能降低风险</strong>的样本。</p>
+<hr>
+<h3 id="Q50-LLM-分类系统在生产里常见的失效模式有哪些？"><a href="#Q50-LLM-分类系统在生产里常见的失效模式有哪些？" class="headerlink" title="Q50. LLM 分类系统在生产里常见的失效模式有哪些？"></a>Q50. LLM 分类系统在生产里常见的失效模式有哪些？</h3><p><strong>答。</strong> 常见失败包括：分类法改动后的<strong>标签漂移</strong>、提示<strong>脆弱</strong>、<strong>隐性格式错误</strong>、对<strong>少数类</strong>处理不佳，以及在<strong>模糊输入</strong>上的<strong>虚假自信</strong>。另一类常见问题是：上游<strong>检索</strong>或<strong>预处理</strong>改变了分类器实际看到的输入时，出现<strong>静默退化</strong>。</p>
+<p>最强回答是<strong>系统级</strong>的：分类质量取决于<strong>提示</strong>、<strong>数据定义</strong>、<strong>评测集</strong>、<strong>路由策略</strong>与<strong>复核闭环</strong>。若你只盯着一个<strong>准确率数字</strong>，就会错过系统<strong>真正</strong>成败的原因。</p>
+<hr>
+<p><em>截图页码与 PDF 阅读器页码可能差 1；均以原书页脚「Language Models Interview Handbook / Lamhot Siagian」版面为准。</em></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+              <a href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag"><i class="fa fa-tag"></i> 翻译</a>
+              <a href="/tags/%E5%88%86%E7%B1%BB/" rel="tag"><i class="fa fa-tag"></i> 分类</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC5%E7%AB%A0-%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9B%AE%E6%A0%87%E4%B8%8E%E6%A8%A1%E5%9E%8B%E5%AE%B6%E6%97%8F-%E5%85%A8%E8%AF%91%E6%96%87/" rel="prev" title="《LLM Interview Handbook》第 5 章：预训练目标、模型家族与经典对照（全译文）">
+                  <i class="fa fa-angle-left"></i> 《LLM Interview Handbook》第 5 章：预训练目标、模型家族与经典对照（全译文）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC7%E7%AB%A0-%E4%B8%BB%E9%A2%98%E5%BB%BA%E6%A8%A1%E4%B8%8E%E8%81%9A%E7%B1%BB-%E5%85%A8%E8%AF%91%E6%96%87/" rel="next" title="《LLM Interview Handbook》第 7 章：主题建模与聚类（全译文）">
+                  《LLM Interview Handbook》第 7 章：主题建模与聚类（全译文） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

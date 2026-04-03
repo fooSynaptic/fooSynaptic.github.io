@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340">
+  <title>Ch5 global search for knights</title>
+  <rect width="900" height="340" fill="#0a192f"/>
+  <ellipse cx="450" cy="200" rx="300" ry="140" fill="none" stroke="#233554" stroke-width="1.5"/>
+  <ellipse cx="450" cy="200" rx="220" ry="100" fill="none" stroke="#304878" stroke-width="1"/>
+  <circle cx="280" cy="160" r="6" fill="#64ffda"/><circle cx="520" cy="130" r="6" fill="#64ffda"/>
+  <circle cx="650" cy="200" r="6" fill="#64ffda"/><circle cx="380" cy="240" r="6" fill="#64ffda"/>
+  <circle cx="200" cy="220" r="5" fill="#ffd700"/><circle cx="600" cy="170" r="5" fill="#ffd700"/>
+  <path d="M450,60 L450,110" stroke="#8892b0" stroke-width="1"/><path d="M450,280 L450,320" stroke="#8892b0" stroke-width="1"/>
+  <text x="450" y="50" text-anchor="middle" font-family="monospace" font-size="12" fill="#ccd6f6">SCAN :: latent_signals</text>
+  <text x="450" y="330" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#8892b0">Ch.5 Knight alliance</text>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200" role="img">
+  <title>B-Tree 示意</title>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .box { fill: #fff; stroke: #475569; stroke-width: 1.2; }
+      .k { font: 500 13px ui-monospace,Menlo,monospace; fill: #1e293b; }
+      .note { font: 500 11px system-ui,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; fill: #64748b; }
+      .br { stroke: #94a3b8; stroke-width: 1.2; fill: none; }
+    ]]></style>
+  </defs>
+  <rect class="box" x="258" y="14" width="124" height="36" rx="3"/>
+  <text class="k" x="320" y="36" text-anchor="middle">[30, 70]</text>
+  <text class="note" x="320" y="10" text-anchor="middle">根节点</text>
+  <path class="br" d="M 290 50 L 118 90 M 320 50 L 320 90 M 350 50 L 522 90"/>
+  <rect class="box" x="56" y="94" width="124" height="32" rx="3"/>
+  <text class="k" x="118" y="114" text-anchor="middle">[10, 20]</text>
+  <rect class="box" x="258" y="94" width="124" height="32" rx="3"/>
+  <text class="k" x="320" y="114" text-anchor="middle">[40, 50, 60]</text>
+  <rect class="box" x="460" y="94" width="124" height="32" rx="3"/>
+  <text class="k" x="522" y="114" text-anchor="middle">[80, 90]</text>
+  <text class="note" x="118" y="88" text-anchor="middle">内部节点</text>
+  <text class="note" x="320" y="88" text-anchor="middle">内部节点</text>
+  <text class="note" x="522" y="88" text-anchor="middle">内部节点</text>
+  <text class="note" x="320" y="178" text-anchor="middle">叶子节点（包含实际数据或指向数据的指针）</text>
+</svg>

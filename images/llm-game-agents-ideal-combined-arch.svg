@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" width="640" height="340" role="img" aria-labelledby="t">
+  <title id="t">理想智能体组合架构</title>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="8" y="8" width="624" height="324" rx="6"/>
+  <text x="320" y="34" text-anchor="middle" fill="#0f172a" font-size="15" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">理想智能体架构（组合）</text>
+  <line x1="8" y1="44" x2="632" y2="44" stroke="#64748b" stroke-width="1.2"/>
+  <rect fill="#fff" stroke="#334155" x="40" y="56" width="560" height="78" rx="4"/>
+  <text x="320" y="78" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Generative Agents 的记忆流</text>
+  <text x="320" y="98" text-anchor="middle" fill="#475569" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">完整经历记录 · 多层次反思 ·社交关系追踪</text>
+  <text x="320" y="122" text-anchor="middle" fill="#b45309" font-size="18" font-weight="bold" font-family="sans-serif">+</text>
+  <rect fill="#fff" stroke="#334155" x="40" y="132" width="560" height="78" rx="4"/>
+  <text x="320" y="154" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">ReAct 的推理–行动范式</text>
+  <text x="320" y="174" text-anchor="middle" fill="#475569" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">思想与动作交替 · 与外部环境交互 · 减少幻觉</text>
+  <text x="320" y="198" text-anchor="middle" fill="#b45309" font-size="18" font-weight="bold" font-family="sans-serif">+</text>
+  <rect fill="#fff" stroke="#334155" x="40" y="208" width="560" height="78" rx="4"/>
+  <text x="320" y="230" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Reflexion 的失败反思</text>
+  <text x="320" y="250" text-anchor="middle" fill="#475569" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">失败经验语言化 · 错误诊断与改进建议 · 跨尝试学习</text>
+  <text x="320" y="308" text-anchor="middle" fill="#64748b" font-size="10" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">组合：记忆 + ReAct 行动 + Reflexion 从错误中学习</text>
+</svg>

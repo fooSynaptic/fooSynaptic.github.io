@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" width="640" height="320" role="img">
+  <title>数据模型选择流程</title>
+  <desc>关系复杂度与多对多、树状结构分支</desc>
+  <defs>
+    <style type="text/css"><![CDATA[
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 1.2; }
+      .lbl { font: 500 12px system-ui,"PingFang SC","Microsoft YaHei",sans-serif; fill: #1e293b; }
+      .edge { stroke: #64748b; stroke-width: 1.2; fill: none; }
+      .tag { font: 500 11px system-ui,sans-serif; fill: #475569; }
+      .end { fill: #ecfdf5; stroke: #047857; stroke-width: 1.2; }
+    ]]></style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748b"/></marker>
+  </defs>
+  <rect class="box" x="220" y="12" width="200" height="44" rx="4"/>
+  <text class="lbl" x="320" y="38" text-anchor="middle">数据关系复杂吗？</text>
+  <text class="tag" x="140" y="82" text-anchor="middle">复杂</text>
+  <text class="tag" x="500" y="82" text-anchor="middle">简单</text>
+  <path class="edge" marker-end="url(#arr)" d="M 280 56 L 160 100"/>
+  <path class="edge" marker-end="url(#arr)" d="M 360 56 L 480 100"/>
+  <rect class="box" x="80" y="100" width="160" height="40" rx="4"/>
+  <text class="lbl" x="160" y="124" text-anchor="middle">多对多关系？</text>
+  <rect class="box" x="400" y="100" width="160" height="40" rx="4"/>
+  <text class="lbl" x="480" y="124" text-anchor="middle">树状/层次结构？</text>
+  <text class="tag" x="100" y="168">是</text>
+  <text class="tag" x="220" y="168">否</text>
+  <text class="tag" x="420" y="168">是</text>
+  <text class="tag" x="540" y="168">否</text>
+  <path class="edge" marker-end="url(#arr)" d="M 120 140 L 80 188"/>
+  <path class="edge" marker-end="url(#arr)" d="M 200 140 L 200 188"/>
+  <path class="edge" marker-end="url(#arr)" d="M 440 140 L 440 188"/>
+  <path class="edge" marker-end="url(#arr)" d="M 520 140 L 600 188"/>
+  <rect class="end" x="40" y="188" width="80" height="36" rx="3"/>
+  <text class="lbl" x="80" y="210" text-anchor="middle">图模型</text>
+  <rect class="end" x="160" y="188" width="80" height="36" rx="3"/>
+  <text class="lbl" x="200" y="210" text-anchor="middle">关系模型</text>
+  <rect class="end" x="400" y="188" width="80" height="36" rx="3"/>
+  <text class="lbl" x="440" y="210" text-anchor="middle">文档模型</text>
+  <rect class="end" x="560" y="188" width="80" height="36" rx="3"/>
+  <text class="lbl" x="600" y="210" text-anchor="middle">关系模型</text>
+  <text class="tag" x="320" y="280" text-anchor="middle">示意：DDIA 数据模型选择</text>
+</svg>

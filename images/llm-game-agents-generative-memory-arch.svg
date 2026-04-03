@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 320" width="560" height="320" role="img" aria-labelledby="t">
+  <title id="t">Generative Agents 记忆流与行为生成</title>
+  <defs>
+    <marker id="ad" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="8" y="8" width="544" height="304" rx="6"/>
+  <rect fill="#cbd5e1" stroke="#475569" stroke-width="1.5" x="24" y="28" width="512" height="78" rx="4"/>
+  <text x="280" y="52" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">记忆流（Memory Stream）</text>
+  <rect fill="#fff" stroke="#334155" x="36" y="62" width="150" height="36" rx="3"/>
+  <text x="111" y="84" text-anchor="middle" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">观察 Observations</text>
+  <rect fill="#fff" stroke="#334155" x="205" y="62" width="150" height="36" rx="3"/>
+  <text x="280" y="84" text-anchor="middle" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">反思 Reflections</text>
+  <rect fill="#fff" stroke="#334155" x="374" y="62" width="150" height="36" rx="3"/>
+  <text x="449" y="84" text-anchor="middle" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">计划 Plans</text>
+  <line x1="280" y1="106" x2="280" y2="132" stroke="#334155" stroke-width="2" marker-end="url(#ad)"/>
+  <rect fill="#fff" stroke="#334155" x="100" y="136" width="360" height="56" rx="4"/>
+  <text x="280" y="158" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">记忆检索</text>
+  <text x="280" y="178" text-anchor="middle" fill="#475569" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">时近性 + 重要性 + 盨关性</text>
+  <line x1="280" y1="192" x2="280" y2="218" stroke="#334155" stroke-width="2" marker-end="url(#ad)"/>
+  <rect fill="#fff" stroke="#334155" x="100" y="222" width="360" height="52" rx="4"/>
+  <text x="280" y="244" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">行为生成</text>
+  <text x="280" y="262" text-anchor="middle" fill="#475569" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">Plan, React, Dialogue</text>
+</svg>

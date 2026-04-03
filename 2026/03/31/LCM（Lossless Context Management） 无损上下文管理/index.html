@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="摘要LCM（Lossless Context Management）是一套面向大模型的确定性上下文管理思路：一旦对话逼近上下文上限，我的目标不是删消息，而是把历史收成一棵分层摘要 DAG，同时把所有原始消息落在可查询的存储里（实现上常用 SQLite 这类嵌入式库）。这样做的直接结果，是送进模型的窗口看起来变短了，但只要沿着 DAG 展开，我仍能无损回到任意一条原文——压缩只发生在「给模型看的那一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LCM（Lossless Context Management）无损上下文管理">
+<meta property="og:url" content="https://foosynaptic.github.io/2026/03/31/LCM%EF%BC%88Lossless%20Context%20Management%EF%BC%89%20%E6%97%A0%E6%8D%9F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="摘要LCM（Lossless Context Management）是一套面向大模型的确定性上下文管理思路：一旦对话逼近上下文上限，我的目标不是删消息，而是把历史收成一棵分层摘要 DAG，同时把所有原始消息落在可查询的存储里（实现上常用 SQLite 这类嵌入式库）。这样做的直接结果，是送进模型的窗口看起来变短了，但只要沿着 DAG 展开，我仍能无损回到任意一条原文——压缩只发生在「给模型看的那一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-45.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-75.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-81.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-87.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-93.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-95.jpeg">
+<meta property="og:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-101.jpeg">
+<meta property="article:published_time" content="2026-03-30T22:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T03:49:20.591Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="LCM">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="上下文管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foosynaptic.github.io/images/lcm-lossless-context-management/lcm-img-xref-45.jpeg">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/2026/03/31/LCM%EF%BC%88Lossless%20Context%20Management%EF%BC%89%20%E6%97%A0%E6%8D%9F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://foosynaptic.github.io/2026/03/31/LCM%EF%BC%88Lossless%20Context%20Management%EF%BC%89%20%E6%97%A0%E6%8D%9F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/","path":"2026/03/31/LCM（Lossless Context Management） 无损上下文管理/","title":"LCM（Lossless Context Management）无损上下文管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LCM（Lossless Context Management）无损上下文管理 | fooSynaptic</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8D%A2%E6%8E%89%E3%80%8C%E9%98%88%E5%80%BC%E4%B8%80%E5%88%B0%E5%B0%B1%E6%95%B4%E6%AE%B5%E6%91%98%E8%A6%81%E3%80%8D"><span class="nav-number">2.</span> <span class="nav-text">为什么要换掉「阈值一到就整段摘要」</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%80%BB%E4%BD%93%E5%8F%96%E8%88%8D%EF%BC%9A%E5%88%86%E5%B1%82%E5%8E%8B%E7%BC%A9-%E6%BA%90%E6%95%B0%E6%8D%AE%E6%B0%B8%E8%BF%9C%E5%9C%A8%E5%BA%93%E9%87%8C"><span class="nav-number">3.</span> <span class="nav-text">我的总体取舍：分层压缩 + 源数据永远在库里</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E9%B2%9C%E5%B0%BE%E9%83%A8%EF%BC%88Fresh-Tail%EF%BC%89%EF%BC%9A%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9D%9A%E6%8C%81%E7%95%99%E4%B8%80%E6%88%AA%E6%B0%B8%E8%BF%9C%E4%B8%8D%E5%8E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">新鲜尾部（Fresh Tail）：我为什么坚持留一截永远不压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E9%87%8F%E5%8E%8B%E7%BC%A9%EF%BC%88%E6%B7%B1%E5%BA%A6-0%EF%BC%89%EF%BC%9A%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E7%BB%93%E6%9E%84%E5%8C%96%E6%8F%90%E7%A4%BA%E3%80%81%E5%8F%88%E4%B8%BA%E4%BB%80%E4%B9%88%E7%95%99%E9%92%A9%E5%AD%90"><span class="nav-number">3.2.</span> <span class="nav-text">增量压缩（深度 0）：我为什么用结构化提示、又为什么留钩子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%9D%E8%81%9A%EF%BC%88Condensation%EF%BC%89%E4%B8%8E%E5%A4%9A%E6%B7%B1%E5%BA%A6%EF%BC%9A%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%88%E8%A6%81%E3%80%8C%E5%86%8D%E6%91%98%E8%A6%81%E4%B8%80%E5%B1%82%E3%80%8D"><span class="nav-number">3.3.</span> <span class="nav-text">凝聚（Condensation）与多深度：我为什么又要「再摘要一层」</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB-Agent-%E4%B8%8E-DAG%EF%BC%9A%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%85%E9%A1%BB%E4%B8%8A%E5%AD%90-Agent%E3%80%81%E8%BF%98%E5%BF%85%E9%A1%BB%E9%99%90%E9%A2%84%E7%AE%97"><span class="nav-number">3.4.</span> <span class="nav-text">主 Agent 与 DAG：我为什么必须上子 Agent、还必须限预算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">75</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2026/03/31/LCM%EF%BC%88Lossless%20Context%20Management%EF%BC%89%20%E6%97%A0%E6%8D%9F%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/jojo_median.ico">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LCM（Lossless Context Management）无损上下文管理 | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LCM（Lossless Context Management）无损上下文管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-31 06:00:00" itemprop="dateCreated datePublished" datetime="2026-03-31T06:00:00+08:00">2026-03-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p><strong>LCM（Lossless Context Management）<strong>是一套面向大模型的</strong>确定性上下文管理</strong>思路：一旦对话逼近上下文上限，我的目标<strong>不是删消息</strong>，而是把历史收成一棵<strong>分层摘要 DAG</strong>，同时把所有<strong>原始消息</strong>落在可查询的存储里（实现上常用 <strong>SQLite</strong> 这类嵌入式库）。这样做的直接结果，是送进模型的窗口<strong>看起来变短了</strong>，但只要沿着 DAG 展开，我仍能<strong>无损</strong>回到任意一条原文——压缩只发生在「给模型看的那一层」，不发生「从事实层抹掉证据」。</p>
+<hr>
+<h2 id="为什么要换掉「阈值一到就整段摘要」"><a href="#为什么要换掉「阈值一到就整段摘要」" class="headerlink" title="为什么要换掉「阈值一到就整段摘要」"></a>为什么要换掉「阈值一到就整段摘要」</h2><p>长对话里，我能用的 <strong>token budget</strong> 是硬顶；还要<strong>预留余量</strong>，否则模型没有空间现场写摘要。常见做法是：用量爬升到大约 <strong>80%</strong> 预算就触发一次<strong>大段批量摘要</strong>，把尽量多的旧消息揉成<strong>一条扁平摘要</strong>，换出窗口空间。</p>
+<p>我介意这种做法，主要因为它在<strong>工程上省窗口，在事实与可控性上亏本</strong>：</p>
+<ul>
+<li>摘要往往要 <strong>1～2 分钟</strong>才能跑完，期间用户体验和时序都很难编排；</li>
+<li><strong>扁平</strong>之后，<strong>结构</strong>和<strong>细粒度</strong>一起消失，模型后面容易<strong>记串</strong>、<strong>和早先决策打架</strong>、<strong>反复问已经说清的事</strong>；</li>
+<li>一旦细节被摘要「覆盖」，我很难再问<strong>压缩前到底写了什么</strong>——<strong>可追溯性</strong>断了。</li>
+</ul>
+<p>所以我在对比 LCM 时，心里始终有一条标准：<strong>省 token 可以，但不能以「永久丢证据」为代价。</strong></p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-45.jpeg" alt="传统路径：超阈值后批量摘要 → 细节难以恢复（示意图）"></p>
+<p><em>对照意图：下面一行是「预算触顶 → 整坨摘要 → 细节难复原」；上面是 token 压力随轮次累积的过程。</em></p>
+<hr>
+<h2 id="我的总体取舍：分层压缩-源数据永远在库里"><a href="#我的总体取舍：分层压缩-源数据永远在库里" class="headerlink" title="我的总体取舍：分层压缩 + 源数据永远在库里"></a>我的总体取舍：分层压缩 + 源数据永远在库里</h2><p>拉长对话时，我仍要面对同一件事：<strong>token 只会越来越多</strong>。差异在于接近上限时，我<strong>不截断、不物理删</strong>，而是：</p>
+<ol>
+<li>把更早的内容收成<strong>摘要节点</strong>，并显式挂上<strong>指向源消息的引用</strong>；</li>
+<li><strong>摘要可以多层</strong>（更像树/DAG），越往上越「提纲」化；</li>
+<li><strong>库里</strong>始终保存全量原文；模型窗口里出现的，只是<strong>当前最合适的投影</strong>。</li>
+</ol>
+<p>这样一来，「给模型看的上下文」和「我手下掌握的全部事实」是<strong>分开的两层</strong>：前者要短，后者要全。</p>
+<hr>
+<h3 id="新鲜尾部（Fresh-Tail）：我为什么坚持留一截永远不压"><a href="#新鲜尾部（Fresh-Tail）：我为什么坚持留一截永远不压" class="headerlink" title="新鲜尾部（Fresh Tail）：我为什么坚持留一截永远不压"></a>新鲜尾部（Fresh Tail）：我为什么坚持留一截永远不压</h3><p>我刻意让<strong>最近若干轮原始消息</strong>始终完整进窗——这是我说的<strong>新鲜尾部</strong>。原因很简单：<strong>当前话题的指代、半句没说完的约束、刚改过的参数</strong>，几乎都挤在这一段；一旦把「刚才」也压进摘要，我立刻付出<strong>交互断层</strong>和<strong>反复确认成本</strong>。</p>
+<p>具体参数可以按产品调，例如让最近 <strong>32</strong> 条不参与压缩（<code>LCM_FRESH_TAIL_COUNT=32</code>），并用 <strong>TOP TOKEN BAR</strong> 一类 UI 持续盯住已用量；何时动手压缩，我用 <strong>~75%</strong> 预算之类阈值提前预警（<code>LCM_CONTEXT_THRESHOLD</code>），避免撞墙才慌。</p>
+<p>当「尾部以外的、仍原样躺在窗口里的旧消息」合计超过大约 <strong>2000 token</strong> 这一档，我就触发<strong>增量压缩</strong>——而且我会让它<strong>异步</strong>跑：<strong>不把用户卡在压缩完成</strong>，因为体验上压缩是后台家务，对话是前台主线。</p>
+<p>源消息已经<strong>落库</strong>时，我更放心：压缩动的是<strong>摘要节点与呈现关系</strong>，不是在数据库里 <code>DELETE</code> 对话——这也是「lossless」在我这儿的第一层含义：<strong>存储层不丢行。</strong></p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-75.jpeg" alt="新鲜尾部、阈值条与「尾部外存量超阈则异步增量压缩」（示意图）"></p>
+<hr>
+<h3 id="增量压缩（深度-0）：我为什么用结构化提示、又为什么留钩子"><a href="#增量压缩（深度-0）：我为什么用结构化提示、又为什么留钩子" class="headerlink" title="增量压缩（深度 0）：我为什么用结构化提示、又为什么留钩子"></a>增量压缩（深度 0）：我为什么用结构化提示、又为什么留钩子</h3><p>满足规则的一批旧消息，会带着<strong>结构化压缩提示</strong>进模型；出来的是<strong>深度 0</strong>摘要。我让摘要去<strong>替换</strong>窗口里那一段的「展开前视图」，但在 DAG 里<strong>边不拆</strong>：指向源消息的引用还在，后面用工具或子 Agent 还能<strong>按需展开</strong>。</p>
+<p>深度 0 的提示我偏向明确几件事，都是为<strong>后面的轮次</strong>服务：</p>
+<ul>
+<li>留住<strong>决策、理由、约束、进行中的任务</strong>——这是后面推理真正要继承的状态；</li>
+<li>清掉重复与寒暄——否则浪费后续每一枪的 token；</li>
+<li>结尾留一句「若要细节可展开某某块」式的<strong>导航线索</strong>，让检索不必盲搜。</li>
+</ul>
+<p>如果不留引用与钩子，我就又回到「摘要一盖，考古只能靠猜」的老路。</p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-81.jpeg" alt="增量压缩：消息块 + 结构化提示 → LLM → 深度 0 节点（示意图）"></p>
+<p><em>关系说明：被选中块经深度 0 变成摘要节点；源消息仍在库里，主对话继续在更短的上下文中推进。</em></p>
+<hr>
+<h3 id="凝聚（Condensation）与多深度：我为什么又要「再摘要一层」"><a href="#凝聚（Condensation）与多深度：我为什么又要「再摘要一层」" class="headerlink" title="凝聚（Condensation）与多深度：我为什么又要「再摘要一层」"></a>凝聚（Condensation）与多深度：我为什么又要「再摘要一层」</h3><p>同一<strong>深度</strong>上摘要节点攒到足够多的话（例如<strong>4</strong>个一组），我会做<strong>凝聚</strong>：把几个兄弟摘要再提成<strong>更高一层</strong>的父节点。父层用的提示必须<strong>不同于</strong>深度 0——因为输入已经是摘要而非原文，我要它抓<strong>脉络</strong>而不是复述碎碎念：决策结果、阻塞点、仍在跑的任务线，以及带时间戳的<strong>关键事件轴</strong>。</p>
+<p>时间尺度上我通常这样理解各层职责（也可用<strong>分钟 / 小时 / 天 / 月</strong>去直觉对齐「越往上，覆盖越长」）：</p>
+<ul>
+<li><strong>深度 0</strong>：尽量保留<strong>可执行的细节</strong>与<strong>为什么这样定</strong>；</li>
+<li><strong>深度 1</strong>：讲清<strong>怎么演变到现在</strong>、当前卡在哪；</li>
+<li><strong>深度 2</strong>：收<strong>长期仍有效的承诺与里程碑</strong>，希望<strong>数周</strong>后回头看还能当地图用。</li>
+</ul>
+<p>没有分层的话，要么摘要太短兜不住长历史，要么一长串摘要又把窗口撑爆——<strong>多层</strong>本质是在<strong>信息密度</strong>和<strong>可导航性</strong>之间再做一次折中。</p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-87.jpeg" alt="凝聚与分层：多深度节点与时间跨度直觉（示意图）"></p>
+<p>当 DAG 已经很大时，我喂给「主对话模型」的仍是一条<strong>短主线拼新鲜尾部</strong>；库里没有消息被删掉，它们只是不再默认<strong>全部摊在面上</strong>。</p>
+<hr>
+<h3 id="主-Agent-与-DAG：我为什么必须上子-Agent、还必须限预算"><a href="#主-Agent-与-DAG：我为什么必须上子-Agent、还必须限预算" class="headerlink" title="主 Agent 与 DAG：我为什么必须上子 Agent、还必须限预算"></a>主 Agent 与 DAG：我为什么必须上子 Agent、还必须限预算</h3><p>一个<strong>深度 2</strong>节点背后，动辄<strong>上万 token</strong>原文。若我为了回答用户一句追问，就把整条子树塞回<strong>主 Agent</strong>，等于<strong>自杀式胀窗</strong>，马上触发下一轮压缩——这和我的目标相反。</p>
+<p>所以我把「在图里走路」交给<strong>子 Agent</strong>，并给它<strong>隔离上下文</strong>：它可以在例如 <strong>~20k token</strong> 的可探索子树上规划路径，但用 <strong><code>describe → 有选择 expand</code></strong> 的方式，把<strong>真正进上下文的量</strong>压在<strong>几百到一千 token</strong>这一档，<strong>主 Agent 宽度不变</strong>，却能从很久以前的轮次里<strong>抠出原句级细节</strong>。</p>
+<p>我依赖的几件工具，分工是：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>我为什么要它</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>lcm_describe</code></td>
+<td>先摸清子树「摘要侧多大、源侧多大、有哪些子节点」，<strong>再决定</strong>从哪下刀，避免盲展开。</td>
+</tr>
+<tr>
+<td><code>lcm_grep</code></td>
+<td>在<strong>各层节点</strong>里关键词命中，结果带<strong>深度</strong>，我知道该往抽象层还是往叶子挖。</td>
+</tr>
+<tr>
+<td><code>lcm_expand</code> / <code>lcm_expand_query</code></td>
+<td>需要证据链时，用<strong>委托授权</strong>之类机制派出子 Agent，在<strong>硬预算</strong>内做<strong>策略性遍历</strong>。</td>
+</tr>
+</tbody></table>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-93.jpeg" alt="`lcm_describe`：调用与返回字段（示意图）"></p>
+<p>子Agent侧我会给足 <strong><code>lcm_describe</code> / <code>lcm_expand</code></strong>，但把 <strong>token 预算</strong>（例如 <strong>4000</strong>）和 <strong>TTL</strong> 卡死：先看图，再只展开最相关子树。典型情况是：可探索范围量级在 <strong>~20k token</strong>，实际吃进模型的可以压到 <strong>800 token</strong> 以下——<strong>主上下文不动</strong>，远端细节却仍能<strong>对齐回来</strong>。</p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-95.jpeg" alt="子 Agent：有界预算下遍历 DAG（示意图）"></p>
+<p><img src="/images/lcm-lossless-context-management/lcm-img-xref-101.jpeg" alt="探索范围 vs 实际 token 消耗对照（示意图）"></p>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>我是在「<strong>上下文必须短</strong>」和「<strong>事实必须可追溯</strong>」之间搭一座桥：<strong>推理</strong>仍交给 LLM，<strong>骨架与记忆</strong>由分层 DAG、持久原文和一套<strong>有界检索</strong>工具一起扛。这样我才能既要产品上的响应与成本，又要工程上的可审计与可回滚。</p>
+<hr>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li>论文/技术页：<a target="_blank" rel="noopener" href="https://papers.voltropy.com/LCM">https://papers.voltropy.com/LCM</a>  </li>
+<li>开源实现：<a target="_blank" rel="noopener" href="https://github.com/martian-engineering/lossless-claw">https://github.com/martian-engineering/lossless-claw</a>  </li>
+<li>站点：<a target="_blank" rel="noopener" href="https://losslesscontext.ai/">https://losslesscontext.ai</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+              <a href="/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/" rel="tag"><i class="fa fa-tag"></i> 上下文管理</a>
+              <a href="/tags/LCM/" rel="tag"><i class="fa fa-tag"></i> LCM</a>
+              <a href="/tags/Agent/" rel="tag"><i class="fa fa-tag"></i> Agent</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/31/Palantir%EF%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%AA%A8%E6%9E%B6/" rel="prev" title="Palantir：大模型的骨架">
+                  <i class="fa fa-angle-left"></i> Palantir：大模型的骨架
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/04/03/LLM-Interview-Handbook-%E7%AC%AC2%E7%AB%A0-Token%E5%88%86%E8%AF%8D%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3-%E5%85%A8%E8%AF%91%E6%96%87/" rel="next" title="《LLM Interview Handbook》第 2 章：Token、分词与上下文窗口（全译文）">
+                  《LLM Interview Handbook》第 2 章：Token、分词与上下文窗口（全译文） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

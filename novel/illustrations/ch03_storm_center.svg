@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300">
+  <title>Ch3 storm center growth curve</title>
+  <rect width="900" height="300" fill="#0f172a"/>
+  <line x1="80" y1="240" x2="820" y2="240" stroke="#334155" stroke-width="2"/>
+  <line x1="80" y1="240" x2="80" y2="60" stroke="#334155" stroke-width="2"/>
+  <polyline points="80,220 200,200 340,170 500,120 700,80 820,55" fill="none" stroke="#38bdf8" stroke-width="3"/>
+  <text x="450" y="45" text-anchor="middle" font-family="monospace" font-size="12" fill="#94a3b8">stars / invites / noise</text>
+  <text x="450" y="285" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">Ch.3 Eye of storm</text>
+</svg>

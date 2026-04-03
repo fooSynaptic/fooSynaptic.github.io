@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" width="720" height="200" role="img" aria-labelledby="t">
+  <title id="t">反思树示意</title>
+  <rect fill="#e2e8f0" stroke="#334155" stroke-width="2" x="6" y="6" width="708" height="188" rx="6"/>
+  <text x="360" y="28" text-anchor="middle" fill="#0f172a" font-size="14" font-weight="bold" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">反思树（叶=观察，枝=反思）</text>
+  <g stroke="#475569" stroke-width="1.5" fill="none">
+    <line x1="360" y1="36" x2="240" y2="78"/><line x1="360" y1="36" x2="480" y2="78"/>
+    <line x1="240" y1="106" x2="160" y2="148"/><line x1="240" y1="106" x2="280" y2="148"/>
+    <line x1="480" y1="106" x2="400" y2="148"/><line x1="480" y1="106" x2="560" y2="148"/>
+  </g>
+  <g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif" font-size="10" fill="#0f172a">
+    <rect fill="#f1f5f9" stroke="#334155" x="240" y="40" width="240" height="28" rx="3"/>
+    <text x="360" y="58" text-anchor="middle">Klaus 对研究充满热情（元反思）</text>
+    <rect fill="#fff" stroke="#334155" x="120" y="78" width="240" height="28" rx="3"/>
+    <text x="240" y="96" text-anchor="middle">Klaus 致力于研究</text>
+    <rect fill="#fff" stroke="#334155" x="380" y="78" width="240" height="28" rx="3"/>
+    <text x="500" y="96" text-anchor="middle">Klaus 和 Maria 有共同兴趣</text>
+    <rect fill="#fff" stroke="#334155" x="48" y="148" width="88" height="26" rx="3"/><text x="92" y="165" text-anchor="middle">写论文</text>
+    <rect fill="#fff" stroke="#334155" x="156" y="148" width="88" height="26" rx="3"/><text x="200" y="165" text-anchor="middle">读书</text>
+    <rect fill="#fff" stroke="#334155" x="264" y="148" width="88" height="26" rx="3"/><text x="308" y="165" text-anchor="middle">讨论项目</text>
+    <rect fill="#fff" stroke="#334155" x="372" y="148" width="112" height="26" rx="3"/><text x="428" y="165" text-anchor="middle">图书馆相遇</text>
+  </g>
+</svg>

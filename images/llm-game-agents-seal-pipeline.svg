@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 72" width="560" height="72" role="img">
+
+  <rect fill="#f1f5f9" stroke="#cbd5e1" x="4" y="8" width="552" height="52" rx="4"/>
+  <text x="280" y="40" text-anchor="middle" fill="#0f172a" font-size="11" font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">领域工作流程 → 仿真系统 → 自动生成数据 → 智能体进化</text>
+</svg>

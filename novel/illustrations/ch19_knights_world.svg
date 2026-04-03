@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
+  <title>Ch19 knights world</title>
+  <rect width="900" height="320" fill="#001219"/>
+  <circle cx="450" cy="160" r="120" fill="none" stroke="#94d2bd" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="280" cy="140" r="8" fill="#e9d8a6"/><circle cx="620" cy="130" r="8" fill="#e9d8a6"/>
+  <circle cx="520" cy="210" r="8" fill="#ee9b00"/><circle cx="380" cy="200" r="8" fill="#ee9b00"/>
+  <circle cx="450" cy="160" r="14" fill="#0a9396" stroke="#fff" stroke-width="2"/>
+  <text x="450" y="290" text-anchor="middle" font-family="monospace" font-size="12" fill="#94d2bd">Ch.19 Knights world map</text>
+</svg>
