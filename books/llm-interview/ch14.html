@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="说明底本为 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。   第 14 章　语言模型的优化与数学基础本章概述面试官经常用数学类问题检验候选人是否真正理解 Transformer 为何有效，而不是只会背系统设计词汇。目标很少是让你凭">
+<meta property="og:type" content="website">
+<meta property="og:title" content="《LLM Interview Handbook》第 14 章：语言模型的优化与数学基础（全译文）">
+<meta property="og:url" content="https://foosynaptic.github.io/books/llm-interview/ch14.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="说明底本为 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。   第 14 章　语言模型的优化与数学基础本章概述面试官经常用数学类问题检验候选人是否真正理解 Transformer 为何有效，而不是只会背系统设计词汇。目标很少是让你凭">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch14-p-097.png">
+<meta property="article:published_time" content="2026-04-03T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T13:38:41.491Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="优化">
+<meta property="article:tag" content="数学基础">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch14-p-097.png">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/books/llm-interview/ch14">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"https://foosynaptic.github.io/books/llm-interview/ch14.html","path":"books/llm-interview/ch14.html","title":"《LLM Interview Handbook》第 14 章：语言模型的优化与数学基础（全译文）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《LLM Interview Handbook》第 14 章：语言模型的优化与数学基础（全译文） | fooSynaptic
+</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-14-%E7%AB%A0-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BC%98%E5%8C%96%E4%B8%8E%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">第 14 章　语言模型的优化与数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-%E9%9D%A2%E8%AF%95%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　面试锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-%E9%9D%A2%E8%AF%95%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　面试速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88%E6%B2%BF%E7%94%A8%E4%B9%A6%E4%B8%AD%E7%BC%96%E5%8F%B7-Q122%E2%80%93Q131%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（沿用书中编号 Q122–Q131）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q122-softmax-%E5%9C%A8%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6%E9%87%8C%E5%A6%82%E4%BD%95%E8%A2%AB%E4%BD%BF%E7%94%A8%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q122. softmax 在注意力机制里如何被使用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q123-%E8%87%AA%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%87%8C%E4%B8%BA%E4%BD%95%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%82%B9%E7%A7%AF%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q123. 自注意力里为何会出现点积？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q124-%E4%B8%BA%E4%BD%95%E8%AF%AD%E8%A8%80%E5%BB%BA%E6%A8%A1%E7%9A%84%E6%A0%87%E5%87%86%E6%8D%9F%E5%A4%B1%E6%98%AF%E4%BA%A4%E5%8F%89%E7%86%B5%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q124. 为何语言建模的标准损失是交叉熵？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q125-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E5%B5%8C%E5%85%A5%E7%9A%84%E6%A2%AF%E5%BA%A6%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q125. 反向传播时，如何计算嵌入的梯度？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q126-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E9%87%8C%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q126. 深度学习里雅可比矩阵表示什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q127-%E7%89%B9%E5%BE%81%E5%80%BC%E4%B8%8E%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E5%A6%82%E4%BD%95%E4%B8%8E%E9%99%8D%E7%BB%B4%E7%9B%B8%E8%81%94%E7%B3%BB%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q127. 特征值与特征向量如何与降维相联系？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q128-%E4%BB%80%E4%B9%88%E6%98%AF-KL-%E6%95%A3%E5%BA%A6%EF%BC%8C%E5%9C%A8-LLM-%E8%AE%AD%E7%BB%83%E9%87%8C%E4%BD%95%E6%97%B6%E6%9C%89%E7%94%A8%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q128. 什么是 KL 散度，在 LLM 训练里何时有用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q129-%E4%B8%BA%E4%BD%95-ReLU-%E7%9A%84%E5%AF%BC%E6%95%B0%E5%9C%A8%E6%B7%B1%E5%B1%82%E7%BD%91%E7%BB%9C%E9%87%8C%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q129. 为何 ReLU 的导数在深层网络里重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q130-%E9%93%BE%E5%BC%8F%E6%B3%95%E5%88%99%E5%A6%82%E4%BD%95%E4%BD%BF%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%88%90%E4%B8%BA%E5%8F%AF%E8%83%BD%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q130. 链式法则如何使反向传播成为可能？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q131-%E6%AE%8B%E5%B7%AE%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%BD%92%E4%B8%80%E5%8C%96%E5%A6%82%E4%BD%95%E7%BC%93%E8%A7%A3%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q131. 残差连接与归一化如何缓解梯度消失？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">《LLM Interview Handbook》第 14 章：语言模型的优化与数学基础（全译文）
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/books/">BOOKS</a></li>
+            <li><a href="/books/llm-interview/">LLM面试书</a></li>
+            <li>CH14</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <blockquote>
+<p><strong>说明</strong><br>底本为 <em>Language Models Interview Handbook</em>（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。</p>
+</blockquote>
+<hr>
+<h2 id="第-14-章-语言模型的优化与数学基础"><a href="#第-14-章-语言模型的优化与数学基础" class="headerlink" title="第 14 章　语言模型的优化与数学基础"></a>第 14 章　语言模型的优化与数学基础</h2><h3 id="本章概述"><a href="#本章概述" class="headerlink" title="本章概述"></a>本章概述</h3><p>面试官经常用<strong>数学类问题</strong>检验候选人是否<strong>真正理解 Transformer 为何有效</strong>，而不是只会背<strong>系统设计</strong>词汇。目标很少是让你凭记忆推出每一个方程；更重要的是表明你理解<strong>注意力分数如何变成概率</strong>、<strong>梯度如何穿过嵌入表与线性层</strong>，以及为何 <strong>交叉熵</strong>、<strong>KL 散度</strong> 这类函数在训练流程里如此常见。</p>
+<p>本章聚焦在 LLM 工作中<strong>反复出现</strong>的那一小撮数学工具：<strong>softmax</strong>、<strong>点积</strong>、<strong>交叉熵</strong>、<strong>梯度</strong>、<strong>雅可比矩阵</strong>、<strong>特征值/特征向量分析</strong>、<strong>KL 散度</strong>，以及<strong>激活函数的导数</strong>。最强的回答会解释<strong>方程在操作上意味着什么</strong>，以及<strong>工程师为何要在意</strong>。</p>
+<hr>
+<h3 id="Interview-Anchor-面试锚点"><a href="#Interview-Anchor-面试锚点" class="headerlink" title="Interview Anchor　面试锚点"></a>Interview Anchor　面试锚点</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>面试官真正想测的</strong></td>
+<td>能否在讲清<strong>训练循环</strong>与<strong>优化选择</strong>时，不丢掉<strong>工程实务</strong>这条主线。</td>
+</tr>
+<tr>
+<td><strong>高质量回答套路</strong></td>
+<td>先定义<strong>数学对象</strong>，说明<strong>优化器在最小化什么</strong>，再把它连到<strong>硬件效率</strong>、<strong>稳定性</strong>与<strong>泛化</strong>。</td>
+</tr>
+<tr>
+<td><strong>常见低分答法</strong></td>
+<td>把答案变成<strong>孤立的公式</strong>，却不说它们在<strong>真实系统</strong>里为何重要。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="INTERVIEW-CHEATSHEET-面试速记条"><a href="#INTERVIEW-CHEATSHEET-面试速记条" class="headerlink" title="INTERVIEW CHEATSHEET　面试速记条"></a>INTERVIEW CHEATSHEET　面试速记条</h3><table>
+<thead>
+<tr>
+<th>项</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>要表达的亮点</strong></td>
+<td><strong>优化</strong>解释在算力约束下，模型参数如何从<strong>随机初始化</strong>走向<strong>有用行为</strong>。</td>
+</tr>
+<tr>
+<td><strong>最佳举例</strong></td>
+<td><strong>交叉熵</strong>、<strong>梯度</strong>、<strong>批量大小</strong>与<strong>学习率</strong>都重要，因为它们共同塑造<strong>稳定性</strong>与<strong>收敛速度</strong>。</td>
+</tr>
+<tr>
+<td><strong>可追问方向</strong></td>
+<td>提到<strong>梯度累积</strong>、<strong>优化器选择</strong>与<strong>混合精度</strong>。</td>
+</tr>
+<tr>
+<td><strong>资深补充</strong></td>
+<td>把数学层面的选择与<strong>服务成本</strong>、<strong>模型质量</strong>挂钩。</td>
+</tr>
+<tr>
+<td><strong>切忌这样说</strong></td>
+<td>只背方程，却不把它系到<strong>训练动态</strong>或<strong>失效模式</strong>。</td>
+</tr>
+</tbody></table>
+<hr>
+<p>下面的优化示意图把训练循环压缩为<strong>核心机制</strong>：让后文的数学讨论始终<strong>锚定在梯度流、损失信号与参数更新</strong>上，而不是飘在抽象公式里。</p>
+<p><strong>图 14.1</strong>（<em>A minimal forward-and-backward training view.</em>）：</p>
+<p><img src="/images/llm-interview-handbook/chapters/ch14-p-097.png" alt="图 14.1：极简的前向—反向训练视图"></p>
+<h3 id="What-Strong-Candidates-Sound-Like"><a href="#What-Strong-Candidates-Sound-Like" class="headerlink" title="What Strong Candidates Sound Like"></a>What Strong Candidates Sound Like</h3><blockquote>
+<p><strong>书里有一句可背的口述（译文）</strong>：「数学之所以重要，是因为<strong>每一个优化选择</strong>不仅影响训练损失，还影响<strong>稳定性</strong>、<strong>硬件效率</strong>，以及<strong>经济上能达到的质量水平</strong>。」</p>
+</blockquote>
+<hr>
+<h2 id="问答（沿用书中编号-Q122–Q131）"><a href="#问答（沿用书中编号-Q122–Q131）" class="headerlink" title="问答（沿用书中编号 Q122–Q131）"></a>问答（沿用书中编号 Q122–Q131）</h2><h3 id="Q122-softmax-在注意力机制里如何被使用？"><a href="#Q122-softmax-在注意力机制里如何被使用？" class="headerlink" title="Q122. softmax 在注意力机制里如何被使用？"></a>Q122. softmax 在注意力机制里如何被使用？</h3><p><strong>答。</strong> Softmax 把<strong>原始相似度分数</strong>变成在 token 上的<strong>归一化分布</strong>。在<strong>自注意力</strong>里，模型先算当前 token 的 <strong>query</strong> 与其它 token 的 <strong>key</strong> 的相似度；Softmax 再把这些分数变成<strong>和为 1 的权重</strong>，让模型按权重<strong>比例混合 value 向量</strong>，而不是对单个 token 做硬选择。</p>
+<p>实务直觉是：Softmax 让注意力<strong>可微</strong>，且在不同候选之间<strong>可比</strong>。没有它，注意力分数会<strong>无界</strong>，也更难解释成<strong>相对重要性</strong>。</p>
+<hr>
+<h3 id="Q123-自注意力里为何会出现点积？"><a href="#Q123-自注意力里为何会出现点积？" class="headerlink" title="Q123. 自注意力里为何会出现点积？"></a>Q123. 自注意力里为何会出现点积？</h3><p><strong>答。</strong> 点积给出两个向量之间<strong>对齐程度</strong>的一种快速度量。在注意力中，query–key 点积相当于在问：<strong>「对当前 token 来说，另一个 token 看起来有多相关？」</strong> 数值越大，对齐越强，经 softmax 后<strong>注意力权重</strong>也越大。</p>
+<p>好的面试回答还会提到<strong>缩放</strong>：由于原始点积会随向量维度<strong>变大</strong>，Transformer 会除以 <strong>key 维度的平方根</strong>，以在训练过程中保持分数的<strong>数值稳定</strong>（Vaswani et al., 2017）。</p>
+<hr>
+<h3 id="Q124-为何语言建模的标准损失是交叉熵？"><a href="#Q124-为何语言建模的标准损失是交叉熵？" class="headerlink" title="Q124. 为何语言建模的标准损失是交叉熵？"></a>Q124. 为何语言建模的标准损失是交叉熵？</h3><p><strong>答。</strong> 交叉熵衡量<strong>预测概率分布</strong>与<strong>真实目标分布</strong>有多接近。在<strong>下一词预测</strong>里，真实分布几乎把所有概率质量放在<strong>正确的下一词</strong>上；若模型给该词的概率太低，交叉熵就会<strong>惩罚</strong>它。</p>
+<p>工程师偏爱交叉熵，因为它给出<strong>清晰的梯度</strong>、与 <strong>softmax 输出</strong>自然配合，且与<strong>概率预测质量</strong>一致。人们谈到<strong>困惑度（perplexity）</strong>时，通常指的是平均交叉熵的<strong>指数变换</strong>。</p>
+<hr>
+<h3 id="Q125-反向传播时，如何计算嵌入的梯度？"><a href="#Q125-反向传播时，如何计算嵌入的梯度？" class="headerlink" title="Q125. 反向传播时，如何计算嵌入的梯度？"></a>Q125. 反向传播时，如何计算嵌入的梯度？</h3><p><strong>答。</strong> 每个 token 的查表相当于从嵌入矩阵里<strong>取出一行</strong>。反向传播时，损失梯度会沿用到前向里<strong>实际出现过的那些行</strong>；优化器再更新这些行，使<strong>类似上下文</strong>在将来产生更好的预测。</p>
+<p>直觉很简单：嵌入表不过是又一个<strong>可训练参数矩阵</strong>。主要差别在于<strong>稀疏性</strong>：每一步里，只有<strong>本 batch 中出现的 token</strong> 对应的嵌入会得到<strong>直接更新</strong>。</p>
+<hr>
+<h3 id="Q126-深度学习里雅可比矩阵表示什么？"><a href="#Q126-深度学习里雅可比矩阵表示什么？" class="headerlink" title="Q126. 深度学习里雅可比矩阵表示什么？"></a>Q126. 深度学习里雅可比矩阵表示什么？</h3><p><strong>答。</strong> 雅可比矩阵包含<strong>向量值函数</strong>对其输入的<strong>全部偏导数</strong>。在深度学习中，它描述<strong>输入每个维度的小变化</strong>如何影响<strong>输出的每个维度</strong>。当某一层把一向量变换成另一向量、且梯度必须<strong>准确回传</strong>穿过该变换时，这就很重要。</p>
+<p>面试官未必要你完整推导；很多时候他们想看你懂不懂：<strong>向量函数的反向传播</strong>依赖的是<strong>结构化的偏导数</strong>，而不是单一的标量斜率。</p>
+<hr>
+<h3 id="Q127-特征值与特征向量如何与降维相联系？"><a href="#Q127-特征值与特征向量如何与降维相联系？" class="headerlink" title="Q127. 特征值与特征向量如何与降维相联系？"></a>Q127. 特征值与特征向量如何与降维相联系？</h3><p><strong>答。</strong> 在 <strong>PCA</strong> 等降维方法里，<strong>特征向量</strong>标识数据<strong>变化的主要方向</strong>，<strong>特征值</strong>说明每个方向解释了多少<strong>方差</strong>。保留<strong>领先的特征向量</strong>可以在尽量保留重要结构的同时<strong>压缩数据</strong>。</p>
+<p>在 LLM 实务中，你通常不会在 Transformer 里现场算 PCA；但要理解为何<strong>低维投影</strong>、<strong>潜空间</strong>与<strong>压缩的特征表示</strong>仍能保留有用结构，这套想法仍然有用。</p>
+<hr>
+<h3 id="Q128-什么是-KL-散度，在-LLM-训练里何时有用？"><a href="#Q128-什么是-KL-散度，在-LLM-训练里何时有用？" class="headerlink" title="Q128. 什么是 KL 散度，在 LLM 训练里何时有用？"></a>Q128. 什么是 KL 散度，在 LLM 训练里何时有用？</h3><p><strong>答。</strong> KL 散度度量<strong>一个概率分布</strong>与<strong>另一个</strong>相差多少。在 LLM 工作中，它出现在：把模型预测分布与<strong>参考分布</strong>比较、用教师蒸馏学生、或约束更新后的策略<strong>不要偏离基线太远</strong>等场景。</p>
+<p>强答应强调：KL 散度<strong>不是对称的「距离」</strong>，而是一种<strong>有方向的惩罚</strong>。语言模型训练与对齐常常依赖<strong>以受控方式保持分布接近</strong>，而不仅是最大化逐点准确率。</p>
+<hr>
+<h3 id="Q129-为何-ReLU-的导数在深层网络里重要？"><a href="#Q129-为何-ReLU-的导数在深层网络里重要？" class="headerlink" title="Q129. 为何 ReLU 的导数在深层网络里重要？"></a>Q129. 为何 ReLU 的导数在深层网络里重要？</h3><p><strong>答。</strong> ReLU 对负输入输出 0，对正输入原样通过；因此其导数在负侧为 0，在正侧为 1。这使得它<strong>计算简单</strong>，并在许多设定下比旧的<strong>饱和型</strong>非线性（如 sigmoid）更利于<strong>梯度流动</strong>。</p>
+<p>实务要点不是「ReLU 完美」，而是其导数规避了部分<strong>严重收缩</strong>行为——而那正是早年深层网络<strong>难以优化</strong>的原因之一。讨论<strong>梯度消失</strong>时，这一历史教训仍然值得提。</p>
+<hr>
+<h3 id="Q130-链式法则如何使反向传播成为可能？"><a href="#Q130-链式法则如何使反向传播成为可能？" class="headerlink" title="Q130. 链式法则如何使反向传播成为可能？"></a>Q130. 链式法则如何使反向传播成为可能？</h3><p><strong>答。</strong> 神经网络是<strong>许多函数的复合</strong>。链式法则让我们通过<strong>从输出层向输入逐步相乘局部导数</strong>，来计算整个复合函数的导数。反向传播本质上就是<strong>高效地记账</strong>，重复应用链式法则。</p>
+<p>面试里可以把链式法则框定为：正是它把深层模型从<strong>黑箱</strong>变成<strong>可训练系统</strong>。没有它，就很难把最终预测误差<strong>分配</strong>到更靠前的层。</p>
+<hr>
+<h3 id="Q131-残差连接与归一化如何缓解梯度消失？"><a href="#Q131-残差连接与归一化如何缓解梯度消失？" class="headerlink" title="Q131. 残差连接与归一化如何缓解梯度消失？"></a>Q131. 残差连接与归一化如何缓解梯度消失？</h3><p><strong>答。</strong> 残差连接提供<strong>短路路径</strong>，让梯度可以直接流过，降低信号在穿过多层时<strong>消失</strong>的概率。归一化有助于把激活与更新保持在<strong>稳定的数值范围</strong>，使优化不那么脆弱。</p>
+<p>Transformer 尤其受益于这一组合：若没有它，很深的注意力堆栈会<strong>难训练得多</strong>。强答应把数学连到<strong>工程结果</strong>：这些机制是<strong>极深 Transformer 在实务上可行</strong>的一部分原因。</p>
+<hr>
+<p>下面的损失函数小例是为了让优化数学<strong>保持可解释</strong>。公式重要，但代码帮助读者把它们系回<strong>概率分布</strong>与<strong>训练信号</strong>。</p>
+<p><strong>Listing 14.1</strong>（书中摘录）：<em>A tiny Python example for cross-entropy and KL divergence</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">target = np.array([<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>])</span><br><span class="line">pred   = np.array([<span class="number">0.1</span>, <span class="number">0.8</span>, <span class="number">0.1</span>])</span><br><span class="line">eps = <span class="number">1e-12</span></span><br><span class="line"></span><br><span class="line">cross_entropy = -(target * np.log(pred + eps)).<span class="built_in">sum</span>()</span><br><span class="line"></span><br><span class="line">teacher = np.array([<span class="number">0.05</span>, <span class="number">0.9</span>, <span class="number">0.05</span>])</span><br><span class="line">kl = (teacher * (np.log(teacher + eps) - np.log(pred + eps))).<span class="built_in">sum</span>()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"cross_entropy=<span class="subst">{cross_entropy:<span class="number">.4</span>f}</span>"</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f"kl_divergence=<span class="subst">{kl:<span class="number">.4</span>f}</span>"</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/books/">BOOKS</a></li>
+            <li><a href="/books/llm-interview/">LLM面试书</a></li>
+            <li>CH14</li>
+  </ul>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

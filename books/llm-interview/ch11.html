@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/jojo_median.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/jojo_small.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="说明底本为 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。   第 11 章　多模态大语言模型本章概述多模态模型把语言界面扩展到文本之外，把图像、音频、视频或其它模态纳入同一推理循环。技术难点不仅是编码各模态，还要对齐它们的表示，使">
+<meta property="og:type" content="website">
+<meta property="og:title" content="《LLM Interview Handbook》第 11 章：多模态大语言模型（全译文）">
+<meta property="og:url" content="https://foosynaptic.github.io/books/llm-interview/ch11.html">
+<meta property="og:site_name" content="fooSynaptic">
+<meta property="og:description" content="说明底本为 Language Models Interview Handbook（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。   第 11 章　多模态大语言模型本章概述多模态模型把语言界面扩展到文本之外，把图像、音频、视频或其它模态纳入同一推理循环。技术难点不仅是编码各模态，还要对齐它们的表示，使">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch11-p-074.png">
+<meta property="article:published_time" content="2026-04-03T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-03T13:38:41.484Z">
+<meta property="article:author" content="fooSynaptic">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="多模态">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch11-p-074.png">
+
+
+<link rel="canonical" href="https://foosynaptic.github.io/books/llm-interview/ch11">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"https://foosynaptic.github.io/books/llm-interview/ch11.html","path":"books/llm-interview/ch11.html","title":"《LLM Interview Handbook》第 11 章：多模态大语言模型（全译文）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>《LLM Interview Handbook》第 11 章：多模态大语言模型（全译文） | fooSynaptic
+</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+<style>
+.post-body img[src*="about-tech-stack.svg"] {
+  max-width: 680px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+</style>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">fooSynaptic</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-11-%E7%AB%A0-%E5%A4%9A%E6%A8%A1%E6%80%81%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">第 11 章　多模态大语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-%E9%9D%A2%E8%AF%95%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　面试锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-%E9%9D%A2%E8%AF%95%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　面试速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88Q91%E2%80%93Q100%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（Q91–Q100）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q91-%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%A8%A1%E6%80%81-LLM%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q91. 什么是多模态 LLM？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q92-%E6%96%87%E6%9C%AC%E2%80%94%E5%9B%BE%E5%83%8F%E7%B3%BB%E7%BB%9F%E8%83%8C%E5%90%8E%E5%B8%B8%E8%A7%81%E7%9A%84%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q92. 文本—图像系统背后常见的架构模式是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q93-%E4%B8%BA%E4%BD%95-CLIP-%E5%9C%A8%E5%A4%9A%E6%A8%A1%E6%80%81%E7%B3%BB%E7%BB%9F%E5%8F%B2%E4%B8%AD%E5%BE%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q93. 为何 CLIP 在多模态系统史中很重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q94-%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E3%80%8C%E8%A7%86%E8%A7%89%E9%94%9A%E5%AE%9A%EF%BC%88visual-grounding%EF%BC%89%E3%80%8D%E6%8C%87%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q94. 多模态模型中的「视觉锚定（visual grounding）」指什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q95-%E4%BD%95%E6%97%B6%E5%BA%94%E4%BE%9D%E8%B5%96-OCR%EF%BC%8C%E4%BD%95%E6%97%B6%E4%BE%9D%E8%B5%96%E5%8E%9F%E7%94%9F%E8%A7%86%E8%A7%89%E2%80%94%E8%AF%AD%E8%A8%80%E7%90%86%E8%A7%A3%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q95. 何时应依赖 OCR，何时依赖原生视觉—语言理解？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q96-%E5%A4%9A%E6%A8%A1%E6%80%81%E6%8F%90%E7%A4%BA%E4%B8%8E%E7%BA%AF%E6%96%87%E6%9C%AC%E6%8F%90%E7%A4%BA%E6%9C%89%E4%BD%95%E4%B8%8D%E5%90%8C%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q96. 多模态提示与纯文本提示有何不同？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q97-%E5%A6%82%E4%BD%95%E8%AF%84%E4%BC%B0%E5%A4%9A%E6%A8%A1%E6%80%81%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q97. 如何评估多模态系统？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q98-%E5%A4%9A%E6%A8%A1%E6%80%81-LLM-%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%A4%B1%E6%95%88%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q98. 多模态 LLM 有哪些常见失效模式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q99-%E9%9F%B3%E9%A2%91%E4%B8%8E%E8%A7%86%E9%A2%91%E7%9B%B8%E6%AF%94%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%EF%BC%8C%E8%AE%BE%E8%AE%A1%E4%B8%8A%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q99. 音频与视频相比静态图像，设计上如何改变？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q100-%E5%93%AA%E4%BA%9B%E5%A4%9A%E6%A8%A1%E6%80%81%E7%94%A8%E4%BE%8B%E9%80%9A%E5%B8%B8%E6%9C%80%E5%85%88%E5%B8%A6%E6%9D%A5%E8%BE%83%E5%A5%BD%E4%B8%9A%E5%8A%A1%E4%BB%B7%E5%80%BC%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q100. 哪些多模态用例通常最先带来较好业务价值？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fooSynaptic"
+      src="/images/jojo_median.ico">
+  <p class="site-author-name" itemprop="name">fooSynaptic</p>
+  <div class="site-description" itemprop="description">Truth through synaptic thinking. 以突触般的智能连接，探索真理。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fooSynaptic" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fooSynaptic" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2313990450@qq.com" title="E-Mail → mailto:2313990450@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          链接
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="/about/" title="&#x2F;about&#x2F;">关于我</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E5%B0%8F%E8%AF%B4/" title="&#x2F;categories&#x2F;小说&#x2F;">小说</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" title="&#x2F;categories&#x2F;论文解读&#x2F;">论文解读</a>
+            </li>
+            <li class="links-of-blogroll-item">
+              <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" title="&#x2F;categories&#x2F;读书笔记&#x2F;">读书笔记</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">《LLM Interview Handbook》第 11 章：多模态大语言模型（全译文）
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/books/">BOOKS</a></li>
+            <li><a href="/books/llm-interview/">LLM面试书</a></li>
+            <li>CH11</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <blockquote>
+<p><strong>说明</strong><br>底本为 <em>Language Models Interview Handbook</em>（© 2026 Lamhot Siagian, AI Engineering Insider）；个人学习整理，转载请注明出处，勿用于商业再发行。</p>
+</blockquote>
+<hr>
+<h2 id="第-11-章-多模态大语言模型"><a href="#第-11-章-多模态大语言模型" class="headerlink" title="第 11 章　多模态大语言模型"></a>第 11 章　多模态大语言模型</h2><h3 id="本章概述"><a href="#本章概述" class="headerlink" title="本章概述"></a>本章概述</h3><p>多模态模型把语言界面扩展到文本之外，把<strong>图像、音频、视频</strong>或其它模态纳入同一<strong>推理循环</strong>。技术难点不仅是<strong>编码各模态</strong>，还要<strong>对齐它们的表示</strong>，使系统能把语言<strong>锚定</strong>在非文本证据上。<strong>CLIP</strong> 展示了<strong>图文对齐</strong>如何支撑强<strong>零样本</strong>迁移；后来的多模态<strong>指令微调</strong>系统则进一步推向对话式交互（Radford et al., 2021; Liu et al., 2023）。</p>
+<p>面试官常用多模态问题观察候选人能否把 LLM 直觉迁移到更广的系统场景——在那里<strong>感知、锚定与评估</strong>都更复杂。</p>
+<hr>
+<h3 id="Interview-Anchor-面试锚点"><a href="#Interview-Anchor-面试锚点" class="headerlink" title="Interview Anchor　面试锚点"></a>Interview Anchor　面试锚点</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>面试官真正想测的</strong></td>
+<td>能否解释多模态系统如何把图像或其它信号与语言对齐，而不堆<strong>空话</strong>。</td>
+</tr>
+<tr>
+<td><strong>高质量回答套路</strong></td>
+<td>描述<strong>模态专用编码器</strong>、<strong>对齐到共享表示空间</strong>，以及语言侧在<strong>融合信号</strong>上的推理。</td>
+</tr>
+<tr>
+<td><strong>常见低分答法</strong></td>
+<td>暗示图像只是「<strong>变成文本</strong>」。应讲<strong>表示对齐</strong>与<strong>局限</strong>。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="INTERVIEW-CHEATSHEET-面试速记条"><a href="#INTERVIEW-CHEATSHEET-面试速记条" class="headerlink" title="INTERVIEW CHEATSHEET　面试速记条"></a>INTERVIEW CHEATSHEET　面试速记条</h3><table>
+<thead>
+<tr>
+<th>项</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>要表达的亮点</strong></td>
+<td>多模态系统对齐不同数据类型，使语言推理能操作<strong>不止文本</strong>。</td>
+</tr>
+<tr>
+<td><strong>最佳举例</strong></td>
+<td>图像理解常见做法是<strong>视觉编码器 + 语言模型</strong>，而不是单一黑盒。</td>
+</tr>
+<tr>
+<td><strong>可追问方向</strong></td>
+<td>提到<strong>对齐、指令微调</strong>，以及在<strong>感知与推理</strong>任务上的评估。</td>
+</tr>
+<tr>
+<td><strong>资深补充</strong></td>
+<td>区分<strong>感知错误</strong>与下游<strong>推理错误</strong>。</td>
+</tr>
+<tr>
+<td><strong>切忌这样说</strong></td>
+<td>假定多模态质量用与<strong>纯文本</strong>完全相同的方式评估即可。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="What-Strong-Candidates-Sound-Like"><a href="#What-Strong-Candidates-Sound-Like" class="headerlink" title="What Strong Candidates Sound Like"></a>What Strong Candidates Sound Like</h3><blockquote>
+<p><strong>书里有一句可背的口述（译文）</strong>：「多模态模型只有<strong>表示对齐与推理</strong>都可靠才算成功——因为<strong>感知错误</strong>会传导到每一个下游语言答案。」</p>
+</blockquote>
+<hr>
+<p>多模态架构图把宽泛概念落成可复用的工程模式：<strong>对齐</strong>是关键——不同输入类型必须先编码进<strong>共享空间</strong>，语言侧推理才有用。</p>
+<p><strong>图 11.1</strong>：一种常见模式：<strong>编码 → 对齐 → 在语言空间中推理</strong>。（图内元素：图像 → 视觉编码器 → 适配器/投影 → 语言模型 → 回复；另有文本提示支路。）</p>
+<p><img src="/images/llm-interview-handbook/chapters/ch11-p-074.png" alt="图 11.1：多模态对齐与推理的常见工程模式"></p>
+<hr>
+<h2 id="问答（Q91–Q100）"><a href="#问答（Q91–Q100）" class="headerlink" title="问答（Q91–Q100）"></a>问答（Q91–Q100）</h2><h3 id="Q91-什么是多模态-LLM？"><a href="#Q91-什么是多模态-LLM？" class="headerlink" title="Q91. 什么是多模态 LLM？"></a>Q91. 什么是多模态 LLM？</h3><p><strong>答。</strong>多模态 LLM 是能处理并推理<strong>一种以上</strong>输入或输出模态的系统，例如<strong>文本+图像</strong>或<strong>文本+音频</strong>。语言模型通常仍是中心，但通过<strong>额外编码器或适配器</strong>把非文本输入转成模型可用的表示。</p>
+<p>强回答会指出：多模态<strong>不只是加图像</strong>——而是<strong>跨模态对齐表示</strong>，使系统能回答<strong>有据</strong>问题，而非单靠文本先验<strong>胡编</strong>。</p>
+<h3 id="Q92-文本—图像系统背后常见的架构模式是什么？"><a href="#Q92-文本—图像系统背后常见的架构模式是什么？" class="headerlink" title="Q92. 文本—图像系统背后常见的架构模式是什么？"></a>Q92. 文本—图像系统背后常见的架构模式是什么？</h3><p><strong>答。</strong>常见模式是<strong>视觉编码器</strong>把图像变成嵌入，再通过<strong>投影或适配器</strong>映射到语言模型能消费的<strong>空间</strong>；LLM 在生成时同时以<strong>文本 token</strong>与<strong>图像派生表示</strong>为条件。</p>
+<p>面试关键是讲清<strong>桥梁</strong>：语言模型并不是在读像素；另一个模型把像素变成 LLM 能推理的<strong>形式</strong>。</p>
+<h3 id="Q93-为何-CLIP-在多模态系统史中很重要？"><a href="#Q93-为何-CLIP-在多模态系统史中很重要？" class="headerlink" title="Q93. 为何 CLIP 在多模态系统史中很重要？"></a>Q93. 为何 CLIP 在多模态系统史中很重要？</h3><p><strong>答。</strong>CLIP 表明<strong>图像与文本表示</strong>可以通过大规模配对数据上的<strong>对比学习</strong>对齐。这使零样本视觉任务更可行，并展示了把<strong>自然语言</strong>作为感知模型<strong>监督信号</strong>的力量。</p>
+<p>其重要性<strong>概念与实证</strong>并重：它帮助确立了<strong>对齐表示空间</strong>可支撑灵活的多模态推理与检索，而非狭隘的固定标签视觉系统（Radford et al., 2021）。</p>
+<h3 id="Q94-多模态模型中的「视觉锚定（visual-grounding）」指什么？"><a href="#Q94-多模态模型中的「视觉锚定（visual-grounding）」指什么？" class="headerlink" title="Q94. 多模态模型中的「视觉锚定（visual grounding）」指什么？"></a>Q94. 多模态模型中的「视觉锚定（visual grounding）」指什么？</h3><p><strong>答。</strong>视觉锚定指模型的语言输出<strong>真正系在图像证据上</strong>，而非来自语言先验或刻板假设。对图表、小票或照片的有据回答应反映图像中<strong>实际存在</strong>的内容，而不只是<strong>一般意义上</strong>说得通的话。</p>
+<p>面试中要说：锚定是多模态 AI 的<strong>核心信任问题</strong>——没有锚定的流利会产生<strong>非常可信的错误</strong>。</p>
+<h3 id="Q95-何时应依赖-OCR，何时依赖原生视觉—语言理解？"><a href="#Q95-何时应依赖-OCR，何时依赖原生视觉—语言理解？" class="headerlink" title="Q95. 何时应依赖 OCR，何时依赖原生视觉—语言理解？"></a>Q95. 何时应依赖 OCR，何时依赖原生视觉—语言理解？</h3><p><strong>答。</strong>当图像<strong>主要是文字</strong>（文档、表单、小票、截图）时，OCR 常常有用。当<strong>空间布局、物体、关系与混合视觉—文本线索</strong>共同重要时，原生多模态模型更有价值。</p>
+<p>实务答案是选<strong>最匹配信息源</strong>的工具。许多强系统<strong>同时</strong>结合 OCR 与多模态推理，而非二选一。</p>
+<h3 id="Q96-多模态提示与纯文本提示有何不同？"><a href="#Q96-多模态提示与纯文本提示有何不同？" class="headerlink" title="Q96. 多模态提示与纯文本提示有何不同？"></a>Q96. 多模态提示与纯文本提示有何不同？</h3><p><strong>答。</strong>多模态提示不仅要指示<strong>答什么</strong>，还要引导模型<strong>查哪段视觉证据</strong>。好提示常指明任务、所需细节程度，以及是否优先图像内文字、物体关系、布局或视觉异常。</p>
+<p>原则仍是<strong>清晰任务胜过模糊请求</strong>；但多模态提示还需意识到<strong>感知极限</strong>、图像质量，以及某些细节<strong>根本看不见</strong>的可能。</p>
+<h3 id="Q97-如何评估多模态系统？"><a href="#Q97-如何评估多模态系统？" class="headerlink" title="Q97. 如何评估多模态系统？"></a>Q97. 如何评估多模态系统？</h3><p><strong>答。</strong>评估应衡量<strong>有据正确性</strong>，而不只是流利度。视任务可能包括：答案准确率、物体或属性正确性、OCR 保真度、空间推理表现、图像不清晰时的<strong>拒绝行为</strong>，以及人工对<strong>有用性</strong>的偏好。</p>
+<p>面试中要说：多模态评估通常需要<strong>任务专用数据集 + 人工审查</strong>——许多失效很微妙，无法单靠<strong>字符串匹配</strong>发现。</p>
+<h3 id="Q98-多模态-LLM-有哪些常见失效模式？"><a href="#Q98-多模态-LLM-有哪些常见失效模式？" class="headerlink" title="Q98. 多模态 LLM 有哪些常见失效模式？"></a>Q98. 多模态 LLM 有哪些常见失效模式？</h3><p><strong>答。</strong>常见失效包括：<strong>虚构未见物体</strong>、误读<strong>小字</strong>、丢失<strong>空间关系</strong>、搞混图表、<strong>过度信任</strong>嘈杂 OCR、以及在图像<strong>实际支撑</strong>之外作答。<strong>分布偏移</strong>也很严重——真实图像与精选基准差别大。</p>
+<p>资深补充：多模态失效<strong>格外危险</strong>，因为用户可能假设「模型看了图就一定知道」。<strong>锚定与弃权</strong>在这里更重要。</p>
+<h3 id="Q99-音频与视频相比静态图像，设计上如何改变？"><a href="#Q99-音频与视频相比静态图像，设计上如何改变？" class="headerlink" title="Q99. 音频与视频相比静态图像，设计上如何改变？"></a>Q99. 音频与视频相比静态图像，设计上如何改变？</h3><p><strong>答。</strong>音频与视频引入<strong>时间</strong>，系统必须建模<strong>帧序列或声学特征序列</strong>及其与语言的关系。这提高<strong>算力成本</strong>，并带来额外对齐问题——例如视频中<strong>哪一刻</strong>支持该答案。</p>
+<p>面试中要体现出<strong>系统后果</strong>：时序模态需要<strong>采样、分段、同步</strong>，以及常需要<strong>分层推理</strong>，而非单次编码。</p>
+<h3 id="Q100-哪些多模态用例通常最先带来较好业务价值？"><a href="#Q100-哪些多模态用例通常最先带来较好业务价值？" class="headerlink" title="Q100. 哪些多模态用例通常最先带来较好业务价值？"></a>Q100. 哪些多模态用例通常最先带来较好业务价值？</h3><p><strong>答。</strong>早期价值往往在<strong>锚定清晰、工作流可度量</strong>的场景：<strong>文档理解</strong>、截图支持、<strong>视觉质检</strong>、<strong>图表解释</strong>、在人工监督下的<strong>医学影像辅助</strong>，以及无障碍相关的<strong>图像描述</strong>。</p>
+<p>强面试回答聚焦<strong>多模态带来非平凡证据</strong>的用例，而不是为新奇而加图像。业务价值来自<strong>文本单独不够</strong>之处的<strong>有据感知</strong>。</p>
+<hr>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/books/">BOOKS</a></li>
+            <li><a href="/books/llm-interview/">LLM面试书</a></li>
+            <li>CH11</li>
+  </ul>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">fooSynaptic's Blog</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
