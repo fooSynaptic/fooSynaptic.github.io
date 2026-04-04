@@ -27,7 +27,7 @@
 <meta property="og:description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="fooSynaptic">
-<meta property="article:tag" content="AI, LLM, NLP, Deep Learning">
+<meta property="article:tag" content="Agent, LLM, GenAI, Deep Learning">
 <meta name="twitter:card" content="summary">
 
 
@@ -37,7 +37,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>fooSynaptic - Any problem, please Contact me: 2313990450@qq.com</title>
+<title>fooSynaptic - Good luck</title>
   
 
 
@@ -73,12 +73,43 @@
 
 
 <style>
+/* 技术栈大图：仅此一图占宽；勿与行内图标共用选择器 */
 .post-body img[src*="about-tech-stack.svg"] {
   max-width: 680px;
   width: 100%;
   height: auto;
   display: block;
   margin: 1em 0;
+}
+/*
+  行内 SVG：必须限制尺寸。无 width/height 时部分浏览器对 SVG 使用 ~300×150 默认占位，
+  Markdown 生成的 <img> 又无 class，易导致目录等处图标巨大。
+*/
+.post-body img.about-inline-icon,
+.post-body .about-page-toc img,
+.post-body img[src*="about/icon-"] {
+  width: 1.25em !important;
+  height: 1.25em !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  vertical-align: -0.2em;
+  margin-right: 0.35em;
+  display: inline-block !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  object-fit: contain;
+  box-sizing: content-box;
+}
+.post-body .about-page-toc {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.post-body .about-page-toc li {
+  margin: 0.2em 0;
+}
+.post-body h2 img.about-inline-icon {
+  margin-right: 0.4em;
+  vertical-align: -0.22em;
 }
 </style>
 
@@ -220,7 +251,7 @@ mjx-container[display="true"] + br {
       <h1 class="site-title">fooSynaptic</h1>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+      <p class="site-subtitle" itemprop="description">Good luck</p>
   </div>
 
   <div class="site-nav-right">
@@ -233,7 +264,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-ddia笔记"><a href="/books/ddia/" rel="section"><i class="fa fa-database fa-fw"></i>DDIA笔记</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>

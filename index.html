@@ -27,7 +27,7 @@
 <meta property="og:description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="fooSynaptic">
-<meta property="article:tag" content="AI, LLM, NLP, Deep Learning">
+<meta property="article:tag" content="Agent, LLM, GenAI, Deep Learning">
 <meta name="twitter:card" content="summary">
 
 
@@ -37,7 +37,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>fooSynaptic - Any problem, please Contact me: 2313990450@qq.com</title>
+<title>fooSynaptic - Good luck</title>
   
 
 
@@ -73,12 +73,43 @@
 
 
 <style>
+/* 技术栈大图：仅此一图占宽；勿与行内图标共用选择器 */
 .post-body img[src*="about-tech-stack.svg"] {
   max-width: 680px;
   width: 100%;
   height: auto;
   display: block;
   margin: 1em 0;
+}
+/*
+  行内 SVG：必须限制尺寸。无 width/height 时部分浏览器对 SVG 使用 ~300×150 默认占位，
+  Markdown 生成的 <img> 又无 class，易导致目录等处图标巨大。
+*/
+.post-body img.about-inline-icon,
+.post-body .about-page-toc img,
+.post-body img[src*="about/icon-"] {
+  width: 1.25em !important;
+  height: 1.25em !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  vertical-align: -0.2em;
+  margin-right: 0.35em;
+  display: inline-block !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  object-fit: contain;
+  box-sizing: content-box;
+}
+.post-body .about-page-toc {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.post-body .about-page-toc li {
+  margin: 0.2em 0;
+}
+.post-body h2 img.about-inline-icon {
+  margin-right: 0.4em;
+  vertical-align: -0.22em;
 }
 </style>
 
@@ -220,7 +251,7 @@ mjx-container[display="true"] + br {
       <h1 class="site-title">fooSynaptic</h1>
       <i class="logo-line"></i>
     </a>
-      <p class="site-subtitle" itemprop="description">Any problem, please Contact me: 2313990450@qq.com</p>
+      <p class="site-subtitle" itemprop="description">Good luck</p>
   </div>
 
   <div class="site-nav-right">
@@ -233,7 +264,7 @@ mjx-container[display="true"] + br {
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-小说"><a href="/novel/" rel="section"><i class="fa fa-book fa-fw"></i>小说</a></li><li class="menu-item menu-item-llm面试书"><a href="/books/llm-interview/" rel="section"><i class="fa fa-graduation-cap fa-fw"></i>LLM面试书</a></li><li class="menu-item menu-item-ddia笔记"><a href="/books/ddia/" rel="section"><i class="fa fa-database fa-fw"></i>DDIA笔记</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -3252,7 +3283,7 @@ mjx-container[display="true"] + br {
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/" class="post-title-link" itemprop="url">DDIA 读书笔记：数据密集型应用系统设计</a>
+          <a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/" class="post-title-link" itemprop="url">《DDIA》读书笔记系列</a>
         </h2>
 
         <div class="post-meta-container">
@@ -3285,10 +3316,41 @@ mjx-container[display="true"] + br {
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p><strong>Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems</strong></p>
+          <p>本系列将 <strong>《Designing Data-Intensive Applications》</strong>（<em>DDIA</em>，Martin Kleppmann）的笔记按原书三部分整理；正文收录在固定目录 <strong><code>/books/ddia/</code></strong>（与 <a href="/2026/03/30/LLM-Interview-Handbook-series-index/">《LLM Interview Handbook》全译系列</a> 相同的 <code>books</code> 编排），便于收藏章节链接与全文内检索。</p>
+<blockquote>
+<p><strong>声明</strong>：本文为个人学习笔记，非官方译本；转载请注明出处，勿用于商业再发行。阅读原书请支持正版（<a target="_blank" rel="noopener" href="https://dataintensive.net/">dataintensive.net</a>）。</p>
 </blockquote>
-<p>这是一份关于《数据密集型应用系统设计》(DDIA) 的完整读书笔记，本书被誉为”数据系统领域的圣经”。</p>
+<h2 id="在线目录（全书三部分）"><a href="#在线目录（全书三部分）" class="headerlink" title="在线目录（全书三部分）"></a>在线目录（全书三部分）</h2><table>
+<thead>
+<tr>
+<th>部分</th>
+<th>主题</th>
+<th>涵盖章节</th>
+<th>链接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一</td>
+<td>数据系统基础</td>
+<td>第 1–4 章</td>
+<td><a href="/books/ddia/part1.html">阅读</a></td>
+</tr>
+<tr>
+<td>二</td>
+<td>分布式数据</td>
+<td>第 5–9 章</td>
+<td><a href="/books/ddia/part2.html">阅读</a></td>
+</tr>
+<tr>
+<td>三</td>
+<td>衍生数据</td>
+<td>第 10–12 章</td>
+<td><a href="/books/ddia/part3.html">阅读</a></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>仅部分标题与表格的目录页</strong>（方便收藏）：<a href="/books/ddia/index.html">/books/ddia/</a></li>
+</ul>
 <h2 id="书籍信息"><a href="#书籍信息" class="headerlink" title="书籍信息"></a>书籍信息</h2><table>
 <thead>
 <tr>
@@ -3310,7 +3372,7 @@ mjx-container[display="true"] + br {
 </tr>
 <tr>
 <td><strong>出版时间</strong></td>
-<td>2017年3月</td>
+<td>2017 年 3 月</td>
 </tr>
 </tbody></table>
 <h2 id="核心主题"><a href="#核心主题" class="headerlink" title="核心主题"></a>核心主题</h2><p>本书围绕三个核心概念展开：</p>
@@ -3319,10 +3381,7 @@ mjx-container[display="true"] + br {
 <li><strong>可扩展性 (Scalability)</strong>：系统能够应对负载增长</li>
 <li><strong>可维护性 (Maintainability)</strong>：系统易于理解、修改和扩展</li>
 </ul>
-<h2 id="全书结构"><a href="#全书结构" class="headerlink" title="全书结构"></a>全书结构</h2><h3 id="第一部分：数据系统基础"><a href="#第一部分：数据系统基础" class="headerlink" title="第一部分：数据系统基础"></a>第一部分：数据系统基础</h3><blockquote>
-<p><a href="/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">查看详细笔记</a></p>
-</blockquote>
-<table>
+<h2 id="全书结构（章节摘要）"><a href="#全书结构（章节摘要）" class="headerlink" title="全书结构（章节摘要）"></a>全书结构（章节摘要）</h2><h3 id="第一部分：数据系统基础"><a href="#第一部分：数据系统基础" class="headerlink" title="第一部分：数据系统基础"></a>第一部分：数据系统基础</h3><table>
 <thead>
 <tr>
 <th>章节</th>
@@ -3330,26 +3389,23 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>第1章</td>
+<td>第 1 章</td>
 <td>可靠性、可扩展性、可维护性的定义与实践</td>
 </tr>
 <tr>
-<td>第2章</td>
+<td>第 2 章</td>
 <td>关系模型、文档模型、图模型的对比与选择</td>
 </tr>
 <tr>
-<td>第3章</td>
+<td>第 3 章</td>
 <td>存储引擎原理：B-Tree、LSM-Tree、OLTP vs OLAP</td>
 </tr>
 <tr>
-<td>第4章</td>
+<td>第 4 章</td>
 <td>数据编码格式与模式演化：JSON、Protobuf、Avro</td>
 </tr>
 </tbody></table>
-<h3 id="第二部分：分布式数据"><a href="#第二部分：分布式数据" class="headerlink" title="第二部分：分布式数据"></a>第二部分：分布式数据</h3><blockquote>
-<p><a href="/2025/12/28/DDIA-Part2-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/">查看详细笔记</a></p>
-</blockquote>
-<table>
+<h3 id="第二部分：分布式数据"><a href="#第二部分：分布式数据" class="headerlink" title="第二部分：分布式数据"></a>第二部分：分布式数据</h3><table>
 <thead>
 <tr>
 <th>章节</th>
@@ -3357,30 +3413,27 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>第5章</td>
+<td>第 5 章</td>
 <td>数据复制：主从、多主、无主复制策略</td>
 </tr>
 <tr>
-<td>第6章</td>
+<td>第 6 章</td>
 <td>数据分区：分区策略、再平衡、请求路由</td>
 </tr>
 <tr>
-<td>第7章</td>
+<td>第 7 章</td>
 <td>事务：ACID、隔离级别、分布式事务</td>
 </tr>
 <tr>
-<td>第8章</td>
+<td>第 8 章</td>
 <td>分布式系统挑战：网络、时钟、故障模型</td>
 </tr>
 <tr>
-<td>第9章</td>
+<td>第 9 章</td>
 <td>一致性与共识：CAP、Paxos、Raft</td>
 </tr>
 </tbody></table>
-<h3 id="第三部分：衍生数据"><a href="#第三部分：衍生数据" class="headerlink" title="第三部分：衍生数据"></a>第三部分：衍生数据</h3><blockquote>
-<p><a href="/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/">查看详细笔记</a></p>
-</blockquote>
-<table>
+<h3 id="第三部分：衍生数据"><a href="#第三部分：衍生数据" class="headerlink" title="第三部分：衍生数据"></a>第三部分：衍生数据</h3><table>
 <thead>
 <tr>
 <th>章节</th>
@@ -3388,18 +3441,24 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td>第10章</td>
+<td>第 10 章</td>
 <td>批处理：MapReduce、Spark、数据流引擎</td>
 </tr>
 <tr>
-<td>第11章</td>
+<td>第 11 章</td>
 <td>流处理：Kafka、Flink、事件时间与水位线</td>
 </tr>
 <tr>
-<td>第12章</td>
+<td>第 12 章</td>
 <td>数据系统未来：数据集成、端到端正确性、伦理</td>
 </tr>
 </tbody></table>
+<h2 id="为何这样归档"><a href="#为何这样归档" class="headerlink" title="为何这样归档"></a>为何这样归档</h2><ul>
+<li><strong>岗位侧</strong>：系统设计面试常问存储选型、复制与分区、事务隔离、一致性与消息语义。  </li>
+<li><strong>学习侧</strong>：需要一条「单节点 → 分布式 → 批流一体」的主线，避免孤立背题。  </li>
+<li><strong>实践侧</strong>：固定在 <code>/books/ddia/</code> 下，写方案时便于引用与对齐追问点。</li>
+</ul>
+<p>各部分的表格与示意图已整理为 Markdown/SVG，图片位于站点 <strong><code>/images/</code></strong>（含 <code>ddia-part1-*</code> 与 <code>ddia/part2</code>、<code>ddia/part3</code> 等路径）。</p>
 <h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><h3 id="入门路线（适合初学者）"><a href="#入门路线（适合初学者）" class="headerlink" title="入门路线（适合初学者）"></a>入门路线（适合初学者）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第1章 → 第2章 → 第3章 → 第4章（建立基础）</span><br><span class="line">    ↓</span><br><span class="line">第5章 → 第6章（理解分布式基础）</span><br><span class="line">    ↓</span><br><span class="line">第10章 → 第11章（了解数据处理）</span><br></pre></td></tr></table></figure>
 
 <h3 id="进阶路线（适合有经验的开发者）"><a href="#进阶路线（适合有经验的开发者）" class="headerlink" title="进阶路线（适合有经验的开发者）"></a>进阶路线（适合有经验的开发者）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第7章 → 第8章 → 第9章（深入分布式）</span><br><span class="line">    ↓</span><br><span class="line">第12章（展望未来）</span><br><span class="line">    ↓</span><br><span class="line">回顾第1-4章填补知识空白</span><br></pre></td></tr></table></figure>
@@ -3505,335 +3564,6 @@ mjx-container[display="true"] + br {
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/jojo_median.ico">
-      <meta itemprop="name" content="fooSynaptic">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fooSynaptic">
-      <meta itemprop="description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | fooSynaptic">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">DDIA Part 3: 衍生数据</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-28 00:00:00" itemprop="dateCreated datePublished" datetime="2025-12-28T00:00:00+08:00">2025-12-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本文是 DDIA 第三部分的完整读书笔记，涵盖第 10-12 章：批处理、流处理、数据系统的未来。</p>
-<hr>
-<h2 id="第10章：批处理"><a href="#第10章：批处理" class="headerlink" title="第10章：批处理"></a>第10章：批处理</h2><h3 id="10-1-系统类型对比"><a href="#10-1-系统类型对比" class="headerlink" title="10.1 系统类型对比"></a>10.1 系统类型对比</h3><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>特点</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>在线服务</strong></td>
-<td>请求-响应模式，低延迟</td>
-<td>Web 服务、API</td>
-</tr>
-<tr>
-<td><strong>批处理系统</strong></td>
-<td>处理大量数据，高吞吐</td>
-<td>MapReduce、Spark</td>
-</tr>
-<tr>
-<td><strong>流处理系统</strong></td>
-<td>实时处理数据流</td>
-<td>Kafka Streams、Flink</td>
-</tr>
-</tbody></table>
-<p><img src="/images/ddia/part3/system-types-comparison.svg" alt="在线服务、批处理与流处理对比"></p>
-<h3 id="10-2-Unix-工具的批处理"><a href="#10-2-Unix-工具的批处理" class="headerlink" title="10.2 Unix 工具的批处理"></a>10.2 Unix 工具的批处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 找出访问量最高的 URL</span></span><br><span class="line"><span class="built_in">cat</span> access.log | </span><br><span class="line">  awk <span class="string">'{print $7}'</span> |    <span class="comment"># 提取 URL 字段</span></span><br><span class="line">  <span class="built_in">sort</span> |                <span class="comment"># 排序</span></span><br><span class="line">  <span class="built_in">uniq</span> -c |            <span class="comment"># 计数</span></span><br><span class="line">  <span class="built_in">sort</span> -rn |           <span class="comment"># 按计数降序排序</span></span><br><span class="line">  <span class="built_in">head</span> -n 10           <span class="comment"># 取前10</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>Unix 哲学</strong>：</p>
-<ul>
-<li>每个程序做好一件事</li>
-<li>输出可以成为另一个程序的输入</li>
-<li>快速原型开发</li>
-</ul>
-<h3 id="10-3-MapReduce"><a href="#10-3-MapReduce" class="headerlink" title="10.3 MapReduce"></a>10.3 MapReduce</h3><p><img src="/images/ddia/part3/mapreduce-flow.svg" alt="MapReduce：分片、Map、Shuffle、Reduce"></p>
-<h4 id="词频统计示例"><a href="#词频统计示例" class="headerlink" title="词频统计示例"></a>词频统计示例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Map 函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">map</span>(<span class="params">document</span>):</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> document.split():</span><br><span class="line">        emit(word, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Reduce 函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reduce</span>(<span class="params">word, counts</span>):</span><br><span class="line">    emit(word, <span class="built_in">sum</span>(counts))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行流程：</span></span><br><span class="line"><span class="comment"># 输入: "hello world hello"</span></span><br><span class="line"><span class="comment"># Map 输出: ("hello", 1), ("world", 1), ("hello", 1)</span></span><br><span class="line"><span class="comment"># Shuffle 后: "hello": [1, 1], "world": [1]</span></span><br><span class="line"><span class="comment"># Reduce 输出: ("hello", 2), ("world", 1)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="10-4-Join-策略"><a href="#10-4-Join-策略" class="headerlink" title="10.4 Join 策略"></a>10.4 Join 策略</h3><table>
-<thead>
-<tr>
-<th>策略</th>
-<th>特点</th>
-<th>适用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>排序-合并 Join</strong></td>
-<td>两边都排序后合并</td>
-<td>Reduce 端 Join</td>
-</tr>
-<tr>
-<td><strong>广播 Join</strong></td>
-<td>小表广播到所有节点</td>
-<td>一边数据量小</td>
-</tr>
-<tr>
-<td><strong>分区 Join</strong></td>
-<td>按相同键分区</td>
-<td>两边都很大</td>
-</tr>
-</tbody></table>
-<h3 id="10-5-现代批处理框架"><a href="#10-5-现代批处理框架" class="headerlink" title="10.5 现代批处理框架"></a>10.5 现代批处理框架</h3><table>
-<thead>
-<tr>
-<th>框架</th>
-<th>特点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Spark</strong></td>
-<td>内存计算，比 MapReduce 快 10-100x</td>
-</tr>
-<tr>
-<td><strong>Flink</strong></td>
-<td>统一批流处理</td>
-</tr>
-<tr>
-<td><strong>Presto/Trino</strong></td>
-<td>交互式 SQL 查询</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="第11章：流处理"><a href="#第11章：流处理" class="headerlink" title="第11章：流处理"></a>第11章：流处理</h2><h3 id="11-1-批处理-vs-流处理"><a href="#11-1-批处理-vs-流处理" class="headerlink" title="11.1 批处理 vs 流处理"></a>11.1 批处理 vs 流处理</h3><table>
-<thead>
-<tr>
-<th>方面</th>
-<th>批处理</th>
-<th>流处理</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>数据</td>
-<td>有界，静态</td>
-<td>无界，持续到达</td>
-</tr>
-<tr>
-<td>延迟</td>
-<td>分钟~小时</td>
-<td>毫秒~秒</td>
-</tr>
-<tr>
-<td>触发</td>
-<td>定时/手动</td>
-<td>事件驱动</td>
-</tr>
-<tr>
-<td>结果</td>
-<td>一次性输出</td>
-<td>持续更新</td>
-</tr>
-</tbody></table>
-<h3 id="11-2-消息系统"><a href="#11-2-消息系统" class="headerlink" title="11.2 消息系统"></a>11.2 消息系统</h3><h4 id="传统消息队列"><a href="#传统消息队列" class="headerlink" title="传统消息队列"></a>传统消息队列</h4><p><strong>代表</strong>：RabbitMQ, ActiveMQ, Amazon SQS</p>
-<p><img src="/images/ddia/part3/message-queue-traditional.svg" alt="传统消息队列：单消费者与消费后删除"></p>
-<h4 id="日志型消息系统（Kafka）"><a href="#日志型消息系统（Kafka）" class="headerlink" title="日志型消息系统（Kafka）"></a>日志型消息系统（Kafka）</h4><p><img src="/images/ddia/part3/kafka-partitions-consumers.svg" alt="Kafka 分区与消费者映射示意"></p>
-<p>特点：</p>
-<ul>
-<li>消息持久化，可重放</li>
-<li>保序（分区内）</li>
-<li>多消费者组可独立消费</li>
-</ul>
-<h3 id="11-3-Kafka-架构"><a href="#11-3-Kafka-架构" class="headerlink" title="11.3 Kafka 架构"></a>11.3 Kafka 架构</h3><p><img src="/images/ddia/part3/kafka-cluster-topic.svg" alt="Kafka 集群、Topic 分区与消费者组"></p>
-<h3 id="11-4-变更数据捕获（CDC）"><a href="#11-4-变更数据捕获（CDC）" class="headerlink" title="11.4 变更数据捕获（CDC）"></a>11.4 变更数据捕获（CDC）</h3><blockquote>
-<p>捕获数据库的变更，将其转换为事件流</p>
-</blockquote>
-<p><img src="/images/ddia/part3/cdc-pipeline.svg" alt="CDC：数据库变更经工具进入 Kafka"></p>
-<p><strong>应用场景</strong>：</p>
-<ul>
-<li>同步搜索索引、缓存</li>
-<li>微服务间数据同步</li>
-<li>实时 ETL</li>
-</ul>
-<h3 id="11-5-事件溯源（Event-Sourcing）"><a href="#11-5-事件溯源（Event-Sourcing）" class="headerlink" title="11.5 事件溯源（Event Sourcing）"></a>11.5 事件溯源（Event Sourcing）</h3><p><img src="/images/ddia/part3/event-sourcing-vs-traditional.svg" alt="传统状态更新与事件溯源对比"></p>
-<h3 id="11-6-时间语义"><a href="#11-6-时间语义" class="headerlink" title="11.6 时间语义"></a>11.6 时间语义</h3><table>
-<thead>
-<tr>
-<th>时间类型</th>
-<th>定义</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>事件时间</strong></td>
-<td>事件实际发生的时间</td>
-<td>业务逻辑</td>
-</tr>
-<tr>
-<td><strong>处理时间</strong></td>
-<td>事件到达处理系统的时间</td>
-<td>系统监控</td>
-</tr>
-<tr>
-<td><strong>摄入时间</strong></td>
-<td>事件进入流处理系统的时间</td>
-<td>折中方案</td>
-</tr>
-</tbody></table>
-<h3 id="11-7-窗口操作"><a href="#11-7-窗口操作" class="headerlink" title="11.7 窗口操作"></a>11.7 窗口操作</h3><table>
-<thead>
-<tr>
-<th>窗口类型</th>
-<th>特点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>滚动窗口</strong></td>
-<td>固定大小，不重叠</td>
-</tr>
-<tr>
-<td><strong>滑动窗口</strong></td>
-<td>固定大小，可重叠</td>
-</tr>
-<tr>
-<td><strong>会话窗口</strong></td>
-<td>按活动间隙分割</td>
-</tr>
-</tbody></table>
-<p><img src="/images/ddia/part3/stream-windows.svg" alt="滚动窗口与滑动窗口示意"></p>
-<hr>
-<h2 id="第12章：数据系统的未来"><a href="#第12章：数据系统的未来" class="headerlink" title="第12章：数据系统的未来"></a>第12章：数据系统的未来</h2><h3 id="12-1-数据集成"><a href="#12-1-数据集成" class="headerlink" title="12.1 数据集成"></a>12.1 数据集成</h3><blockquote>
-<p>将多个系统的数据统一管理</p>
-</blockquote>
-<p><img src="/images/ddia/part3/data-integration-arch.svg" alt="数据集成：多源汇聚事件日志再分发"></p>
-<h3 id="12-2-Lambda-架构"><a href="#12-2-Lambda-架构" class="headerlink" title="12.2 Lambda 架构"></a>12.2 Lambda 架构</h3><p><img src="/images/ddia/part3/lambda-architecture.svg" alt="Lambda：批处理层与速度层在服务层合并"></p>
-<p><strong>问题</strong>：需要维护两套代码</p>
-<h3 id="12-3-Kappa-架构"><a href="#12-3-Kappa-架构" class="headerlink" title="12.3 Kappa 架构"></a>12.3 Kappa 架构</h3><p><img src="/images/ddia/part3/kappa-architecture.svg" alt="Kappa：日志 + 流处理 + 服务层"></p>
-<p>统一批流处理：重放日志即可重新计算</p>
-<h3 id="12-4-解绑数据库"><a href="#12-4-解绑数据库" class="headerlink" title="12.4 解绑数据库"></a>12.4 解绑数据库</h3><blockquote>
-<p>将数据库的各个功能分解为独立组件</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>功能</th>
-<th>传统数据库</th>
-<th>解绑后</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>存储</td>
-<td>B-Tree</td>
-<td>分布式文件系统</td>
-</tr>
-<tr>
-<td>事务</td>
-<td>内置</td>
-<td>独立事务管理器</td>
-</tr>
-<tr>
-<td>索引</td>
-<td>内置</td>
-<td>外部搜索引擎</td>
-</tr>
-<tr>
-<td>缓存</td>
-<td>内置</td>
-<td>Redis</td>
-</tr>
-</tbody></table>
-<h3 id="12-5-端到端论证"><a href="#12-5-端到端论证" class="headerlink" title="12.5 端到端论证"></a>12.5 端到端论证</h3><blockquote>
-<p>某些功能只能在端到端层面正确实现</p>
-</blockquote>
-<p><strong>示例</strong>：exactly-once 消息传递</p>
-<ul>
-<li>中间件可能声称 exactly-once</li>
-<li>但网络可能中断</li>
-<li>真正的 exactly-once 需要应用层去重</li>
-</ul>
-<h3 id="12-6-数据流系统设计原则"><a href="#12-6-数据流系统设计原则" class="headerlink" title="12.6 数据流系统设计原则"></a>12.6 数据流系统设计原则</h3><ol>
-<li><strong>不可变性</strong>：日志是追加的，事件不可修改</li>
-<li><strong>可重放性</strong>：可以从日志重建状态</li>
-<li><strong>分离计算和存储</strong>：计算层无状态</li>
-<li><strong>模式演化</strong>：支持模式向前/向后兼容</li>
-</ol>
-<hr>
-<h2 id="本章关键要点"><a href="#本章关键要点" class="headerlink" title="本章关键要点"></a>本章关键要点</h2><ol>
-<li><strong>批处理适合高吞吐的离线计算</strong></li>
-<li><strong>MapReduce 是分布式批处理的基础范式</strong></li>
-<li><strong>流处理适合低延迟的实时计算</strong></li>
-<li><strong>Kafka 是现代流处理的核心组件</strong></li>
-<li><strong>CDC 连接传统数据库和事件流</strong></li>
-<li><strong>事件溯源将状态变更作为事件序列存储</strong></li>
-<li><strong>时间语义在流处理中至关重要</strong></li>
-<li><strong>Lambda/Kappa 架构是批流融合的尝试</strong></li>
-<li><strong>解绑数据库提供更大的灵活性</strong></li>
-</ol>
-<hr>
-<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
-<li>《Streaming Systems》：流处理权威指南</li>
-<li>《Kafka: The Definitive Guide》：Kafka 权威指南</li>
-<li>《Designing Data-Intensive Applications》原书</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part1-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3885,430 +3615,10 @@ mjx-container[display="true"] + br {
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>本文是 DDIA 第一部分的完整读书笔记，涵盖第 1-4 章：可靠性与可扩展性、数据模型、存储引擎、数据编码。</p>
-<hr>
-<h2 id="第1章：可靠性、可扩展性与可维护性"><a href="#第1章：可靠性、可扩展性与可维护性" class="headerlink" title="第1章：可靠性、可扩展性与可维护性"></a>第1章：可靠性、可扩展性与可维护性</h2><h3 id="1-1-数据密集型应用的组成"><a href="#1-1-数据密集型应用的组成" class="headerlink" title="1.1 数据密集型应用的组成"></a>1.1 数据密集型应用的组成</h3><p>现代数据密集型应用通常由多个组件组合：</p>
-<p><img src="/images/ddia-part1-data-intensive-arch.svg" alt="数据密集型应用架构：数据库、缓存、搜索索引、流处理、批处理、消息队列"></p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>特点</th>
-<th>主要瓶颈</th>
-<th>典型场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>数据密集型</strong></td>
-<td>数据量大、复杂、变化快</td>
-<td>磁盘I/O、网络带宽</td>
-<td>Web应用、社交网络</td>
-</tr>
-<tr>
-<td><strong>计算密集型</strong></td>
-<td>计算量大、算法复杂</td>
-<td>CPU处理能力</td>
-<td>科学计算、图形渲染</td>
-</tr>
-</tbody></table>
-<h3 id="1-2-可靠性（Reliability）"><a href="#1-2-可靠性（Reliability）" class="headerlink" title="1.2 可靠性（Reliability）"></a>1.2 可靠性（Reliability）</h3><blockquote>
-<p><strong>可靠性</strong>：系统在面对故障时，仍能正确运行</p>
+          <blockquote>
+<p><strong>正文已迁移至 <code>/books/</code> 固定目录（与《LLM Interview Handbook》系列相同的编排方式）。</strong><br>请阅读：<strong><a href="/books/ddia/part1.html">DDIA 第一部分：数据系统基础（第 1–4 章）</a></strong></p>
 </blockquote>
-<table>
-<thead>
-<tr>
-<th>术语</th>
-<th>英文</th>
-<th>定义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>故障</strong></td>
-<td>Fault</td>
-<td>系统中某个组件偏离其规格</td>
-</tr>
-<tr>
-<td><strong>失效</strong></td>
-<td>Failure</td>
-<td>整个系统停止为用户提供服务</td>
-</tr>
-<tr>
-<td><strong>容错</strong></td>
-<td>Fault-tolerant</td>
-<td>系统能够处理某些类型的故障</td>
-</tr>
-</tbody></table>
-<h4 id="故障类型及应对"><a href="#故障类型及应对" class="headerlink" title="故障类型及应对"></a>故障类型及应对</h4><p><strong>1. 硬件故障</strong></p>
-<ul>
-<li>硬盘损坏、内存故障、电源中断</li>
-<li>应对：RAID、双电源、热备份、多副本</li>
-</ul>
-<p><strong>2. 软件错误</strong></p>
-<ul>
-<li>比硬件故障更难预测，可能导致系统性问题</li>
-<li>应对：全面测试、进程隔离、监控告警</li>
-</ul>
-<p><strong>3. 人为错误</strong></p>
-<ul>
-<li>研究表明，运维人员的配置错误是系统中断的首要原因</li>
-<li>应对：良好的API设计、沙箱环境、快速回滚</li>
-</ul>
-<h3 id="1-3-可扩展性（Scalability）"><a href="#1-3-可扩展性（Scalability）" class="headerlink" title="1.3 可扩展性（Scalability）"></a>1.3 可扩展性（Scalability）</h3><blockquote>
-<p><strong>可扩展性</strong>：系统应对负载增长的能力</p>
-</blockquote>
-<h4 id="描述性能：百分位数"><a href="#描述性能：百分位数" class="headerlink" title="描述性能：百分位数"></a>描述性能：百分位数</h4><table>
-<thead>
-<tr>
-<th>百分位</th>
-<th>含义</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>p50</strong></td>
-<td>中位数</td>
-<td>典型响应时间</td>
-</tr>
-<tr>
-<td><strong>p95</strong></td>
-<td>95%的请求快于此值</td>
-<td>较高标准</td>
-</tr>
-<tr>
-<td><strong>p99</strong></td>
-<td>99%的请求快于此值</td>
-<td>SLA标准</td>
-</tr>
-</tbody></table>
-<h4 id="Twitter-案例：推拉模式"><a href="#Twitter-案例：推拉模式" class="headerlink" title="Twitter 案例：推拉模式"></a>Twitter 案例：推拉模式</h4><table>
-<thead>
-<tr>
-<th>方案</th>
-<th>描述</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>拉模式</strong></td>
-<td>读取时间线时查询关注者的推文</td>
-<td>写入简单</td>
-<td>读取开销大</td>
-</tr>
-<tr>
-<td><strong>推模式</strong></td>
-<td>发推时写入所有关注者的缓存</td>
-<td>读取快速</td>
-<td>写入开销大（大V问题）</td>
-</tr>
-<tr>
-<td><strong>混合模式</strong></td>
-<td>普通用户推模式，大V拉模式</td>
-<td>平衡读写</td>
-<td>实现复杂</td>
-</tr>
-</tbody></table>
-<h4 id="扩展策略"><a href="#扩展策略" class="headerlink" title="扩展策略"></a>扩展策略</h4><ul>
-<li><strong>纵向扩展</strong>：使用更强大的机器（简单但有上限）</li>
-<li><strong>横向扩展</strong>：使用多台普通机器（需要复杂设计）</li>
-<li><strong>弹性扩展</strong>：根据负载自动增减资源</li>
-</ul>
-<h3 id="1-4-可维护性（Maintainability）"><a href="#1-4-可维护性（Maintainability）" class="headerlink" title="1.4 可维护性（Maintainability）"></a>1.4 可维护性（Maintainability）</h3><blockquote>
-<p>软件的大部分成本不在于最初的开发，而在于后续的维护</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>方面</th>
-<th>目标</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>可操作性</strong></td>
-<td>让运维团队能够轻松保持系统运行</td>
-</tr>
-<tr>
-<td><strong>简单性</strong></td>
-<td>让新工程师能够轻松理解系统</td>
-</tr>
-<tr>
-<td><strong>可演化性</strong></td>
-<td>让工程师能够轻松对系统进行修改</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="第2章：数据模型与查询语言"><a href="#第2章：数据模型与查询语言" class="headerlink" title="第2章：数据模型与查询语言"></a>第2章：数据模型与查询语言</h2><h3 id="2-1-数据模型分层"><a href="#2-1-数据模型分层" class="headerlink" title="2.1 数据模型分层"></a>2.1 数据模型分层</h3><p><img src="/images/ddia-part1-data-model-layers.svg" alt="数据模型分层：应用层、数据模型层、存储层、硬件层"></p>
-<h3 id="2-2-关系模型"><a href="#2-2-关系模型" class="headerlink" title="2.2 关系模型"></a>2.2 关系模型</h3><table>
-<thead>
-<tr>
-<th>概念</th>
-<th>描述</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>关系（Relation）</strong></td>
-<td>表</td>
-<td>users表</td>
-</tr>
-<tr>
-<td><strong>元组（Tuple）</strong></td>
-<td>行/记录</td>
-<td>一个用户记录</td>
-</tr>
-<tr>
-<td><strong>属性（Attribute）</strong></td>
-<td>列</td>
-<td>name, email, age</td>
-</tr>
-</tbody></table>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 规范化设计：使用外键引用</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> positions (</span><br><span class="line">    position_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    title <span class="type">VARCHAR</span>(<span class="number">100</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> users (</span><br><span class="line">    user_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>),</span><br><span class="line">    position_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> positions(position_id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p><strong>优势</strong>：数据一致性、灵活查询、ACID事务、成熟稳定<br><strong>局限</strong>：对象-关系阻抗不匹配、模式僵化、扩展困难</p>
-<h3 id="2-3-文档模型"><a href="#2-3-文档模型" class="headerlink" title="2.3 文档模型"></a>2.3 文档模型</h3><p><strong>代表产品</strong>：MongoDB, CouchDB, Elasticsearch</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"user_id"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"name"</span><span class="punctuation">:</span> <span class="string">"张三"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"positions"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"软件工程师"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"ABC公司"</span><span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">{</span><span class="attr">"title"</span><span class="punctuation">:</span> <span class="string">"技术总监"</span><span class="punctuation">,</span> <span class="attr">"company"</span><span class="punctuation">:</span> <span class="string">"XYZ公司"</span><span class="punctuation">}</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"skills"</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">"Java"</span><span class="punctuation">,</span> <span class="string">"Python"</span><span class="punctuation">,</span> <span class="string">"分布式系统"</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>文档模型</th>
-<th>关系模型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>数据结构</strong></td>
-<td>嵌套/层次化</td>
-<td>扁平/规范化</td>
-</tr>
-<tr>
-<td><strong>模式</strong></td>
-<td>灵活（Schema-on-read）</td>
-<td>严格（Schema-on-write）</td>
-</tr>
-<tr>
-<td><strong>局部性</strong></td>
-<td>好（整个文档一起存储）</td>
-<td>差（需要JOIN多表）</td>
-</tr>
-<tr>
-<td><strong>多对多关系</strong></td>
-<td>较难处理</td>
-<td>容易处理</td>
-</tr>
-</tbody></table>
-<h3 id="2-4-图模型"><a href="#2-4-图模型" class="headerlink" title="2.4 图模型"></a>2.4 图模型</h3><p><strong>适用场景</strong>：社交网络、知识图谱、推荐系统</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// Neo4j Cypher 示例</span><br><span class="line">CREATE (alice:Person {name: 'Alice', age: 30})</span><br><span class="line">CREATE (bob:Person {name: 'Bob', age: 25})</span><br><span class="line">CREATE (alice)-[:FOLLOWS {since: '2020-01-01'}]-&gt;(bob)</span><br><span class="line"></span><br><span class="line">-- 找出 Alice 关注的人所关注的人</span><br><span class="line">MATCH (alice:Person {name: 'Alice'})-[:FOLLOWS]-&gt;()-[:FOLLOWS]-&gt;(fof)</span><br><span class="line">RETURN fof.name</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-5-数据模型选择指南"><a href="#2-5-数据模型选择指南" class="headerlink" title="2.5 数据模型选择指南"></a>2.5 数据模型选择指南</h3><p><img src="/images/ddia-part1-model-selection-flowchart.svg" alt="数据模型选择：关系复杂度与结构形态决策"></p>
-<hr>
-<h2 id="第3章：存储与检索"><a href="#第3章：存储与检索" class="headerlink" title="第3章：存储与检索"></a>第3章：存储与检索</h2><h3 id="3-1-两大存储引擎家族"><a href="#3-1-两大存储引擎家族" class="headerlink" title="3.1 两大存储引擎家族"></a>3.1 两大存储引擎家族</h3><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>优化目标</th>
-<th>典型应用</th>
-<th>代表产品</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>日志结构存储</strong></td>
-<td>写入优化</td>
-<td>高写入负载</td>
-<td>LevelDB, RocksDB, Cassandra</td>
-</tr>
-<tr>
-<td><strong>原地更新存储</strong></td>
-<td>读取优化</td>
-<td>事务处理</td>
-<td>MySQL InnoDB, PostgreSQL</td>
-</tr>
-</tbody></table>
-<h3 id="3-2-哈希索引"><a href="#3-2-哈希索引" class="headerlink" title="3.2 哈希索引"></a>3.2 哈希索引</h3><p><img src="/images/ddia-part1-hash-index.svg" alt="哈希索引：内存哈希表与磁盘日志文件"></p>
-<p><strong>局限</strong>：所有键必须在内存中、范围查询慢</p>
-<h3 id="3-3-LSM-Tree（Log-Structured-Merge-Tree）"><a href="#3-3-LSM-Tree（Log-Structured-Merge-Tree）" class="headerlink" title="3.3 LSM-Tree（Log-Structured Merge-Tree）"></a>3.3 LSM-Tree（Log-Structured Merge-Tree）</h3><p><img src="/images/ddia-part1-lsm-tree.svg" alt="LSM-Tree：Memtable 与多级 SSTable"></p>
-<p><strong>优化技术</strong>：</p>
-<ul>
-<li><strong>布隆过滤器</strong>：快速判断键是否存在（避免无效磁盘读取）</li>
-<li><strong>压缩策略</strong>：Size-Tiered（写密集）、Leveled（读密集）</li>
-</ul>
-<h3 id="3-4-B-Tree"><a href="#3-4-B-Tree" class="headerlink" title="3.4 B-Tree"></a>3.4 B-Tree</h3><p><img src="/images/ddia-part1-btree.svg" alt="B-Tree：根、内部节点与叶子示意"></p>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>B-Tree</th>
-<th>LSM-Tree</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>写入</strong></td>
-<td>原地更新</td>
-<td>追加写入</td>
-</tr>
-<tr>
-<td><strong>读取</strong></td>
-<td>快（一次定位）</td>
-<td>可能需要检查多个文件</td>
-</tr>
-<tr>
-<td><strong>写放大</strong></td>
-<td>较低</td>
-<td>较高（压缩开销）</td>
-</tr>
-<tr>
-<td><strong>空间利用</strong></td>
-<td>可能碎片化</td>
-<td>更紧凑</td>
-</tr>
-</tbody></table>
-<h3 id="3-5-OLTP-vs-OLAP"><a href="#3-5-OLTP-vs-OLAP" class="headerlink" title="3.5 OLTP vs OLAP"></a>3.5 OLTP vs OLAP</h3><table>
-<thead>
-<tr>
-<th>特性</th>
-<th>OLTP</th>
-<th>OLAP</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>全称</strong></td>
-<td>在线事务处理</td>
-<td>在线分析处理</td>
-</tr>
-<tr>
-<td><strong>主要操作</strong></td>
-<td>增删改查</td>
-<td>复杂查询、聚合</td>
-</tr>
-<tr>
-<td><strong>访问模式</strong></td>
-<td>基于键的随机访问</td>
-<td>扫描大量记录</td>
-</tr>
-<tr>
-<td><strong>数据量</strong></td>
-<td>GB~TB</td>
-<td>TB~PB</td>
-</tr>
-<tr>
-<td><strong>响应时间</strong></td>
-<td>毫秒级</td>
-<td>秒~分钟级</td>
-</tr>
-</tbody></table>
-<p><strong>列式存储优势</strong>：</p>
-<ul>
-<li>只读取需要的列</li>
-<li>相同类型数据更易压缩</li>
-<li>向量化处理</li>
-</ul>
-<hr>
-<h2 id="第4章：数据编码与演化"><a href="#第4章：数据编码与演化" class="headerlink" title="第4章：数据编码与演化"></a>第4章：数据编码与演化</h2><h3 id="4-1-兼容性概念"><a href="#4-1-兼容性概念" class="headerlink" title="4.1 兼容性概念"></a>4.1 兼容性概念</h3><p><img src="/images/ddia-part1-encoding-compatibility.svg" alt="后向兼容与前向兼容：新旧代码读写数据关系"></p>
-<p><strong>滚动升级</strong>：不停机部署新版本，同时运行新旧版本代码</p>
-<h3 id="4-2-编码格式对比"><a href="#4-2-编码格式对比" class="headerlink" title="4.2 编码格式对比"></a>4.2 编码格式对比</h3><table>
-<thead>
-<tr>
-<th>特性</th>
-<th>JSON</th>
-<th>Protobuf</th>
-<th>Thrift</th>
-<th>Avro</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>可读性</td>
-<td>高</td>
-<td>无</td>
-<td>无</td>
-<td>无</td>
-</tr>
-<tr>
-<td>空间效率</td>
-<td>低</td>
-<td>高</td>
-<td>高</td>
-<td>最高</td>
-</tr>
-<tr>
-<td>模式</td>
-<td>可选</td>
-<td>必须</td>
-<td>必须</td>
-<td>必须</td>
-</tr>
-<tr>
-<td>模式演化</td>
-<td>手动</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>动态模式</td>
-<td>天然</td>
-<td>困难</td>
-<td>困难</td>
-<td>支持</td>
-</tr>
-</tbody></table>
-<h3 id="4-3-Protocol-Buffers-示例"><a href="#4-3-Protocol-Buffers-示例" class="headerlink" title="4.3 Protocol Buffers 示例"></a>4.3 Protocol Buffers 示例</h3><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Person</span> {</span><br><span class="line">  <span class="keyword">required</span> <span class="type">string</span> user_name = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">optional</span> <span class="type">int64</span> favorite_number = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">repeated</span> <span class="type">string</span> interests = <span class="number">3</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-
-<p><strong>兼容性规则</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>操作</th>
-<th>后向兼容</th>
-<th>前向兼容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>添加可选字段</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>删除可选字段</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>添加必填字段</td>
-<td>✗</td>
-<td>✗</td>
-</tr>
-<tr>
-<td>修改字段标签</td>
-<td>✗</td>
-<td>✗</td>
-</tr>
-</tbody></table>
-<h3 id="4-4-数据流模式"><a href="#4-4-数据流模式" class="headerlink" title="4.4 数据流模式"></a>4.4 数据流模式</h3><p><strong>1. 数据库</strong>：数据可能比代码更持久，需要能够读取多年前写入的数据</p>
-<p><strong>2. 服务调用（REST/RPC）</strong>：</p>
-<ul>
-<li>REST：基于HTTP，资源导向</li>
-<li>gRPC：基于Protobuf，高性能</li>
-</ul>
-<p><strong>3. 消息传递</strong>：</p>
-<ul>
-<li>解耦、缓冲、异步、可靠性</li>
-<li>代表：Kafka, RabbitMQ</li>
-</ul>
-<hr>
-<h2 id="本章关键要点"><a href="#本章关键要点" class="headerlink" title="本章关键要点"></a>本章关键要点</h2><ol>
-<li><strong>可靠性</strong>不是追求零故障，而是在故障发生时系统仍能正常工作</li>
-<li><strong>百分位数</strong>比平均值更能反映用户真实体验</li>
-<li><strong>抽象</strong>是管理复杂性的最重要工具</li>
-<li><strong>没有万能的数据模型</strong>，选择取决于应用场景</li>
-<li><strong>LSM-Tree</strong>优化写入，<strong>B-Tree</strong>优化读取</li>
-<li><strong>兼容性是渐进式部署的前提</strong></li>
-</ol>
-<hr>
-<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
-<li>《Site Reliability Engineering》：Google SRE 实践</li>
-<li>《Database Internals》：数据库内部原理深入指南</li>
-<li>《Building Microservices》：服务间通信详解</li>
-</ul>
+<p>系列总览：<a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/">《DDIA》读书笔记系列</a> · <a href="/books/ddia/">目录页</a></p>
 
       
     </div>
@@ -4386,322 +3696,91 @@ mjx-container[display="true"] + br {
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>本文是 DDIA 第二部分的完整读书笔记，涵盖第 5-9 章：数据复制、数据分区、事务、分布式挑战、一致性与共识。</p>
-<hr>
-<h2 id="第5章：数据复制"><a href="#第5章：数据复制" class="headerlink" title="第5章：数据复制"></a>第5章：数据复制</h2><h3 id="5-1-复制的目的"><a href="#5-1-复制的目的" class="headerlink" title="5.1 复制的目的"></a>5.1 复制的目的</h3><table>
-<thead>
-<tr>
-<th>目的</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>高可用性</strong></td>
-<td>部分节点故障时系统仍可用</td>
-</tr>
-<tr>
-<td><strong>降低延迟</strong></td>
-<td>将数据放在离用户更近的地方</td>
-</tr>
-<tr>
-<td><strong>提高读吞吐</strong></td>
-<td>多个副本可以并行处理读请求</td>
-</tr>
-</tbody></table>
-<h3 id="5-2-主从复制"><a href="#5-2-主从复制" class="headerlink" title="5.2 主从复制"></a>5.2 主从复制</h3><p><img src="/images/ddia/part2/leader-follower-replication.svg" alt="主从复制：Leader、复制日志与多个 Follower"></p>
-<h3 id="同步复制-vs-异步复制"><a href="#同步复制-vs-异步复制" class="headerlink" title="同步复制 vs 异步复制"></a>同步复制 vs 异步复制</h3><table>
-<thead>
-<tr>
-<th>方式</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>同步</strong></td>
-<td>数据一致，从节点数据最新</td>
-<td>延迟高，从节点故障会阻塞</td>
-</tr>
-<tr>
-<td><strong>异步</strong></td>
-<td>延迟低，不受从节点影响</td>
-<td>数据可能丢失</td>
-</tr>
-<tr>
-<td><strong>半同步</strong></td>
-<td>平衡一致性和可用性</td>
-<td>实现复杂</td>
-</tr>
-</tbody></table>
-<h3 id="故障转移（Failover）"><a href="#故障转移（Failover）" class="headerlink" title="故障转移（Failover）"></a>故障转移（Failover）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 检测主节点故障（心跳超时）</span><br><span class="line">2. 选举新主节点（选择数据最新的节点）</span><br><span class="line">3. 重新配置系统</span><br><span class="line">   - 客户端发送写请求到新主节点</span><br><span class="line">   - 其他从节点从新主节点复制</span><br></pre></td></tr></table></figure>
-
-<p><strong>问题</strong>：数据丢失、脑裂、超时设置</p>
-<h3 id="5-3-复制延迟问题"><a href="#5-3-复制延迟问题" class="headerlink" title="5.3 复制延迟问题"></a>5.3 复制延迟问题</h3><p><strong>读己之写一致性</strong>：用户写入后立即读取可能看到旧数据</p>
-<p><strong>单调读</strong>：用户刷新页面可能路由到不同从节点，看到数据”回退”</p>
-<p><strong>一致前缀读</strong>：因果关系打乱（先看到回答再看到问题）</p>
-<h3 id="5-4-多主复制"><a href="#5-4-多主复制" class="headerlink" title="5.4 多主复制"></a>5.4 多主复制</h3><p><img src="/images/ddia/part2/multi-datacenter-multi-master.svg" alt="多主复制：两数据中心异步互连"></p>
-<p><strong>冲突解决策略</strong>：</p>
-<ul>
-<li>最后写入胜出（LWW）</li>
-<li>合并值</li>
-<li>CRDT</li>
-<li>自定义逻辑</li>
-</ul>
-<h3 id="5-5-无主复制（Quorum）"><a href="#5-5-无主复制（Quorum）" class="headerlink" title="5.5 无主复制（Quorum）"></a>5.5 无主复制（Quorum）</h3><p><strong>公式</strong>：<code>W + R &gt; N</code></p>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>N</td>
-<td>副本总数</td>
-</tr>
-<tr>
-<td>W</td>
-<td>写入需要确认的副本数</td>
-</tr>
-<tr>
-<td>R</td>
-<td>读取需要查询的副本数</td>
-</tr>
-</tbody></table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">示例：N=3, W=2, R=2</span><br><span class="line">写入成功需要 2 个副本确认</span><br><span class="line">读取需要查询 2 个副本</span><br><span class="line">W + R = 4 &gt; N = 3 → 保证读到最新值</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="第6章：数据分区"><a href="#第6章：数据分区" class="headerlink" title="第6章：数据分区"></a>第6章：数据分区</h2><h3 id="6-1-分区的目的"><a href="#6-1-分区的目的" class="headerlink" title="6.1 分区的目的"></a>6.1 分区的目的</h3><blockquote>
-<p>将大数据集分散到多个节点，每个节点只存储部分数据</p>
+          <blockquote>
+<p><strong>正文已迁移至 <code>/books/</code> 固定目录（与《LLM Interview Handbook》系列相同的编排方式）。</strong><br>请阅读：<strong><a href="/books/ddia/part2.html">DDIA 第二部分：分布式数据（第 5–9 章）</a></strong></p>
 </blockquote>
-<h3 id="6-2-分区策略"><a href="#6-2-分区策略" class="headerlink" title="6.2 分区策略"></a>6.2 分区策略</h3><h4 id="按键范围分区"><a href="#按键范围分区" class="headerlink" title="按键范围分区"></a>按键范围分区</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分区1: A-F    分区2: G-N    分区3: O-Z</span><br></pre></td></tr></table></figure>
+<p>系列总览：<a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/">《DDIA》读书笔记系列</a> · <a href="/books/ddia/">目录页</a></p>
 
-<p><strong>优点</strong>：支持范围查询<br><strong>缺点</strong>：可能导致热点</p>
-<h4 id="按哈希分区"><a href="#按哈希分区" class="headerlink" title="按哈希分区"></a>按哈希分区</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分区 = hash(key) % N</span><br></pre></td></tr></table></figure>
+      
+    </div>
 
-<p><strong>优点</strong>：均匀分布<br><strong>缺点</strong>：不支持范围查询</p>
-<h3 id="6-3-次级索引分区"><a href="#6-3-次级索引分区" class="headerlink" title="6.3 次级索引分区"></a>6.3 次级索引分区</h3><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>特点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>本地索引</td>
-<td>写入快，查询需要scatter-gather</td>
-</tr>
-<tr>
-<td>全局索引</td>
-<td>查询快，写入需要分布式事务</td>
-</tr>
-</tbody></table>
-<h3 id="6-4-分区再平衡"><a href="#6-4-分区再平衡" class="headerlink" title="6.4 分区再平衡"></a>6.4 分区再平衡</h3><table>
-<thead>
-<tr>
-<th>策略</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>固定分区数</td>
-<td>预先创建多个分区</td>
-</tr>
-<tr>
-<td>动态分区</td>
-<td>根据数据大小自动分裂/合并</td>
-</tr>
-<tr>
-<td>按节点分区</td>
-<td>每个节点固定数量的分区</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="第7章：事务"><a href="#第7章：事务" class="headerlink" title="第7章：事务"></a>第7章：事务</h2><h3 id="7-1-ACID-特性"><a href="#7-1-ACID-特性" class="headerlink" title="7.1 ACID 特性"></a>7.1 ACID 特性</h3><table>
-<thead>
-<tr>
-<th>特性</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>原子性 (Atomicity)</strong></td>
-<td>全部成功或全部失败</td>
-</tr>
-<tr>
-<td><strong>一致性 (Consistency)</strong></td>
-<td>从一个有效状态到另一个有效状态</td>
-</tr>
-<tr>
-<td><strong>隔离性 (Isolation)</strong></td>
-<td>并发事务互不干扰</td>
-</tr>
-<tr>
-<td><strong>持久性 (Durability)</strong></td>
-<td>提交后数据不丢失</td>
-</tr>
-</tbody></table>
-<h3 id="7-2-隔离级别"><a href="#7-2-隔离级别" class="headerlink" title="7.2 隔离级别"></a>7.2 隔离级别</h3><table>
-<thead>
-<tr>
-<th>级别</th>
-<th>脏读</th>
-<th>不可重复读</th>
-<th>幻读</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>读未提交</td>
-<td>✓</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>读已提交</td>
-<td>✗</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>可重复读</td>
-<td>✗</td>
-<td>✗</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>可串行化</td>
-<td>✗</td>
-<td>✗</td>
-<td>✗</td>
-</tr>
-</tbody></table>
-<h3 id="7-3-串行化实现"><a href="#7-3-串行化实现" class="headerlink" title="7.3 串行化实现"></a>7.3 串行化实现</h3><h4 id="真正的串行执行"><a href="#真正的串行执行" class="headerlink" title="真正的串行执行"></a>真正的串行执行</h4><ul>
-<li>单线程处理事务</li>
-<li>适合事务短、数据在内存</li>
-</ul>
-<h4 id="两阶段锁定（2PL）"><a href="#两阶段锁定（2PL）" class="headerlink" title="两阶段锁定（2PL）"></a>两阶段锁定（2PL）</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">增长阶段：只能获取锁</span><br><span class="line">收缩阶段：只能释放锁</span><br></pre></td></tr></table></figure>
+    
+    
+    
 
-<h4 id="可串行化快照隔离（SSI）"><a href="#可串行化快照隔离（SSI）" class="headerlink" title="可串行化快照隔离（SSI）"></a>可串行化快照隔离（SSI）</h4><ul>
-<li>乐观并发控制</li>
-<li>检测冲突后回滚</li>
-</ul>
-<h3 id="7-4-分布式事务"><a href="#7-4-分布式事务" class="headerlink" title="7.4 分布式事务"></a>7.4 分布式事务</h3><h4 id="两阶段提交（2PC）"><a href="#两阶段提交（2PC）" class="headerlink" title="两阶段提交（2PC）"></a>两阶段提交（2PC）</h4><p><img src="/images/ddia/part2/two-phase-commit.svg" alt="两阶段提交 2PC：准备阶段与提交阶段"></p>
-<p><strong>问题</strong>：协调者故障时参与者阻塞</p>
-<hr>
-<h2 id="第8章：分布式系统的挑战"><a href="#第8章：分布式系统的挑战" class="headerlink" title="第8章：分布式系统的挑战"></a>第8章：分布式系统的挑战</h2><h3 id="8-1-不可靠的网络"><a href="#8-1-不可靠的网络" class="headerlink" title="8.1 不可靠的网络"></a>8.1 不可靠的网络</h3><ul>
-<li>请求可能丢失</li>
-<li>请求可能排队很久</li>
-<li>响应可能丢失</li>
-<li>无法区分节点故障和网络故障</li>
-</ul>
-<h3 id="8-2-不可靠的时钟"><a href="#8-2-不可靠的时钟" class="headerlink" title="8.2 不可靠的时钟"></a>8.2 不可靠的时钟</h3><table>
-<thead>
-<tr>
-<th>时钟类型</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>墙上时钟</td>
-<td>获取当前时间（NTP同步）</td>
-</tr>
-<tr>
-<td>单调时钟</td>
-<td>测量时间间隔</td>
-</tr>
-</tbody></table>
-<p><strong>问题</strong>：不同机器时钟可能不同步</p>
-<h3 id="8-3-进程暂停"><a href="#8-3-进程暂停" class="headerlink" title="8.3 进程暂停"></a>8.3 进程暂停</h3><ul>
-<li>GC 暂停</li>
-<li>虚拟机暂停</li>
-<li>页面交换</li>
-</ul>
-<h3 id="8-4-拜占庭故障"><a href="#8-4-拜占庭故障" class="headerlink" title="8.4 拜占庭故障"></a>8.4 拜占庭故障</h3><blockquote>
-<p>节点可能发送任意消息（故意或无意）</p>
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://foosynaptic.github.io/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/jojo_median.ico">
+      <meta itemprop="name" content="fooSynaptic">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fooSynaptic">
+      <meta itemprop="description" content="Truth through synaptic thinking. 以突触般的智能连接，探索真理。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | fooSynaptic">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/28/DDIA-Part3-%E8%A1%8D%E7%94%9F%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">DDIA Part 3: 衍生数据</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-28 00:00:00" itemprop="dateCreated datePublished" datetime="2025-12-28T00:00:00+08:00">2025-12-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><strong>正文已迁移至 <code>/books/</code> 固定目录（与《LLM Interview Handbook》系列相同的编排方式）。</strong><br>请阅读：<strong><a href="/books/ddia/part3.html">DDIA 第三部分：衍生数据（第 10–12 章）</a></strong></p>
 </blockquote>
-<hr>
-<h2 id="第9章：一致性与共识"><a href="#第9章：一致性与共识" class="headerlink" title="第9章：一致性与共识"></a>第9章：一致性与共识</h2><h3 id="9-1-一致性模型"><a href="#9-1-一致性模型" class="headerlink" title="9.1 一致性模型"></a>9.1 一致性模型</h3><p><img src="/images/ddia/part2/consistency-spectrum.svg" alt="一致性模型：从弱到强的光谱"></p>
-<h3 id="9-2-线性一致性"><a href="#9-2-线性一致性" class="headerlink" title="9.2 线性一致性"></a>9.2 线性一致性</h3><blockquote>
-<p>系统表现得好像只有一个数据副本，所有操作都是原子的</p>
-</blockquote>
-<p><img src="/images/ddia/part2/linearizability-timeline.svg" alt="线性一致性：写入后所有后续读须见新值"></p>
-<h3 id="9-3-CAP-定理"><a href="#9-3-CAP-定理" class="headerlink" title="9.3 CAP 定理"></a>9.3 CAP 定理</h3><p><img src="/images/ddia/part2/cap-theorem.svg" alt="CAP：一致性、可用性、分区容忍三者不可兼得"></p>
-<h3 id="9-4-共识算法"><a href="#9-4-共识算法" class="headerlink" title="9.4 共识算法"></a>9.4 共识算法</h3><p><strong>共识的性质</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>性质</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>一致同意</strong></td>
-<td>所有节点决定相同的值</td>
-</tr>
-<tr>
-<td><strong>完整性</strong></td>
-<td>决定的值必须是某个节点提议的</td>
-</tr>
-<tr>
-<td><strong>终止性</strong></td>
-<td>最终会做出决定</td>
-</tr>
-</tbody></table>
-<h3 id="9-5-Raft-算法"><a href="#9-5-Raft-算法" class="headerlink" title="9.5 Raft 算法"></a>9.5 Raft 算法</h3><p><img src="/images/ddia/part2/raft-leader-followers.svg" alt="Raft：Leader 向 Follower 复制日志"></p>
-<p><strong>选举流程</strong>：</p>
-<ol>
-<li>跟随者超时未收到心跳</li>
-<li>转变为候选人，增加任期</li>
-<li>向其他节点请求投票</li>
-<li>获得多数票则成为领导者</li>
-</ol>
-<h3 id="9-6-Paxos-算法"><a href="#9-6-Paxos-算法" class="headerlink" title="9.6 Paxos 算法"></a>9.6 Paxos 算法</h3><p><img src="/images/ddia/part2/paxos-two-phases.svg" alt="Paxos：Prepare / Promise 与 Accept / Accepted"></p>
-<h3 id="Raft-vs-Paxos"><a href="#Raft-vs-Paxos" class="headerlink" title="Raft vs Paxos"></a>Raft vs Paxos</h3><table>
-<thead>
-<tr>
-<th>方面</th>
-<th>Raft</th>
-<th>Paxos</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>可理解性</td>
-<td>高</td>
-<td>低</td>
-</tr>
-<tr>
-<td>领导者</td>
-<td>稳定领导者</td>
-<td>每次共识可能不同</td>
-</tr>
-<tr>
-<td>日志</td>
-<td>连续日志</td>
-<td>可能有空洞</td>
-</tr>
-</tbody></table>
-<h3 id="9-7-共识的应用"><a href="#9-7-共识的应用" class="headerlink" title="9.7 共识的应用"></a>9.7 共识的应用</h3><ul>
-<li><strong>ZooKeeper</strong>：Kafka 使用进行领导者选举</li>
-<li><strong>etcd</strong>：Kubernetes 存储集群状态</li>
-<li><strong>Consul</strong>：服务发现和配置</li>
-</ul>
-<hr>
-<h2 id="本章关键要点"><a href="#本章关键要点" class="headerlink" title="本章关键要点"></a>本章关键要点</h2><ol>
-<li><strong>复制的核心挑战是处理变更</strong></li>
-<li><strong>异步复制有数据丢失风险</strong></li>
-<li><strong>Quorum 使用 W + R &gt; N 保证一致性</strong></li>
-<li><strong>分区支持水平扩展</strong></li>
-<li><strong>隔离级别是性能与一致性的权衡</strong></li>
-<li><strong>线性一致性是最强的一致性保证</strong></li>
-<li><strong>CAP 定理表明网络分区时需要取舍</strong></li>
-<li><strong>Raft 比 Paxos 更易理解</strong></li>
-</ol>
-<hr>
-<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
-<li>《Amazon Dynamo》论文：无主复制经典论文</li>
-<li>《Paxos Made Simple》：Lamport 的简化版 Paxos</li>
-<li>《In Search of an Understandable Consensus Algorithm》：Raft 论文</li>
-</ul>
+<p>系列总览：<a href="/2025/12/28/DDIA-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E6%80%BB%E8%A7%88/">《DDIA》读书笔记系列</a> · <a href="/books/ddia/">目录页</a></p>
 
       
     </div>
