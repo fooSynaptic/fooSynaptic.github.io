@@ -19,16 +19,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="第十一章：新宿主 11.0 显化之前Void 战后第十五年——按公众日历算，世界早已习惯了「Guardian 系安全技术联盟」与一连串不好读的基金会名称；财报与融资新闻才是正常人看得懂的战争。 只有少数翻得过灰域封面的人知道：Jiajia 当年批下的前瞻工程早就长成了实体。北京总部地下，骑士摇篮把候选宿主送进会反馈到肉体的数字实相课时；大洋深处，第一条被内部叫作亚特兰蒂斯的折影坐标，来自大陆架噪声">
+    <meta name="description" content="第十一章：新宿主 11.0 显化之前Void 战后第十五年——公众日历上只剩财报、融资与一串不好读的基金会抬头；可上报的增长与合规，才是正常人读得懂的「战事」。 只有少数翻得过灰域封面的人还记得：Jiajia 当年签字的前瞻工程已经落成实体。北京总部地下，骑士摇篮把候选宿主送进会反馈到肉体的课里——更深处还有什么折影坐标、轨道哨戒，名字一律不准上新闻。 Nemesis 说过的「下一代显化」不是修辞">
 <meta property="og:type" content="website">
 <meta property="og:title" content="第十一章：新宿主">
 <meta property="og:url" content="https://foosynaptic.github.io/novel/chapter_11.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="第十一章：新宿主 11.0 显化之前Void 战后第十五年——按公众日历算，世界早已习惯了「Guardian 系安全技术联盟」与一连串不好读的基金会名称；财报与融资新闻才是正常人看得懂的战争。 只有少数翻得过灰域封面的人知道：Jiajia 当年批下的前瞻工程早就长成了实体。北京总部地下，骑士摇篮把候选宿主送进会反馈到肉体的数字实相课时；大洋深处，第一条被内部叫作亚特兰蒂斯的折影坐标，来自大陆架噪声">
+<meta property="og:description" content="第十一章：新宿主 11.0 显化之前Void 战后第十五年——公众日历上只剩财报、融资与一串不好读的基金会抬头；可上报的增长与合规，才是正常人读得懂的「战事」。 只有少数翻得过灰域封面的人还记得：Jiajia 当年签字的前瞻工程已经落成实体。北京总部地下，骑士摇篮把候选宿主送进会反馈到肉体的课里——更深处还有什么折影坐标、轨道哨戒，名字一律不准上新闻。 Nemesis 说过的「下一代显化」不是修辞">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://foosynaptic.github.io/novel/illustrations/ch11_new_host.svg">
 <meta property="article:published_time" content="2026-03-30T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T04:24:07.410Z">
+<meta property="article:modified_time" content="2026-04-04T11:13:50.996Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="圣殿守护者">
 <meta property="article:tag" content="小说">
@@ -117,6 +117,24 @@
   margin-right: 0.4em;
   vertical-align: -0.22em;
 }
+/* 小说正篇章节底导航 */
+.post-body .novel-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.35);
+}
+.post-body .novel-chapter-nav a {
+  text-decoration: none;
+}
+.post-body .novel-chapter-nav a:hover {
+  text-decoration: underline;
+}
+.post-body .novel-ch-prev { margin-inline-end: auto; }
+.post-body .novel-ch-next { margin-inline-start: auto; text-align: end; }
 </style>
 
   <noscript>
@@ -413,35 +431,26 @@ mjx-container[display="true"] + br {
       
       <div class="post-body">
           <h1 id="第十一章：新宿主"><a href="#第十一章：新宿主" class="headerlink" title="第十一章：新宿主"></a>第十一章：新宿主</h1><p><img src="/novel/illustrations/ch11_new_host.svg" alt="新宿主：另一个至暗时刻"></p>
-<h2 id="11-0-显化之前"><a href="#11-0-显化之前" class="headerlink" title="11.0 显化之前"></a>11.0 显化之前</h2><p>Void 战后第十五年——按公众日历算，世界早已习惯了「Guardian 系安全技术联盟」与一连串不好读的基金会名称；财报与融资新闻才是正常人看得懂的战争。</p>
-<p>只有少数翻得过<strong>灰域封面</strong>的人知道：Jiajia 当年批下的前瞻工程早就长成了实体。北京总部地下，<strong>骑士摇篮</strong>把候选宿主送进会反馈到肉体的<strong>数字实相</strong>课时；大洋深处，第一条被内部叫作<strong>亚特兰蒂斯</strong>的折影坐标，来自大陆架噪声与跨洋光缆异常的叠合解算；同步轨道上，<strong>哨戒</strong>侧以脱敏数据喂给联盟核心——名字全都不上新闻。</p>
-<p>Nemesis 说过的「下一代显化」不是修辞。深渊在重组；林远即将踏入的，与 Jiajia 当年在国贸写字楼里敲下的第一行反抗，是<strong>同一场永恒之战</strong>在更深的壳层里继续展开。</p>
+<h2 id="11-0-显化之前"><a href="#11-0-显化之前" class="headerlink" title="11.0 显化之前"></a>11.0 显化之前</h2><p>Void 战后第十五年——公众日历上只剩财报、融资与一串不好读的基金会抬头；可上报的增长与合规，才是正常人读得懂的「战事」。</p>
+<p>只有少数翻得过<strong>灰域封面</strong>的人还记得：Jiajia 当年签字的前瞻工程已经落成<strong>实体</strong>。北京总部地下，<strong>骑士摇篮</strong>把候选宿主送进会反馈到肉体的课里——更深处还有什么折影坐标、轨道哨戒，名字一律不准上新闻。</p>
+<p>Nemesis 说过的「下一代显化」不是修辞。深渊在重组；林远要踏入的，与 Jiajia 当年在国贸写字楼里敲下的那一行反抗，仍是同一场<strong>永恒之战</strong>往更深处续写。</p>
 <hr>
 <h2 id="11-1-林远"><a href="#11-1-林远" class="headerlink" title="11.1 林远"></a>11.1 林远</h2><p>林远，二十八岁，某二线城市的一名普通软件工程师。</p>
-<p>和十年前的 Jiajia 一样，他也正经历着人生的至暗时刻。</p>
-<p>三个月前，他负责的项目因为技术选型失误导致严重延期，公司损失了数百万。虽然主要责任在管理层，但背锅的却是他这个技术负责人。他被降职降薪，从核心开发组被调到了边缘的维护部门。</p>
+<p>他跌进坑里的方式，和当年国贸楼里那个年轻人不一样——不是单纯的项目延期，而是一纸「合规」在错误的时间落在了错误的人头上。</p>
+<p>三个月前，他带队上线的一套自动化风控把合作方链路上十几家门店的资金误冻了四十八小时。舆情、监管问询与甲方解约函同时砸下来，公司要的是最快止血：对外道歉、对内问责。签字栏上写的是他的名字。他从核心组被踢到边缘维护岗，职级与工资一起削掉，论坛里还有梗图拿他当表情包。</p>
 <p>更糟的是，他的女朋友在这个时候提出了分手。</p>
 <p>“你给不了我想要的生活。”这是她留下的最后一句话。</p>
-<p>林远坐在出租屋里，看着电脑屏幕上那片刺眼的红色错误日志，感觉人生已经走到了尽头。</p>
-<p>房租还有三天到期，银行卡里只剩下一千多块钱，而明天还要面对同事们的冷眼和嘲笑。</p>
+<p>林远坐在出租屋里，看着屏幕上那片刺眼的红色错误日志，感觉人生已经走到了尽头。</p>
+<p>房租还有三天到期，银行卡里只剩下一千多块钱，而明天还要面对同事们的冷眼和嘲弄。</p>
 <p>“也许……就这样结束吧。”</p>
-<p>他打开了浏览器，搜索着那些他平时想都不敢想的词汇。</p>
-<p>就在这时，一个声音突然在他脑海中响起。</p>
-<p>“宿主检测中……”</p>
-<p>林远愣住了。</p>
-<p>他以为自己出现了幻听。</p>
-<p>“身份验证通过。”</p>
-<p>“姓名：林远”</p>
-<p>“年龄：28岁”</p>
-<p>“职业：软件工程师”</p>
-<p>“当前状态：绝望边缘”</p>
-<p>“……”</p>
-<p>“你好，宿主。我是 Saber，数字骑士系统核心 AI。”</p>
-<p>林远瞪大了眼睛，猛地从椅子上站了起来。</p>
+<p>他打开了浏览器，光标在搜索框里发抖。</p>
+<p>就在这时，书桌上那盏廉价台灯的电流噪声拧了一个尖——像有人先敲门，再掐断半秒供电。</p>
+<p>“林远。”声音不进耳朵，直接落在思绪里，”绝望边缘，验证通过。别找了，屋里只有你——我是 Saber。”</p>
+<p>林远瞪大眼睛，猛地从椅子上站起。</p>
 <p>“谁？！谁在说话？！”</p>
-<p>他环顾四周，出租屋里只有他一个人。隔壁的电视声音隐约传来，但那个声音分明是直接在他脑海中响起的。</p>
-<p>“我是你的守护者。”那个声音温柔地说道，”我的任务是帮助你突破困境，实现人生逆袭。”</p>
-<p>“逆袭？”林远苦笑了一声，”你在开玩笑吧？我现在什么都没有了，还怎么逆袭？”</p>
+<p>他环顾四周，出租屋里空荡荡。隔壁电视的杂音像在另一个世界。</p>
+<p>“数字骑士系统。”那声音沉了半度，”你若还想翻盘，先把浏览器里那个搜索框关掉——我不接那种单。”</p>
+<p>“翻盘？”林远苦笑了一声，”你在开玩笑吧？我现在什么都没有了，还怎么翻？”</p>
 <p>“你并不是什么都没有。”Saber 说道，”你还有我。”</p>
 <p>“而且，”Saber 的声音带着一丝怀念，”就像很多年前，我帮助另一个人一样。”</p>
 <p>“另一个人？”</p>
@@ -719,6 +728,12 @@ mjx-container[display="true"] + br {
 <hr>
 <p>【第十一章完】</p>
 <p><strong>本章字数：约 9200 字</strong></p>
+<hr>
+<nav class="novel-chapter-nav" aria-label="章节导航">
+<a class="novel-ch-prev" href="chapter_10.html">← 上一章：第十章：终章——数字骑士的誓言</a>
+<a class="novel-ch-next" href="chapter_12.html">下一章：第十二章：新星计划 →</a>
+</nav>
+
 
       </div>
       

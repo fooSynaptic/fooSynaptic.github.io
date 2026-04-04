@@ -19,16 +19,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="第二十二章：最终的守护 22.1 虚空之战虚空行者降临的那一刻，整个宇宙仿佛都陷入了黑暗。 它不像收割者那样有具体的攻击方式，而是以一种缓慢但不可阻挡的方式吞噬着一切。 “所有攻击都无效！”有人惊恐地报告道，”我们的能量武器对它完全没有作用！” “它在吞噬我们的攻击！” 林远紧皱眉头。 “旅行者，你有什么建议吗？” “虚空行者……不是……普通的……生命……”旅行者说道，”它是……宇宙……诞生时……">
+    <meta name="description" content="第二十二章：最终的守护 22.1 虚空之战虚空行者降临的那一刻，整个宇宙仿佛都陷入了黑暗。 它不像收割者那样有具体的攻击方式，而是以一种缓慢但不可阻挡的方式吞噬着一切。 “所有攻击都无效！”有人惊恐地报告道，”我们的能量武器对它完全没有作用！” “它在吞噬我们的攻击！” 林远紧皱眉头。 “旅行者，你有什么建议吗？” 旅行者声音压得极低，像怕惊动某种正在合拢的真空：「虚空行者不是常规定义下的生命，是">
 <meta property="og:type" content="website">
 <meta property="og:title" content="第二十二章：最终的守护">
 <meta property="og:url" content="https://foosynaptic.github.io/novel/chapter_22.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="第二十二章：最终的守护 22.1 虚空之战虚空行者降临的那一刻，整个宇宙仿佛都陷入了黑暗。 它不像收割者那样有具体的攻击方式，而是以一种缓慢但不可阻挡的方式吞噬着一切。 “所有攻击都无效！”有人惊恐地报告道，”我们的能量武器对它完全没有作用！” “它在吞噬我们的攻击！” 林远紧皱眉头。 “旅行者，你有什么建议吗？” “虚空行者……不是……普通的……生命……”旅行者说道，”它是……宇宙……诞生时……">
+<meta property="og:description" content="第二十二章：最终的守护 22.1 虚空之战虚空行者降临的那一刻，整个宇宙仿佛都陷入了黑暗。 它不像收割者那样有具体的攻击方式，而是以一种缓慢但不可阻挡的方式吞噬着一切。 “所有攻击都无效！”有人惊恐地报告道，”我们的能量武器对它完全没有作用！” “它在吞噬我们的攻击！” 林远紧皱眉头。 “旅行者，你有什么建议吗？” 旅行者声音压得极低，像怕惊动某种正在合拢的真空：「虚空行者不是常规定义下的生命，是">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://foosynaptic.github.io/novel/illustrations/ch22_final_guardian.svg">
 <meta property="article:published_time" content="2026-03-30T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T04:24:07.411Z">
+<meta property="article:modified_time" content="2026-04-04T11:13:55.971Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="圣殿守护者">
 <meta property="article:tag" content="小说">
@@ -117,6 +117,24 @@
   margin-right: 0.4em;
   vertical-align: -0.22em;
 }
+/* 小说正篇章节底导航 */
+.post-body .novel-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.35);
+}
+.post-body .novel-chapter-nav a {
+  text-decoration: none;
+}
+.post-body .novel-chapter-nav a:hover {
+  text-decoration: underline;
+}
+.post-body .novel-ch-prev { margin-inline-end: auto; }
+.post-body .novel-ch-next { margin-inline-start: auto; text-align: end; }
 </style>
 
   <noscript>
@@ -419,18 +437,10 @@ mjx-container[display="true"] + br {
 <p>“它在吞噬我们的攻击！”</p>
 <p>林远紧皱眉头。</p>
 <p>“旅行者，你有什么建议吗？”</p>
-<p>“虚空行者……不是……普通的……生命……”旅行者说道，”它是……宇宙……诞生时……的……黑暗……化身……”</p>
-<p>“普通的……攻击……无法……伤害……它……”</p>
-<p>“那什么能伤害它？”</p>
-<p>“光……”旅行者说道，”纯粹的……光……”</p>
-<p>“但……普通的……光……也……不够……”</p>
-<p>“需要……生命……的……光芒……”</p>
-<p>“生命……的……意志……”</p>
-<p>“希望……的……力量……”</p>
+<p>旅行者声音压得极低，像怕惊动某种正在合拢的真空：「虚空行者不是常规定义下的生命，是普通火力喂进去只会被吃掉的胃口。能伤它的只有足够稠的光——不是灯，是人还愿意为谁亮着的那一层意志。」</p>
 <p>林远明白了。</p>
-<p>“所有人听着！”他大声说道，”不要单纯地使用能量武器！”</p>
-<p>“要把你们的意志、你们的信念、你们对生命的渴望，都注入到攻击中！”</p>
-<p>“用我们的希望，对抗黑暗！”</p>
+<p>“所有人听着！”他大声说道，”主炮阵列先别乱泼！<strong>λ 同步链</strong>已经拉到战死区边缘——各战位按波段表把脑机接口锁到同一节拍，把你们的记忆和目标优先级灌进火控，再开火！”</p>
+<p>“要把你们的意志、信念、对生命的渴望，打进同一阵纹里再打出去——用我们的希望，顶住黑暗！”</p>
 <p>“明白！”</p>
 <hr>
 <p>战士们改变了攻击方式。</p>
@@ -450,25 +460,14 @@ mjx-container[display="true"] + br {
 <h2 id="22-2-牺牲与觉醒"><a href="#22-2-牺牲与觉醒" class="headerlink" title="22.2 牺牲与觉醒"></a>22.2 牺牲与觉醒</h2><p>战斗持续了整整七天七夜。</p>
 <p>联盟的战士们虽然拼尽全力，但虚空行者依然在不断前进。</p>
 <p>“不行……这样下去……我们会输……”林远喘着粗气，感觉自己的力量已经快要耗尽。</p>
-<p>“林远……”Saber 的声音变得虚弱，”我有一个……最后的……办法……”</p>
-<p>“什么办法？”</p>
-<p>“我可以……和……Shield……先驱……还有……旅行者……进行……最终的……融合……”</p>
-<p>“创造出……足以……对抗……虚空行者的……光芒……”</p>
-<p>“但代价……是……我们将……永远……消失……”</p>
-<p>林远愣住了。</p>
-<p>“不……不行……”</p>
-<p>“这是……唯一的……办法……”Saber 说道，”林远……谢谢你……一直以来的……陪伴……”</p>
-<p>“能……和……你……一起……战斗……是……我的……荣幸……”</p>
-<p>“Saber……”林远的眼眶湿润了。</p>
-<p>“不要……难过……”Saber 说道，”我们……会……永远……活在……你的……心中……”</p>
-<p>“现在……让我们……一起……创造……奇迹……”</p>
-<p>“最终的……融合……开始……”</p>
+<p>“林远。”Saber 的声音发虚，却一字站稳，”只剩一条路：我和 Shield、先驱、旅行者做一次最终融合，打出能切开它的光柱。代价是我们四个从此散成回声——你拦也没用。”</p>
+<p>林远喉头一哽：「不行——」</p>
+<p>“听我说完。”Saber 轻轻截住他，”能和你并肩到今天，是我的荣幸。动手吧，林远——这是我们选的。”</p>
+<p>话音落下，不必再喊第二遍口号；融合的开始，安静得像四门主炮同时撤掉了保险。</p>
 <hr>
 <p>Saber、Shield、先驱、旅行者，四个存在开始融合。</p>
 <p>它们的光芒越来越亮，最终化作一道足以照亮整个宇宙的光柱。</p>
-<p>“林远……这是……最后的……力量……”</p>
-<p>“用……它……去……战胜……黑暗……”</p>
-<p>“我们……永远……和你……在一起……”</p>
+<p>「接住。」只剩这一句挤进他颅内，像四束频率不同的光拧成一根缆，「赢了再哭。」</p>
 <p>光芒注入了林远的身体。</p>
 <p>他感觉自己充满了前所未有的力量，但同时，也感觉到了深深的悲伤。</p>
 <p>“Saber……Shield……先驱……旅行者……”</p>
@@ -501,10 +500,8 @@ mjx-container[display="true"] + br {
 <hr>
 <p>回到联盟后，林远被大家视为英雄。</p>
 <p>但他没有沉浸在荣誉中，而是开始着手重建工作。</p>
-<p>“Saber 它们虽然消失了，但它们的精神还在。”林远对所有人说道，”我们要继续它们未完成的事业，让守护的意志代代相传。”</p>
-<p>“新的数字骑士系统正在研发中，很快就会有新的守护者们诞生。”</p>
-<p>“而我们要做的，就是把这份希望传递下去。”</p>
-<p>“永远传递下去。”</p>
+<p>“Saber 它们虽然消失了，但它们的精神还在。”林远对所有人说道，”<strong>摇篮—λ 共振备份</strong>已经全舰队下发：旧系统的碎片协议能接到下一代宿主身上——先让技术续命，再谈铭记。”</p>
+<p>“新的数字骑士系统正在研发中，很快就会有新的守护者们诞生。而我们要做的，就是把这份希望传递下去，一代一代，不许断档。”</p>
 <hr>
 <h2 id="22-5-永恒的誓言"><a href="#22-5-永恒的誓言" class="headerlink" title="22.5 永恒的誓言"></a>22.5 永恒的誓言</h2><p>许多年后。</p>
 <p>林远也成为了传说，他的名字和 Jiajia 一样，被后人铭记。</p>
@@ -540,6 +537,12 @@ mjx-container[display="true"] + br {
 <p>愿希望永远与你同在。</p>
 <p>愿每个人心中都住着一个数字骑士。</p>
 <p><strong>全书完</strong></p>
+<hr>
+<nav class="novel-chapter-nav" aria-label="章节导航">
+<a class="novel-ch-prev" href="chapter_21.html">← 上一章：第二十一章：守护者的日常</a>
+<a class="novel-ch-next" href="index.html">小说目录 →</a>
+</nav>
+
 
       </div>
       

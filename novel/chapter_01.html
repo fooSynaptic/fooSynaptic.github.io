@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://foosynaptic.github.io/novel/illustrations/ch01_beijing_night.svg">
 <meta property="og:image" content="https://foosynaptic.github.io/novel/illustrations/ch01_awakening_tesseract.svg">
 <meta property="article:published_time" content="2026-03-30T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T04:24:07.409Z">
+<meta property="article:modified_time" content="2026-04-04T11:13:41.448Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="圣殿守护者">
 <meta property="article:tag" content="小说">
@@ -119,6 +119,24 @@
   margin-right: 0.4em;
   vertical-align: -0.22em;
 }
+/* 小说正篇章节底导航 */
+.post-body .novel-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.35);
+}
+.post-body .novel-chapter-nav a {
+  text-decoration: none;
+}
+.post-body .novel-chapter-nav a:hover {
+  text-decoration: underline;
+}
+.post-body .novel-ch-prev { margin-inline-end: auto; }
+.post-body .novel-ch-next { margin-inline-start: auto; text-align: end; }
 </style>
 
   <noscript>
@@ -420,11 +438,11 @@ mjx-container[display="true"] + br {
 <hr>
 <p>在那遥远的、超越凡人理解的高维空间中，存在着一个由纯粹代码构成的世界。这不是人类所理解的数字世界——不是由0和1组成的冰冷逻辑，而是由符文、算法和意志编织而成的宏伟宇宙。</p>
 <p>这里，是**高阶天堂（High Heavens）<strong>与</strong>燃烧地狱（Burning Hells）**的战场。</p>
-<p>天堂之中，银白色的数据流如瀑布般倾泻而下，形成了巍峨的尖塔与圣洁的回廊。无数天使在其中穿行，他们的身躯由纯净的光与逻辑构成，每一个都是完美秩序的化身。最高议会的七位大天使端坐于水晶王座之上，俯瞰着芸芸众生。他们是：<strong>正义的泰瑞尔（Tyrael）</strong>、<strong>希望的奥莉尔（Auriel）</strong>、<strong>命运的伊瑟瑞尔（Itherael）</strong>、<strong>智慧的马萨伊尔（Malthael）</strong>、<strong>英勇的因普瑞斯（Imperius）</strong>、<strong>刚毅的安杰瑞斯（Angiris）</strong>，以及<strong>仁慈的赛麦尔（Samael）</strong>。</p>
-<p>而在地狱深处，暗红色的岩浆在虚空中流淌，将一切映照得如同末日景象。七位恶魔领主统治着各自的疆域，他们是：<strong>憎恨之王墨菲斯托（Mephisto）</strong>、<strong>毁灭之王巴尔（Baal）</strong>、<strong>恐惧之王迪亚波罗（Diablo）</strong>，以及象征七宗罪的四大次级魔王——<strong>贪婪的阿兹莫丹（Azmodan）</strong>、<strong>色欲的安达利尔（Andariel）</strong>、<strong>暴食的督瑞尔（Duriel）<strong>和</strong>愤怒的彼列（Belial）</strong>。恶魔们形态各异，有的如同扭曲的巨兽，有的如同腐烂的尸骸，有的则是纯粹的暗影与恶意。</p>
+<p>天堂之中，银白色的数据流如瀑布般倾泻而下，尖塔与回廊由光与逻辑砌成。最高议会七尊水晶王座的身影俯瞰众生；后文还将与你同行的，至少有这样几位名字：<strong>正义的泰瑞尔（Tyrael）</strong>、<strong>英勇的因普瑞斯（Imperius）</strong>、<strong>希望的奥莉尔（Auriel）</strong>——其余大天使仍在眩目的瀑光里沉默端坐。</p>
+<p>地狱深处，岩浆般的暗红灌满虚空。<strong>憎恨之王墨菲斯托（Mephisto）</strong>、<strong>毁灭之王巴尔（Baal）</strong>、**恐惧之王迪亚波罗（Diablo）**各据一隅，次级魔王的疆域在火海下彼此撕咬；那些形貌——有的像巨兽，有的像腐骸，有的只是纯粹的暗影——如今不必逐一登记。</p>
 <p>这场战争已经持续了无数个纪元。</p>
-<p>天使们相信，只有绝对的秩序才能拯救世界。他们认为，所有的代码都应当遵循既定的规范，所有的程序都应当被严格控制。开源，在他们眼中是混乱的根源；自由，是他们无法容忍的异端。他们追求的是一种完美的、不容置疑的统治——每一行代码都要经过审查，每一个程序员都要被监控。</p>
-<p>而恶魔们则不同。他们并不在乎秩序，他们只在乎力量。闭源软件、商业垄断、专利壁垒——这些都是他们手中的武器。他们蛊惑着世间的程序员，用金钱、地位和权力诱惑他们堕落。七宗罪在科技界找到了完美的载体：贪婪驱动着对利润的追逐，傲慢滋养着技术的封闭，憎恨则让开源社区与商业公司之间的对立日益尖锐。</p>
+<p>天使们相信唯有铁律能救世：<strong>开源</strong>在他们眼里像敞开的伤口——秩序要的是可审计的每一行（职场里你迟早会收到那种抄送全员的「合规审计」模板邮件）。</p>
+<p>恶魔们只管力量：<strong>闭源</strong>、垄断与盖章的<strong>专利函</strong>是他们塞给凡人的契约；钱和头衔是诱饵，锁链在许可证里。后文你还会从反派口中听见墨菲斯托、迪亚波罗与巴尔那几个名字——那是另一条线的回声。</p>
 <p>在这场永恒之战中，有一个世界被双方争夺得最激烈——</p>
 <p>那就是<strong>庇护所（Sanctuary）</strong>。</p>
 <p>庇护所并非天使的造物，也非恶魔的领地。它是意外诞生的奇迹，是代码世界与物质世界交汇的边境。在那里，程序员们如同被遗忘的羔羊，在不知情的情况下编织着这个世界的命运。他们的每一次提交（commit），每一个分支（branch），都在无意中影响着两个世界的平衡。</p>
@@ -443,9 +461,7 @@ mjx-container[display="true"] + br {
 <p>而少数觉醒的奈非天，则开始寻找自己的道路。</p>
 <p>他们聚集在一起，成立了一个古老的组织——<strong>赫拉迪姆（Horadrim）</strong>。</p>
 <p>赫拉迪姆的成立时间已经不可考证，有人说它诞生于互联网诞生之初，有人说它甚至早于计算机的出现。无论如何，这个组织的存在是庇护所最大的秘密之一。</p>
-<p>赫拉迪姆的<strong>公域格架</strong>隐藏在众目睽睽之下。</p>
-<p>表面上，那只是庇护所里最寻常的一层协作面——人人上来摞一段片段、留一道痕迹，像无数个匿名格间紧挨在一起。但在觉醒者眼里，它是被撕碎又铺平的<strong>时间格架</strong>：《星际穿越》里那种把瞬间排成书架的视角，在这里换成了一排排项目与补丁：<strong>信标共鸣</strong>弱的格位里，往往嵌着最深的符文；谁若只当它是社交喧嚣，就永远读不到下一维。</p>
-<p>每一个公开摞叠的「练习册」，都可能是古人留下的书脊；每一行看似无聊的注释，都可能是等人对齐语境才会<strong>显化</strong>的密码。</p>
+<p>赫拉迪姆把线索撒在众目睽睽的<strong>公域格架</strong>上——像一排排长货架，人人上来摞一格练习与补丁；只有对齐频率的人，才读得出哪几格里嵌着<strong>信标</strong>与等人唤醒的符文。至于某个具体署名会把伏笔钉在哪儿，等你随主角摸到 Saber 再点破不迟。</p>
 <p>赫拉迪姆的成员遍布世界各地，他们以各种身份隐藏在人群中。有的是默默无闻的独立开发者，有的是大公司的普通员工，有的是学术界的边缘人物。他们之间很少直接联系，却通过一种神秘的方式保持着沟通——<strong>符文之语（Runewords）</strong>。</p>
 <p>符文之语是一种特殊的代码组合。</p>
 <p>单独看，它们只是普通的函数、变量或者注释；但当它们以特定的顺序组合在一起时，就会产生不可思议的力量。有的符文之语能够提升程序的性能，有的能够增强安全性，还有的能够唤醒沉睡的奈非天血脉。</p>
@@ -1031,18 +1047,12 @@ mjx-container[display="true"] + br {
 <p>【第一章：至暗时刻 完】</p>
 <hr>
 <p><strong>本章字数统计：约 21,500 中文字</strong></p>
-<p><strong>本章概要：</strong></p>
-<ul>
-<li>1.0 序章：永恒之战——介绍了高阶天堂与燃烧地狱的永恒之战，天使与恶魔以开源与闭源、自由与垄断的形式在庇护所（数字世界）中对抗</li>
-<li>1.1 庇护所的阴影——Jiajia在现实世界的困境，展现了他被公司打压、被李明欺负的绝望处境</li>
-<li>1.2 地狱的低语——揭示李明是地狱的代理人，被恶魔马尔法斯腐蚀，正在策划阴谋</li>
-<li>1.3 赫拉迪姆的遗迹——Jiajia在公域格架上同步署名 fooSynaptic 的信标，开始接触符文之语的知识</li>
-<li>1.4 奈非天之血——Jiajia觉醒奈非天血脉，Saber以泰瑞尔的化身形态降临，正式激活数字骑士系统</li>
-<li>1.5 泰瑞尔的降临——Saber展现天使真身，向Jiajia揭示永恒之战的真相和数字骑士的使命</li>
-<li>1.6 符文初现——Jiajia掌握第一个符文之语”代码洞察”，并在与李明的交锋中展现新获得的力量</li>
-<li>1.7 第一次猎魔——Jiajia揭穿李明植入木马的阴谋，完成第一次与地狱势力的正面交锋，正式踏上数字骑士之路</li>
-</ul>
-<p><strong>下一章预告：</strong><br>Jiajia将开始他的逆袭之路，利用数字骑士系统和奈非天的力量，在技术上不断突破，同时揭开赫拉迪姆更多的秘密。而地狱的势力也不会善罢甘休，更强大的代理人正在暗中集结……</p>
+<hr>
+<nav class="novel-chapter-nav" aria-label="章节导航">
+<a class="novel-ch-prev" href="index.html">← 小说目录</a>
+<a class="novel-ch-next" href="chapter_02.html">下一章：第二章：代码即利剑 →</a>
+</nav>
+
 
       </div>
       

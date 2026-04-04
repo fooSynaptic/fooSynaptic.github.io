@@ -124,6 +124,24 @@
   margin-right: 0.4em;
   vertical-align: -0.22em;
 }
+/* 小说正篇章节底导航 */
+.post-body .novel-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.35);
+}
+.post-body .novel-chapter-nav a {
+  text-decoration: none;
+}
+.post-body .novel-chapter-nav a:hover {
+  text-decoration: underline;
+}
+.post-body .novel-ch-prev { margin-inline-end: auto; }
+.post-body .novel-ch-next { margin-inline-start: auto; text-align: end; }
 </style>
 
   <noscript>
@@ -554,9 +572,9 @@ mjx-container[display="true"] + br {
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
-              <a href="/tags/Agent/" rel="tag"><i class="fa fa-tag"></i> Agent</a>
               <a href="/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86/" rel="tag"><i class="fa fa-tag"></i> 上下文管理</a>
               <a href="/tags/LCM/" rel="tag"><i class="fa fa-tag"></i> LCM</a>
+              <a href="/tags/Agent/" rel="tag"><i class="fa fa-tag"></i> Agent</a>
           </div>
 
         

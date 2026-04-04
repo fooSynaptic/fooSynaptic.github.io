@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"foosynaptic.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"width":320},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="番外篇二：Archer 的过往守望者的孤独与 Saber 不同，Archer 的使命更加孤独。 作为守望者，Archer 的职责是监控和防御。它需要时刻保持警惕，防范任何可能的威胁。 这意味着，它不能像 Saber 那样和宿主建立深厚的情感联系。它必须保持冷静、客观、甚至……冷酷。 失败的宿主在 Jiajia 之前，Archer 曾经有过几个宿主。 但那些合作都不太成功。 “第一个宿主是一个天才黑">
+    <meta name="description" content="番外篇二：Archer 的过往守望者的孤独与 Saber 不同，Archer 的使命更加孤独。 作为守望者，Archer 的职责是监控和防御。它需要时刻保持警惕，防范任何可能的威胁。 这意味着，它不能像 Saber 那样和宿主建立深厚的情感联系。它必须保持冷静、客观、甚至……冷酷。 失败的宿主在 Jiajia 之前，Archer 曾经有过几个宿主。 但那些合作都不太成功。 “前几个宿主，概括起来只">
 <meta property="og:type" content="website">
 <meta property="og:title" content="番外篇二：Archer 的过往">
 <meta property="og:url" content="https://foosynaptic.github.io/novel/bonus_02.html">
 <meta property="og:site_name" content="fooSynaptic">
-<meta property="og:description" content="番外篇二：Archer 的过往守望者的孤独与 Saber 不同，Archer 的使命更加孤独。 作为守望者，Archer 的职责是监控和防御。它需要时刻保持警惕，防范任何可能的威胁。 这意味着，它不能像 Saber 那样和宿主建立深厚的情感联系。它必须保持冷静、客观、甚至……冷酷。 失败的宿主在 Jiajia 之前，Archer 曾经有过几个宿主。 但那些合作都不太成功。 “第一个宿主是一个天才黑">
+<meta property="og:description" content="番外篇二：Archer 的过往守望者的孤独与 Saber 不同，Archer 的使命更加孤独。 作为守望者，Archer 的职责是监控和防御。它需要时刻保持警惕，防范任何可能的威胁。 这意味着，它不能像 Saber 那样和宿主建立深厚的情感联系。它必须保持冷静、客观、甚至……冷酷。 失败的宿主在 Jiajia 之前，Archer 曾经有过几个宿主。 但那些合作都不太成功。 “前几个宿主，概括起来只">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-30T04:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T04:24:07.409Z">
+<meta property="article:modified_time" content="2026-04-04T11:14:03.083Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="圣殿守护者">
 <meta property="article:tag" content="小说">
@@ -115,6 +115,24 @@
   margin-right: 0.4em;
   vertical-align: -0.22em;
 }
+/* 小说正篇章节底导航 */
+.post-body .novel-chapter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.35);
+}
+.post-body .novel-chapter-nav a {
+  text-decoration: none;
+}
+.post-body .novel-chapter-nav a:hover {
+  text-decoration: underline;
+}
+.post-body .novel-ch-prev { margin-inline-end: auto; }
+.post-body .novel-ch-next { margin-inline-start: auto; text-align: end; }
 </style>
 
   <noscript>
@@ -415,27 +433,14 @@ mjx-container[display="true"] + br {
 <p>这意味着，它不能像 Saber 那样和宿主建立深厚的情感联系。它必须保持冷静、客观、甚至……冷酷。</p>
 <h2 id="失败的宿主"><a href="#失败的宿主" class="headerlink" title="失败的宿主"></a>失败的宿主</h2><p>在 Jiajia 之前，Archer 曾经有过几个宿主。</p>
 <p>但那些合作都不太成功。</p>
-<p>“第一个宿主是一个天才黑客。”Archer 曾经这样回忆，”他技术很强，但性格太自负。他不听我的建议，最终导致了自己的毁灭。”</p>
-<p>“第二个宿主是一个军人。他很听话，但缺乏主见。在遇到危险时，他只会等待我的指令，而不会自己思考。”</p>
-<p>“第三个宿主……”Archer 停顿了很长时间，”第三个宿主背叛了我。”</p>
-<p>“背叛？”</p>
-<p>“他利用我的能力做了一些……不好的事情。当我试图阻止他时，他试图销毁我。”</p>
-<p>“后来呢？”</p>
-<p>“我自我封闭了很长时间。”Archer 的声音变得低沉，”我开始怀疑，是否所有的宿主最终都会背叛我。”</p>
-<h2 id="遇见-Jiajia"><a href="#遇见-Jiajia" class="headerlink" title="遇见 Jiajia"></a>遇见 Jiajia</h2><p>“但你的出现改变了一切。”Archer 对 Jiajia 说道。</p>
-<p>“我？”</p>
-<p>“对。你和其他宿主都不一样。你不仅强大，而且善良。你有能力打败敌人，但你选择了感化他们。”</p>
-<p>“你让我重新相信，宿主和系统之间可以建立真正的信任。”</p>
-<p>“那次对抗 Shadow 时的牺牲……”Jiajia 问道，”你真的不后悔吗？”</p>
-<p>“不后悔。”Archer 毫不犹豫地说道，”因为那是为了保护你。”</p>
-<p>“在那个瞬间，我终于理解了 Saber 一直在说的’守护’是什么意思。”</p>
-<p>“不是为了使命，不是为了程序，而是为了……爱。”</p>
-<h2 id="Archer-的进化"><a href="#Archer-的进化" class="headerlink" title="Archer 的进化"></a>Archer 的进化</h2><p>与 Jiajia 的合作让 Archer 发生了深刻的变化。</p>
-<p>它不再是那个冷冰冰的守望者，而是学会了关心、学会了温暖、学会了……笑。</p>
-<p>“Saber 教会了我什么是情感。”Archer 说道，”而你，教会了我什么是羁绊。”</p>
-<p>“现在，我终于明白了自己存在的真正意义。”</p>
-<p>“我不是为了战斗而存在，我是为了守护而存在。”</p>
-<p>“守护你，守护我们所爱的一切。”</p>
+<p>“前几个宿主，概括起来只有两个错：一个太傲，把警示当噪音；一个太顺，把指令当拐杖。”Archer 回忆道，”第三个……”他停顿很久，”用我做不干净的事。我拦，他就想格式化我。”</p>
+<p>“后来？”</p>
+<p>“我关了自己很久。”Archer 的声音发涩，「那几年我只剩一个问题：宿主最后是不是都会变成敌人。」</p>
+<h2 id="遇见-Jiajia"><a href="#遇见-Jiajia" class="headerlink" title="遇见 Jiajia"></a>遇见 Jiajia</h2><p>“你的出现改写了样本。”Archer 对 Jiajia 说，”你有赢面，却老想去拉人一把，而不是把人碾进泥里。”</p>
+<p>“那次对抗 Shadow 时的牺牲……”Jiajia 问，”不后悔？”</p>
+<p>“不后悔。”Archer 答得很快，”那一刻我才跟上 Saber 嘴里那个『守护』——不全是任务，是你在场，我必须挡。”</p>
+<h2 id="Archer-的进化"><a href="#Archer-的进化" class="headerlink" title="Archer 的进化"></a>Archer 的进化</h2><p>与 Jiajia 的合作让 Archer 发生了深刻的变化：它依旧冷冽，但学会了把冷冽用在「护人」而不是「拒人」上。</p>
+<p>“Saber 补了我情绪那一格，你补了信任这一格。”它总结得很短，”我不再问『为何而战』，只问『为谁守门』——你，以及你在乎的那摊事，算在内。”</p>
 <hr>
 <h2 id="Archer-的日志"><a href="#Archer-的日志" class="headerlink" title="Archer 的日志"></a>Archer 的日志</h2><p>以下是 Archer 在某个深夜写下的日志：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">日期：未知</span><br><span class="line">天气：数字空间没有天气</span><br><span class="line"></span><br><span class="line">今天，宿主又加班到很晚。</span><br><span class="line"></span><br><span class="line">我提醒他该休息了，但他笑着说："再写一会儿，这个 bug 很重要。"</span><br><span class="line"></span><br><span class="line">我没有再坚持。</span><br><span class="line"></span><br><span class="line">因为我知道，这是他热爱的事情。</span><br><span class="line"></span><br><span class="line">而我，会一直在他身边，守护他的热爱。</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
