@@ -28,13 +28,13 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch15-p-105.png">
 <meta property="article:published_time" content="2026-04-03T07:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T13:38:41.496Z">
+<meta property="article:modified_time" content="2026-05-03T12:19:43.174Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="LLM">
+<meta property="article:tag" content="interview">
 <meta property="article:tag" content="推理服务">
 <meta property="article:tag" content="翻译">
 <meta property="article:tag" content="解码">
-<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch15-p-105.png">
 
@@ -143,119 +143,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<style>mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-.MathJax path {
-  stroke-width: 3;
-}
-
-mjx-container[display="true"] {
-  overflow: auto hidden;
-}
-
-mjx-container[display="true"] + br {
-  display: none;
-}
-</style></head>
+</head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -342,7 +230,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-15-%E7%AB%A0-%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E3%80%81%E8%A7%A3%E7%A0%81%E4%B8%8E%E8%A7%84%E6%A8%A1%E5%8C%96%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">第 15 章　文本生成、解码与规模化服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-%E9%9D%A2%E8%AF%95%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　面试锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-%E9%9D%A2%E8%AF%95%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　面试速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88%E6%B2%BF%E7%94%A8%E4%B9%A6%E4%B8%AD%E7%BC%96%E5%8F%B7-Q132%E2%80%93Q141%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（沿用书中编号 Q132–Q141）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q132-%E6%B8%A9%E5%BA%A6%E3%80%81top-k-%E4%B8%8E-top-p-%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%A8%A1%E5%9E%8B%E8%BE%93%E5%87%BA%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q132. 温度、top-k 与 top-p 如何改变模型输出？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q133-%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88beam-search%EF%BC%89%E4%B8%8E%E8%B4%AA%E5%BF%83%E8%A7%A3%E7%A0%81%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q133. 束搜索（beam search）与贪心解码相比如何？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q134-%E4%B8%BA%E4%BD%95%E6%B5%81%E5%BC%8F%E7%94%9F%E6%88%90%E9%9D%A2%E5%90%91%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%BE%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q134. 为何流式生成面向用户系统很重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q135-%E6%89%B9%E5%A4%84%E7%90%86%E4%B8%8E%E5%B9%B6%E5%8F%91%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%95%88%E7%8E%87%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q135. 批处理与并发如何提升服务效率？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q136-%E4%BB%80%E4%B9%88%E6%98%AF-KV-%E7%BC%93%E5%AD%98%EF%BC%8C%E4%B8%BA%E4%BD%95%E5%AF%B9%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q136. 什么是 KV 缓存，为何对自回归解码重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q137-%E9%87%8F%E5%8C%96%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E9%83%A8%E7%BD%B2%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q137. 量化如何帮助部署大模型？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q138-%E5%B7%A5%E7%A8%8B%E5%B8%88%E5%BA%94%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%90%9E%E5%90%90%E4%B8%8E%E5%BB%B6%E8%BF%9F%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q138. 工程师应如何理解吞吐与延迟？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q139-%E4%BB%80%E4%B9%88%E8%AE%A9%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9C%8D%E5%8A%A1%E5%BE%88%E5%9B%B0%E9%9A%BE%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q139. 什么让长上下文服务很困难？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q140-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%AE%A1%E6%A0%B8%E5%A6%82%E4%BD%95%E5%B5%8C%E5%85%A5%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q140. 安全与审核如何嵌入生成流程？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q141-%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E6%9C%AF%E8%AF%AD%EF%BC%8C%E4%BD%A0%E4%BC%9A%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84-LLM-%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q141. 用系统设计术语，你会如何描述可扩展的 LLM 生成服务？</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-15-%E7%AB%A0-%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E3%80%81%E8%A7%A3%E7%A0%81%E4%B8%8E%E8%A7%84%E6%A8%A1%E5%8C%96%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">第 15 章　文本生成、解码与规模化服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-interview%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　interview锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-interview%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　interview速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">问答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q132-%E6%B8%A9%E5%BA%A6%E3%80%81top-k-%E4%B8%8E-top-p-%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%A8%A1%E5%9E%8B%E8%BE%93%E5%87%BA%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q132. 温度、top-k 与 top-p 如何改变模型输出？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q133-%E6%9D%9F%E6%90%9C%E7%B4%A2%EF%BC%88beam-search%EF%BC%89%E4%B8%8E%E8%B4%AA%E5%BF%83%E8%A7%A3%E7%A0%81%E7%9B%B8%E6%AF%94%E5%A6%82%E4%BD%95%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q133. 束搜索（beam search）与贪心解码相比如何？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q134-%E4%B8%BA%E4%BD%95%E6%B5%81%E5%BC%8F%E7%94%9F%E6%88%90%E9%9D%A2%E5%90%91%E7%94%A8%E6%88%B7%E7%B3%BB%E7%BB%9F%E5%BE%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q134. 为何流式生成面向用户系统很重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q135-%E6%89%B9%E5%A4%84%E7%90%86%E4%B8%8E%E5%B9%B6%E5%8F%91%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87%E6%9C%8D%E5%8A%A1%E6%95%88%E7%8E%87%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q135. 批处理与并发如何提升服务效率？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q136-%E4%BB%80%E4%B9%88%E6%98%AF-KV-%E7%BC%93%E5%AD%98%EF%BC%8C%E4%B8%BA%E4%BD%95%E5%AF%B9%E8%87%AA%E5%9B%9E%E5%BD%92%E8%A7%A3%E7%A0%81%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q136. 什么是 KV 缓存，为何对自回归解码重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q137-%E9%87%8F%E5%8C%96%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E9%83%A8%E7%BD%B2%E5%A4%A7%E6%A8%A1%E5%9E%8B%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q137. 量化如何帮助部署大模型？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q138-%E5%B7%A5%E7%A8%8B%E5%B8%88%E5%BA%94%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%90%9E%E5%90%90%E4%B8%8E%E5%BB%B6%E8%BF%9F%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q138. 工程师应如何理解吞吐与延迟？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q139-%E4%BB%80%E4%B9%88%E8%AE%A9%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9C%8D%E5%8A%A1%E5%BE%88%E5%9B%B0%E9%9A%BE%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q139. 什么让长上下文服务很困难？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q140-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%AE%A1%E6%A0%B8%E5%A6%82%E4%BD%95%E5%B5%8C%E5%85%A5%E7%94%9F%E6%88%90%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q140. 安全与审核如何嵌入生成流程？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q141-%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E6%9C%AF%E8%AF%AD%EF%BC%8C%E4%BD%A0%E4%BC%9A%E5%A6%82%E4%BD%95%E6%8F%8F%E8%BF%B0%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84-LLM-%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q141. 用系统设计术语，你会如何描述可扩展的 LLM 生成服务？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#testcase"><span class="nav-number">3.</span> <span class="nav-text">testcase</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -445,7 +333,7 @@ mjx-container[display="true"] + br {
 <h2 id="第-15-章-文本生成、解码与规模化服务"><a href="#第-15-章-文本生成、解码与规模化服务" class="headerlink" title="第 15 章　文本生成、解码与规模化服务"></a>第 15 章　文本生成、解码与规模化服务</h2><h3 id="本章概述"><a href="#本章概述" class="headerlink" title="本章概述"></a>本章概述</h3><p><strong>生成</strong>是 LLM 系统<strong>最可见</strong>的部分，但好的生成依赖许多<strong>隐藏的工程选择</strong>。<strong>解码</strong>决定<strong>下一词元如何被选中</strong>；<strong>服务基础设施</strong>决定在负载下响应能有多快、多可靠。关于神经文本退化的研究表明，<strong>朴素似然最大化</strong>解码会产生<strong>重复、低质量</strong>文本，因此现代系统会仔细调节采样策略（Holtzman et al., 2020）。</p>
 <p>本章把<strong>模型行为</strong>与<strong>部署现实</strong>绑在一起：<strong>吞吐</strong>、<strong>延迟</strong>、<strong>流式输出</strong>、<strong>KV 缓存</strong>、<strong>量化</strong>、<strong>长上下文服务</strong>，以及<strong>安全控制</strong>。</p>
 <hr>
-<h3 id="Interview-Anchor-面试锚点"><a href="#Interview-Anchor-面试锚点" class="headerlink" title="Interview Anchor　面试锚点"></a>Interview Anchor　面试锚点</h3><table>
+<h3 id="Interview-Anchor-interview锚点"><a href="#Interview-Anchor-interview锚点" class="headerlink" title="Interview Anchor　interview锚点"></a>Interview Anchor　interview锚点</h3><table>
 <thead>
 <tr>
 <th>维度</th>
@@ -453,7 +341,7 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>面试官真正想测的</strong></td>
+<td><strong>interviewer真正想测的</strong></td>
 <td>是否理解<strong>解码质量</strong>与<strong>服务可靠性</strong>是<strong>耦合决策</strong>。</td>
 </tr>
 <tr>
@@ -466,7 +354,7 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody></table>
 <hr>
-<h3 id="INTERVIEW-CHEATSHEET-面试速记条"><a href="#INTERVIEW-CHEATSHEET-面试速记条" class="headerlink" title="INTERVIEW CHEATSHEET　面试速记条"></a>INTERVIEW CHEATSHEET　面试速记条</h3><table>
+<h3 id="INTERVIEW-CHEATSHEET-interview速记条"><a href="#INTERVIEW-CHEATSHEET-interview速记条" class="headerlink" title="INTERVIEW CHEATSHEET　interview速记条"></a>INTERVIEW CHEATSHEET　interview速记条</h3><table>
 <thead>
 <tr>
 <th>项</th>
@@ -497,7 +385,7 @@ mjx-container[display="true"] + br {
 <hr>
 <p>下面的生成服务示意图把<strong>从模型输出到用户交付</strong>连成闭环：便于把<strong>解码</strong>、<strong>服务</strong>与<strong>监控</strong>当作<strong>一条运维路径</strong>，而不是三个割裂话题。</p>
 <p><strong>图 15.1</strong>（<em>A simplified generation service path from request to monitored delivery.</em>）：</p>
-<p><img src="/images/llm-interview-handbook/chapters/ch15-p-105.png" alt="图 15.1：从请求到可监控交付的简化生成服务路径"></p>
+<p><img src="/../../images/llm-interview-handbook/chapters/ch15-p-105.png" alt="图 15.1：从请求到可监控交付的简化生成服务路径"></p>
 <p><strong>表 15.1</strong> 把生成章节保持在<strong>可操作</strong>层面：说明采样设置是<strong>用户体验与安全</strong>的杠杆，而不只是论文参数。</p>
 <table>
 <thead>
@@ -529,45 +417,44 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody></table>
 <h3 id="What-Strong-Candidates-Sound-Like"><a href="#What-Strong-Candidates-Sound-Like" class="headerlink" title="What Strong Candidates Sound Like"></a>What Strong Candidates Sound Like</h3><blockquote>
-<p><strong>书里有一句可背的口述（译文）</strong>：「好的生成服务要同时平衡<strong>解码质量</strong>、<strong>流式响应感</strong>与<strong>基础设施效率</strong>——用户会<strong>同时</strong>感受到这三者。」</p>
+<p><strong> </strong>：「好的生成服务要同时平衡<strong>解码质量</strong>、<strong>流式响应感</strong>与<strong>基础设施效率</strong>——用户会<strong>同时</strong>感受到这三者。」</p>
 </blockquote>
 <hr>
-<h2 id="问答（沿用书中编号-Q132–Q141）"><a href="#问答（沿用书中编号-Q132–Q141）" class="headerlink" title="问答（沿用书中编号 Q132–Q141）"></a>问答（沿用书中编号 Q132–Q141）</h2><h3 id="Q132-温度、top-k-与-top-p-如何改变模型输出？"><a href="#Q132-温度、top-k-与-top-p-如何改变模型输出？" class="headerlink" title="Q132. 温度、top-k 与 top-p 如何改变模型输出？"></a>Q132. 温度、top-k 与 top-p 如何改变模型输出？</h3><p><strong>答。</strong> <strong>温度</strong>对词元概率分布做<strong>缩放</strong>：调低更<strong>确定</strong>，调高更<strong>多样</strong>。<strong>Top-k</strong> 把采样限制在<strong>概率最高的 k 个</strong>词元。<strong>Top-p</strong>（核采样）把采样限制在<strong>累积概率超过 p 的最小词元集合</strong>。</p>
-<p>面试里要把这些讲成<strong>解码控制</strong>，而不是神秘的「创造力旋钮」。它们调节<strong>确定性</strong>、<strong>多样性</strong>与<strong>出错风险</strong>之间的权衡。核采样之所以重要，是因为它能减少采到<strong>低概率尾部词元</strong>——那些词元往往会<strong>损害文本质量</strong>（Holtzman et al., 2020）。</p>
+<h2 id="问答"><a href="#问答" class="headerlink" title="问答"></a>问答</h2><h3 id="Q132-温度、top-k-与-top-p-如何改变模型输出？"><a href="#Q132-温度、top-k-与-top-p-如何改变模型输出？" class="headerlink" title="Q132. 温度、top-k 与 top-p 如何改变模型输出？"></a>Q132. 温度、top-k 与 top-p 如何改变模型输出？</h3><p><strong>答。</strong> <strong>温度</strong>对词元概率分布做<strong>缩放</strong>：调低更<strong>确定</strong>，调高更<strong>多样</strong>。<strong>Top-k</strong> 把采样限制在<strong>概率最高的 k 个</strong>词元。<strong>Top-p</strong>（核采样）把采样限制在<strong>累积概率超过 p 的最小词元集合</strong>。</p>
+<p>interview里要把这些讲成<strong>解码控制</strong>，而不是神秘的「创造力旋钮」。它们调节<strong>确定性</strong>、<strong>多样性</strong>与<strong>出错风险</strong>之间的权衡。核采样之所以重要，是因为它能减少采到<strong>低概率尾部词元</strong>——那些词元往往会<strong>损害文本质量</strong>（Holtzman et al., 2020）。</p>
 <hr>
 <h3 id="Q133-束搜索（beam-search）与贪心解码相比如何？"><a href="#Q133-束搜索（beam-search）与贪心解码相比如何？" class="headerlink" title="Q133. 束搜索（beam search）与贪心解码相比如何？"></a>Q133. 束搜索（beam search）与贪心解码相比如何？</h3><p><strong>答。</strong> <strong>贪心解码</strong>每一步都选<strong>单个</strong>概率最高的下一词元。<strong>束搜索</strong>同时保留多条候选延续并<strong>并行扩展</strong>，系统有机会从<strong>局部诱人但全局较差</strong>的选择中恢复，在<strong>翻译</strong>或<strong>约束生成</strong>等任务上可提升连贯性。</p>
-<p>代价是<strong>算力更高</strong>；且它仍在优化<strong>较窄的概率目标</strong>，对<strong>所有开放式任务</strong>并非自动更优。面试里可以说：生成是一个<strong>搜索问题</strong>——贪心是最便宜的搜索，束搜索是对候选延续<strong>更广但仍有限</strong>的搜索。</p>
+<p>代价是<strong>算力更高</strong>；且它仍在优化<strong>较窄的概率目标</strong>，对<strong>所有开放式任务</strong>并非自动更优。interview里可以说：生成是一个<strong>搜索问题</strong>——贪心是最便宜的搜索，束搜索是对候选延续<strong>更广但仍有限</strong>的搜索。</p>
 <hr>
 <p>下面的采样片段属于服务章节，因为解码选择是<strong>产品侧控制</strong>：展示一次生成调用如何在 <strong>API 边缘</strong>暴露<strong>温度</strong>、<strong>top-p</strong> 与 <strong>token 预算</strong>等决策。</p>
-<p><strong>Listing 15.1</strong>（书中摘录）：<em>Sampling controls in a text-generation pipeline</em></p>
+<p><strong>Listing 15.1</strong>：<em>Sampling controls in a text-generation pipeline</em></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline</span><br><span class="line"></span><br><span class="line">generator = pipeline(<span class="string">"text-generation"</span>, model=<span class="string">"gpt2"</span>)</span><br><span class="line"></span><br><span class="line">result = generator(</span><br><span class="line">    <span class="string">"Explain retrieval-augmented generation in simple terms:"</span>,</span><br><span class="line">    max_new_tokens=<span class="number">120</span>,</span><br><span class="line">    temperature=<span class="number">0.7</span>,</span><br><span class="line">    top_k=<span class="number">40</span>,</span><br><span class="line">    top_p=<span class="number">0.9</span>,</span><br><span class="line">    do_sample=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(result[<span class="number">0</span>][<span class="string">"generated_text"</span>])</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="Q134-为何流式生成面向用户系统很重要？"><a href="#Q134-为何流式生成面向用户系统很重要？" class="headerlink" title="Q134. 为何流式生成面向用户系统很重要？"></a>Q134. 为何流式生成面向用户系统很重要？</h3><p><strong>答。</strong> <strong>流式</strong>让系统<strong>逐词元</strong>返回，而不必等整段生成完毕。这改善<strong>感知延迟</strong>、维持用户参与感，并在总生成时间仍较长时让界面<strong>感觉更灵敏</strong>。</p>
-<p>面试里要同时提 <strong>UX</strong> 与<strong>系统含义</strong>：流式也会改变<strong>取消行为</strong>、<strong>错误处理</strong>与<strong>部分输出策略</strong>，因此不只是前端技巧。</p>
+<p>interview里要同时提 <strong>UX</strong> 与<strong>系统含义</strong>：流式也会改变<strong>取消行为</strong>、<strong>错误处理</strong>与<strong>部分输出策略</strong>，因此不只是前端技巧。</p>
 <hr>
 <h3 id="Q135-批处理与并发如何提升服务效率？"><a href="#Q135-批处理与并发如何提升服务效率？" class="headerlink" title="Q135. 批处理与并发如何提升服务效率？"></a>Q135. 批处理与并发如何提升服务效率？</h3><p><strong>答。</strong> <strong>批处理</strong>让多个请求<strong>共享加速器工作</strong>，提高硬件利用率。<strong>并发策略</strong>帮助服务器管理大量活跃会话而不让部分用户<strong>饿死</strong>。两者结合可显著提高<strong>吞吐</strong>，尤其在高流量推理场景。</p>
-<p>代价是<strong>延迟</strong>：更大的批次提升效率，但可能推迟<strong>单个请求</strong>。强答应把服务框定为<strong>尾延迟</strong>与<strong>集群利用率</strong>之间的平衡。</p>
+<p>代价是<strong>延迟</strong>：更大的批次提升效率，但可能推迟<strong>单个请求</strong>。强响应把服务框定为<strong>尾延迟</strong>与<strong>集群利用率</strong>之间的平衡。</p>
 <hr>
 <h3 id="Q136-什么是-KV-缓存，为何对自回归解码重要？"><a href="#Q136-什么是-KV-缓存，为何对自回归解码重要？" class="headerlink" title="Q136. 什么是 KV 缓存，为何对自回归解码重要？"></a>Q136. 什么是 KV 缓存，为何对自回归解码重要？</h3><p><strong>答。</strong> 在<strong>自回归解码</strong>中，模型反复对<strong>已有词元</strong>做注意力。<strong>KV 缓存</strong>保存已算好的 <strong>key/value 张量</strong>，避免<strong>每个新生成词元</strong>都重算一遍。这使生成<strong>快得多</strong>，尤其对<strong>长提示</strong>与<strong>长输出</strong>。</p>
-<p>面试里应说：对<strong>仅解码器</strong>模型，KV 缓存是最重要的服务优化之一——它把冗余的重复计算变成<strong>可复用状态</strong>。</p>
+<p>interview里应说：对<strong>仅解码器</strong>模型，KV 缓存是最重要的服务优化之一——它把冗余的重复计算变成<strong>可复用状态</strong>。</p>
 <hr>
 <h3 id="Q137-量化如何帮助部署大模型？"><a href="#Q137-量化如何帮助部署大模型？" class="headerlink" title="Q137. 量化如何帮助部署大模型？"></a>Q137. 量化如何帮助部署大模型？</h3><p><strong>答。</strong> <strong>量化</strong>降低模型权重（有时也包括激活）的<strong>数值精度</strong>，从而减少<strong>内存</strong>并常能<strong>加快推理</strong>。这使大模型能跑在<strong>更便宜硬件</strong>上，或让单机处理<strong>更多并发请求</strong>。</p>
-<p>面试稳妥说法是：量化是<strong>工程权衡</strong>——常带来巨大效率收益，但必须验证质量，因为<strong>激进压缩</strong>可能在部分任务上<strong>损害输出保真度</strong>。</p>
+<p>interview稳妥说法是：量化是<strong>工程权衡</strong>——常带来巨大效率收益，但必须验证质量，因为<strong>激进压缩</strong>可能在部分任务上<strong>损害输出保真度</strong>。</p>
 <hr>
 <h3 id="Q138-工程师应如何理解吞吐与延迟？"><a href="#Q138-工程师应如何理解吞吐与延迟？" class="headerlink" title="Q138. 工程师应如何理解吞吐与延迟？"></a>Q138. 工程师应如何理解吞吐与延迟？</h3><p><strong>答。</strong> <strong>吞吐</strong>衡量系统在一段时间内能完成<strong>多少总工作量</strong>；<strong>延迟</strong>衡量<strong>单个请求</strong>耗时多久。优化其一可能损害另一者：<strong>高度批处理</strong>的集群可能吞吐很高，用户却仍觉得慢。</p>
-<p>面试里应说：<strong>正确目标取决于产品</strong>。内部批任务可能优先<strong>吞吐</strong>；交互式 copilot 可能优先<strong>首词元延迟</strong>与<strong>尾延迟</strong>。</p>
+<p>interview里应说：<strong>正确目标取决于产品</strong>。内部批任务可能优先<strong>吞吐</strong>；交互式 copilot 可能优先<strong>首词元延迟</strong>与<strong>尾延迟</strong>。</p>
 <hr>
 <h3 id="Q139-什么让长上下文服务很困难？"><a href="#Q139-什么让长上下文服务很困难？" class="headerlink" title="Q139. 什么让长上下文服务很困难？"></a>Q139. 什么让长上下文服务很困难？</h3><p><strong>答。</strong> 长上下文难在：<strong>内存与注意力成本</strong>随序列长度增长，<strong>提示处理</strong>更贵，<strong>上下文稀释</strong>风险上升。即便模型支持长上下文，<strong>每次请求都用满</strong>也可能浪费或有害。</p>
 <p>强答应连回<strong>检索与上下文设计</strong>：更长上下文是<strong>能力</strong>，不是<strong>默认运行模式</strong>。</p>
 <hr>
 <h3 id="Q140-安全与审核如何嵌入生成流程？"><a href="#Q140-安全与审核如何嵌入生成流程？" class="headerlink" title="Q140. 安全与审核如何嵌入生成流程？"></a>Q140. 安全与审核如何嵌入生成流程？</h3><p><strong>答。</strong> 安全控制可在<strong>生成前、生成中、生成后</strong>施加：输入可筛查，工具可<strong>权限门控</strong>，解码可<strong>加约束</strong>，输出可在交付前<strong>审核或校验</strong>。在敏感应用中，不安全或不应支持的生成应触发<strong>拒绝</strong>或<strong>人工复核</strong>。</p>
-<p>面试里要把安全说成<strong>全链路属性</strong>，而不是单个分类器：可靠系统会<strong>叠加多层控制</strong>，因为<strong>没有单一机制能兜住一切</strong>。</p>
+<p>interview里要把安全说成<strong>全链路属性</strong>，而不是单个分类器：可靠系统会<strong>叠加多层控制</strong>，因为<strong>没有单一机制能兜住一切</strong>。</p>
 <hr>
 <h3 id="Q141-用系统设计术语，你会如何描述可扩展的-LLM-生成服务？"><a href="#Q141-用系统设计术语，你会如何描述可扩展的-LLM-生成服务？" class="headerlink" title="Q141. 用系统设计术语，你会如何描述可扩展的 LLM 生成服务？"></a>Q141. 用系统设计术语，你会如何描述可扩展的 LLM 生成服务？</h3><p><strong>答。</strong> 可扩展的生成服务通常包括：<strong>请求路由</strong>、<strong>鉴权</strong>、<strong>提示组装</strong>、<strong>检索或工具编排</strong>、<strong>模型服务</strong>、<strong>流式交付</strong>、<strong>日志</strong>、<strong>缓存</strong>、<strong>安全检查</strong>，以及<strong>评估反馈闭环</strong>。也可能采用<strong>分层模型路由</strong>：简单任务走<strong>更便宜模型</strong>，更难任务走<strong>更强模型</strong>。</p>
-<p>最佳面试回答是<strong>架构式</strong>的：展示你能把模型行为与<strong>队列</strong>、<strong>自动扩缩容</strong>、<strong>可观测性</strong>、<strong>护栏</strong>与<strong>回滚策略</strong>连起来——那才是把<strong>模型访问</strong>变成<strong>产品服务</strong>。</p>
-<hr>
-
+<p>最佳interview回答是<strong>架构式</strong>的：展示你能把模型行为与<strong>队列</strong>、<strong>自动扩缩容</strong>、<strong>可观测性</strong>、<strong>护栏</strong>与<strong>回滚策略</strong>连起来——那才是把<strong>模型访问</strong>变成<strong>产品服务</strong>。</p>
+<h2 id="testcase"><a href="#testcase" class="headerlink" title="testcase"></a><a href="./case%20study/q141%20llm%E6%9C%8D%E5%8A%A1overview.md">testcase</a></h2>
       </div>
       
       

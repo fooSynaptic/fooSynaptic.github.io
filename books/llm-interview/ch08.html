@@ -28,13 +28,13 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch08-p-053.png">
 <meta property="article:published_time" content="2026-04-03T00:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-03T13:38:41.477Z">
+<meta property="article:modified_time" content="2026-05-02T22:28:39.367Z">
 <meta property="article:author" content="fooSynaptic">
 <meta property="article:tag" content="LLM">
 <meta property="article:tag" content="RAG">
+<meta property="article:tag" content="interview">
 <meta property="article:tag" content="检索">
 <meta property="article:tag" content="翻译">
-<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://foosynaptic.github.io/images/llm-interview-handbook/chapters/ch08-p-053.png">
 
@@ -143,119 +143,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<style>mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-.MathJax path {
-  stroke-width: 3;
-}
-
-mjx-container[display="true"] {
-  overflow: auto hidden;
-}
-
-mjx-container[display="true"] + br {
-  display: none;
-}
-</style></head>
+</head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -342,7 +230,7 @@ mjx-container[display="true"] + br {
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-8-%E7%AB%A0-%E5%A4%A7%E8%A7%84%E6%A8%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A3%80%E7%B4%A2%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">第 8 章　大规模语言模型系统的检索基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-%E9%9D%A2%E8%AF%95%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　面试锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-%E9%9D%A2%E8%AF%95%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　面试速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88Q61%E2%80%93Q70%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（Q61–Q70）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q61-%E4%BB%80%E4%B9%88%E6%98%AF%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%88RAG%EF%BC%89%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q61. 什么是检索增强生成（RAG）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q62-%E8%AF%8D%E6%B1%87%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%A8%A0%E5%AF%86%E6%A3%80%E7%B4%A2%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q62. 词汇检索与稠密检索有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q63-%E4%B8%BA%E4%BD%95%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2%E5%BE%80%E5%BE%80%E4%BC%98%E4%BA%8E%E5%8F%AA%E7%94%A8%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q63. 为何混合检索往往优于只用一种方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q64-%E4%B8%BA%E4%BD%95%E5%88%87%E5%9D%97%E5%9C%A8-RAG-%E4%B8%AD%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q64. 为何切块在 RAG 中如此重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q65-%E5%85%83%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%A6%82%E4%BD%95%E6%94%B9%E5%96%84%E6%A3%80%E7%B4%A2%E8%B4%A8%E9%87%8F%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q65. 元数据过滤如何改善检索质量？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q66-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F%E5%AE%83%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q66. 什么是向量数据库？它解决什么问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q67-%E7%94%9F%E4%BA%A7%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BD%95%E4%BE%9D%E8%B5%96%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB%EF%BC%88ANN%EF%BC%89%E6%90%9C%E7%B4%A2%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q67. 生产系统为何依赖近似最近邻（ANN）搜索？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q68-%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E6%8E%92%EF%BC%9F%E4%B8%BA%E4%BD%95%E6%9C%89%E7%94%A8%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">Q68. 什么是重排？为何有用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q69-%E6%9F%A5%E8%AF%A2%E6%94%B9%E5%86%99%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E6%A3%80%E7%B4%A2%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q69. 查询改写如何帮助检索？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q70-%E6%A3%80%E7%B4%A2%E8%B4%A8%E9%87%8F%E5%93%AA%E4%BA%9B%E7%A6%BB%E7%BA%BF%E6%8C%87%E6%A0%87%E6%9C%80%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q70. 检索质量哪些离线指标最重要？</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-8-%E7%AB%A0-%E5%A4%A7%E8%A7%84%E6%A8%A1%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A3%80%E7%B4%A2%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">第 8 章　大规模语言模型系统的检索基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">本章概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interview-Anchor-interview%E9%94%9A%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">Interview Anchor　interview锚点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INTERVIEW-CHEATSHEET-interview%E9%80%9F%E8%AE%B0%E6%9D%A1"><span class="nav-number">1.3.</span> <span class="nav-text">INTERVIEW CHEATSHEET　interview速记条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-Strong-Candidates-Sound-Like"><span class="nav-number">1.4.</span> <span class="nav-text">What Strong Candidates Sound Like</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E7%AD%94%EF%BC%88Q61%E2%80%93Q70%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">问答（Q61–Q70）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q61-%E4%BB%80%E4%B9%88%E6%98%AF%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90%EF%BC%88RAG%EF%BC%89%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q61. 什么是检索增强生成（RAG）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q62-%E8%AF%8D%E6%B1%87%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%A8%A0%E5%AF%86%E6%A3%80%E7%B4%A2%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q62. 词汇检索与稠密检索有何区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q63-%E4%B8%BA%E4%BD%95%E6%B7%B7%E5%90%88%E6%A3%80%E7%B4%A2%E5%BE%80%E5%BE%80%E4%BC%98%E4%BA%8E%E5%8F%AA%E7%94%A8%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q63. 为何混合检索往往优于只用一种方法？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q64-%E4%B8%BA%E4%BD%95%E5%88%87%E5%9D%97%E5%9C%A8-RAG-%E4%B8%AD%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q64. 为何切块在 RAG 中如此重要？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q65-%E5%85%83%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%A6%82%E4%BD%95%E6%94%B9%E5%96%84%E6%A3%80%E7%B4%A2%E8%B4%A8%E9%87%8F%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">Q65. 元数据过滤如何改善检索质量？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q66-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F%E5%AE%83%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">2.6.</span> <span class="nav-text">Q66. 什么是向量数据库？它解决什么问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q67-%E7%94%9F%E4%BA%A7%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BD%95%E4%BE%9D%E8%B5%96%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB%EF%BC%88ANN%EF%BC%89%E6%90%9C%E7%B4%A2%EF%BC%9F"><span class="nav-number">2.7.</span> <span class="nav-text">Q67. 生产系统为何依赖近似最近邻（ANN）搜索？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q68-%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8D%E6%8E%92%EF%BC%9F%E4%B8%BA%E4%BD%95%E6%9C%89%E7%94%A8%EF%BC%9F"><span class="nav-number">2.8.</span> <span class="nav-text">*Q68. 什么是重排？为何有用？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q69-%E6%9F%A5%E8%AF%A2%E6%94%B9%E5%86%99%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E6%A3%80%E7%B4%A2%EF%BC%9F"><span class="nav-number">2.9.</span> <span class="nav-text">Q69. 查询改写如何帮助检索？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q70-%E6%A3%80%E7%B4%A2%E8%B4%A8%E9%87%8F%E5%93%AA%E4%BA%9B%E7%A6%BB%E7%BA%BF%E6%8C%87%E6%A0%87%E6%9C%80%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.10.</span> <span class="nav-text">Q70. 检索质量哪些离线指标最重要？</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -445,7 +333,7 @@ mjx-container[display="true"] + br {
 <h2 id="第-8-章-大规模语言模型系统的检索基础"><a href="#第-8-章-大规模语言模型系统的检索基础" class="headerlink" title="第 8 章　大规模语言模型系统的检索基础"></a>第 8 章　大规模语言模型系统的检索基础</h2><h3 id="本章概述"><a href="#本章概述" class="headerlink" title="本章概述"></a>本章概述</h3><p><strong>检索</strong>是连接<strong>静态模型知识</strong>与<strong>新鲜、领域特定信息</strong>的核心桥梁。<strong>检索增强生成（RAG）</strong>提供了一种实用方式，把存在<strong>模型权重</strong>里的<strong>参数化记忆</strong>，与存在<strong>索引、文档与知识库</strong>里的<strong>非参数化记忆</strong>结合起来（Lewis et al., 2020）。</p>
 <p>本章聚焦「如何找到对的证据」这一机制：<strong>词汇检索</strong>、<strong>稠密检索</strong>、<strong>混合检索</strong>、<strong>切块</strong>、<strong>排序</strong>、<strong>过滤</strong>与<strong>评估</strong>。优秀候选人明白：很多时候，<strong>好的 LLM 答案始于一个好的检索问题</strong>。</p>
 <hr>
-<h3 id="Interview-Anchor-面试锚点"><a href="#Interview-Anchor-面试锚点" class="headerlink" title="Interview Anchor　面试锚点"></a>Interview Anchor　面试锚点</h3><table>
+<h3 id="Interview-Anchor-interview锚点"><a href="#Interview-Anchor-interview锚点" class="headerlink" title="Interview Anchor　interview锚点"></a>Interview Anchor　interview锚点</h3><table>
 <thead>
 <tr>
 <th>维度</th>
@@ -453,7 +341,7 @@ mjx-container[display="true"] + br {
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>面试官真正想测的</strong></td>
+<td><strong>interviewer真正想测的</strong></td>
 <td>能否把检索讲成带<strong>召回、精确率、切块、重排、元数据与评估</strong>的<strong>信息系统</strong>，而不只是「选一个向量库」。</td>
 </tr>
 <tr>
@@ -462,11 +350,11 @@ mjx-container[display="true"] + br {
 </tr>
 <tr>
 <td><strong>常见低分答法</strong></td>
-<td>只谈<strong>向量存储</strong>，却忽略<strong>切块、文档卫生与重排</strong>往往才是质量主导因素。</td>
+<td>只谈<strong>向量存储</strong>，却忽略<strong>切块、文档清洁程度与重排</strong>往往才是质量主导因素。</td>
 </tr>
 </tbody></table>
 <hr>
-<h3 id="INTERVIEW-CHEATSHEET-面试速记条"><a href="#INTERVIEW-CHEATSHEET-面试速记条" class="headerlink" title="INTERVIEW CHEATSHEET　面试速记条"></a>INTERVIEW CHEATSHEET　面试速记条</h3><table>
+<h3 id="INTERVIEW-CHEATSHEET-interview速记条"><a href="#INTERVIEW-CHEATSHEET-interview速记条" class="headerlink" title="INTERVIEW CHEATSHEET　interview速记条"></a>INTERVIEW CHEATSHEET　interview速记条</h3><table>
 <thead>
 <tr>
 <th>项</th>
@@ -496,7 +384,7 @@ mjx-container[display="true"] + br {
 </tbody></table>
 <hr>
 <p>书中用<strong>检索记分卡</strong>让讨论落在<strong>可度量的系统行为</strong>上，从含混的「相关性」叙事，转向你能<strong>实际评估</strong>的维度。</p>
-<p><strong>表 8.1：面试中可讨论的紧凑检索记分卡</strong></p>
+<p><strong>表 8.1：interview中可讨论的紧凑检索记分卡</strong></p>
 <table>
 <thead>
 <tr>
@@ -527,16 +415,16 @@ mjx-container[display="true"] + br {
 </tr>
 </tbody></table>
 <p>下面的切块小工具说明：<strong>重叠（overlap）是检索设计选择</strong>，而不仅是排版便利。实现刻意保持短小，以便读者聚焦<strong>召回上的取舍</strong>。</p>
-<p><strong>Listing 8.1</strong>（书中摘录）：一个简单的切块辅助，用重叠换取更好召回。</p>
+<p><strong>Listing 8.1</strong>：一个简单的切块辅助，用重叠换取更好召回。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">chunk_text</span>(<span class="params">tokens, chunk_size=<span class="number">400</span>, overlap=<span class="number">60</span></span>):</span><br><span class="line">    chunks = []</span><br><span class="line">    start = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> start &lt; <span class="built_in">len</span>(tokens):</span><br><span class="line">        end = <span class="built_in">min</span>(start + chunk_size, <span class="built_in">len</span>(tokens))</span><br><span class="line">        chunks.append(tokens[start:end])</span><br><span class="line">        <span class="keyword">if</span> end == <span class="built_in">len</span>(tokens):</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        start = end - overlap</span><br><span class="line">    <span class="keyword">return</span> chunks</span><br></pre></td></tr></table></figure>
 
 <h3 id="What-Strong-Candidates-Sound-Like"><a href="#What-Strong-Candidates-Sound-Like" class="headerlink" title="What Strong Candidates Sound Like"></a>What Strong Candidates Sound Like</h3><blockquote>
-<p><strong>书里有一句可背的口述（译文）</strong>：「<strong>检索</strong>才是<strong>有据 LLM 质量</strong>通常输赢所在的地方——因为生成器只能在我们<strong>成功捞出并排好序</strong>的证据之上推理。」</p>
+<p><strong>「<strong>检索</strong>才是<strong>有据 LLM 质量</strong>通常输赢所在的地方——因为生成器只能在我们<strong>成功捞出并排好序</strong>的证据之上推理。」</strong></p>
 </blockquote>
 <hr>
 <p>下面的检索流程示意图把<strong>切块、索引、排序与生成</strong>连成一条<strong>有据路径</strong>，便于说明<strong>召回问题</strong>与<strong>胡编问题</strong>从哪里开始分道扬镳。</p>
 <p><strong>图 8.1</strong>：</p>
-<p><img src="/images/llm-interview-handbook/chapters/ch08-p-053.png" alt="图 8.1：检索增强作答流程"></p>
+<p><img src="/../../images/llm-interview-handbook/chapters/ch08-p-053.png" alt="图 8.1：检索增强作答流程"></p>
 <p><strong>表 8.2：检索质量通常输赢在何处</strong></p>
 <table>
 <thead>
@@ -574,25 +462,25 @@ mjx-container[display="true"] + br {
 </tbody></table>
 <hr>
 <h2 id="问答（Q61–Q70）"><a href="#问答（Q61–Q70）" class="headerlink" title="问答（Q61–Q70）"></a>问答（Q61–Q70）</h2><h3 id="Q61-什么是检索增强生成（RAG）？"><a href="#Q61-什么是检索增强生成（RAG）？" class="headerlink" title="Q61. 什么是检索增强生成（RAG）？"></a>Q61. 什么是检索增强生成（RAG）？</h3><p><strong>答。</strong>RAG 是一种模式：系统先<strong>检索</strong>相关外部信息，再把这些信息作为<strong>上下文</strong>交给语言模型生成。目标是加强<strong>事实锚定</strong>、支持<strong>引用</strong>，并在<strong>不重训基座模型</strong>的前提下实现知识更新。</p>
-<p>核心洞见在于：并非所有知识都应塞进模型权重。外部检索让系统能访问<strong>更新、更可审计</strong>的证据。面试中要同时说清<strong>目的</strong>与<strong>收益</strong>：RAG 提升<strong>可控性</strong>的程度，常与提升<strong>准确性</strong>同样重要（Lewis et al., 2020）。</p>
+<p>核心洞见在于：并非所有知识都应塞进模型权重。外部检索让系统能访问<strong>更新、更可审计</strong>的证据。interview中要同时说清<strong>目的</strong>与<strong>收益</strong>：RAG 提升<strong>可控性</strong>的程度，常与提升<strong>准确性</strong>同样重要（Lewis et al., 2020）。</p>
 <h3 id="Q62-词汇检索与稠密检索有何区别？"><a href="#Q62-词汇检索与稠密检索有何区别？" class="headerlink" title="Q62. 词汇检索与稠密检索有何区别？"></a>Q62. 词汇检索与稠密检索有何区别？</h3><p><strong>答。</strong>词汇检索匹配<strong>显式词项或短语</strong>，因而在<strong>措辞重叠</strong>重要时很强。稠密检索使用<strong>嵌入</strong>，因而即使查询与文档<strong>表面形式不同</strong>，也能检索到语义相关的内容。</p>
 <p>取舍很直接：词汇检索保护<strong>精确匹配</strong>；稠密检索改善<strong>语义召回</strong>。企业系统里二者常需兼备——用户往往<strong>概念化</strong>提问，而文档写的是<strong>操作性</strong>表述。</p>
 <h3 id="Q63-为何混合检索往往优于只用一种方法？"><a href="#Q63-为何混合检索往往优于只用一种方法？" class="headerlink" title="Q63. 为何混合检索往往优于只用一种方法？"></a>Q63. 为何混合检索往往优于只用一种方法？</h3><p><strong>答。</strong>混合检索同时结合<strong>词汇</strong>与<strong>稠密</strong>信号，使系统同时受益于<strong>精确术语</strong>与<strong>语义相似度</strong>。这有助于在同一条链路中处理<strong>缩写、错误码、产品名、法律条款</strong>与用户<strong>改述</strong>。</p>
-<p>强面试回答是：混合检索<strong>缩小</strong>每种方法各自的盲区。单靠稠密可能漏掉<strong>稀少标识符</strong>；单靠词汇可能漏掉<strong>改述</strong>。二者结合常能改善<strong>一阶段召回</strong>。</p>
+<p>强interview回答是：混合检索<strong>缩小</strong>每种方法各自的盲区。单靠稠密可能漏掉<strong>稀少标识符</strong>；单靠词汇可能漏掉<strong>改述</strong>。二者结合常能改善<strong>阶段召回</strong>。</p>
 <h3 id="Q64-为何切块在-RAG-中如此重要？"><a href="#Q64-为何切块在-RAG-中如此重要？" class="headerlink" title="Q64. 为何切块在 RAG 中如此重要？"></a>Q64. 为何切块在 RAG 中如此重要？</h3><p><strong>答。</strong>切块决定<strong>检索的单位</strong>。块太大，检索会变粗——每次命中夹带过多无关文本。块太小，答案可能失去解读所需的<strong>周围语境</strong>。好的切块与<strong>源材料结构</strong>对齐。</p>
-<p>面试中要说：切块既是<strong>召回</strong>决策也是<strong>精确率</strong>决策；它既塑造检索器<strong>能找到什么</strong>，也塑造生成器在段落被捞出后<strong>能理解什么</strong>。</p>
+<p>interview中要说：切块既是<strong>召回</strong>决策也是<strong>精确率</strong>决策；它既塑造检索器<strong>能找到什么</strong>，也塑造生成器在段落被捞出后<strong>能理解什么</strong>。</p>
 <h3 id="Q65-元数据过滤如何改善检索质量？"><a href="#Q65-元数据过滤如何改善检索质量？" class="headerlink" title="Q65. 元数据过滤如何改善检索质量？"></a>Q65. 元数据过滤如何改善检索质量？</h3><p><strong>答。</strong>元数据过滤用<strong>结构化属性</strong>（如产品、地区、日期、语言、权限范围、文档类型）缩小搜索空间。这有助于系统在按语义相关性排序<strong>之前</strong>，就先检索到<strong>正确的邻域</strong>。</p>
 <p>实务教训是：检索质量<strong>不只</strong>取决于更好的嵌入。结构化约束能以<strong>低廉、可靠</strong>的方式承担大量工作。强候选人常把元数据过滤列为生产检索里<strong>投入回报比最高</strong>的改进之一。</p>
 <h3 id="Q66-什么是向量数据库？它解决什么问题？"><a href="#Q66-什么是向量数据库？它解决什么问题？" class="headerlink" title="Q66. 什么是向量数据库？它解决什么问题？"></a>Q66. 什么是向量数据库？它解决什么问题？</h3><p><strong>答。</strong>向量数据库存储<strong>嵌入</strong>，并支持<strong>高效的近邻搜索</strong>。它被设计为在大规模下找出与查询向量<strong>最相似</strong>的向量，常同时结合<strong>元数据过滤</strong>以及复制、持久化、监控等运维能力。</p>
-<p>重要的面试观点是：向量库是<strong>基础设施</strong>，不是<strong>智能</strong>本身。它让检索在速度与规模上<strong>可行</strong>，但相关性仍取决于其上层的<strong>嵌入模型、切块策略与排序逻辑</strong>。</p>
+<p>重要的interview观点是：向量库是<strong>基础设施</strong>，不是<strong>智能</strong>本身。它让检索在速度与规模上<strong>可行</strong>，但相关性仍取决于其上层的<strong>嵌入模型、切块策略与排序逻辑</strong>。</p>
 <h3 id="Q67-生产系统为何依赖近似最近邻（ANN）搜索？"><a href="#Q67-生产系统为何依赖近似最近邻（ANN）搜索？" class="headerlink" title="Q67. 生产系统为何依赖近似最近邻（ANN）搜索？"></a>Q67. 生产系统为何依赖近似最近邻（ANN）搜索？</h3><p><strong>答。</strong>在大索引上<strong>精确</strong>最近邻很昂贵：每次查询若要与过多候选逐一比较，成本过高。<strong>近似</strong>方法用少量<strong>召回</strong>换取<strong>速度与可扩展性</strong>，在真实系统中通常是正确折中。</p>
-<p>面试中最佳回答是<strong>运维向</strong>的：ANN 的存在是因为搜索系统必须以<strong>低延迟</strong>服务真实流量。问题不在于近似在哲学上是否「纯粹」，而在于它是否在<strong>生产速度</strong>下仍保留足够相关性。</p>
-<h3 id="Q68-什么是重排？为何有用？"><a href="#Q68-什么是重排？为何有用？" class="headerlink" title="Q68. 什么是重排？为何有用？"></a>Q68. 什么是重排？为何有用？</h3><p><strong>答。</strong>重排对一阶段检索返回的<strong>短名单</strong>应用<strong>更昂贵</strong>的相关性模型。初始检索器最大化<strong>速度与召回</strong>；重排改善<strong>顺序</strong>，使最佳证据抵达生成器。</p>
-<p>常见模式是<strong>双编码器检索</strong>再接<strong>交叉编码器重排</strong>。这兼得向量搜索的<strong>可扩展性</strong>与更丰富<strong>查询—文档交互</strong>的<strong>精确率</strong>。面试中把重排解释为<strong>第二阶段质量过滤</strong>。</p>
+<p>interview中最佳回答是<strong>运维向</strong>的：ANN 的存在是因为搜索系统必须以<strong>低延迟</strong>服务真实流量。问题不在于近似在哲学上是否「纯粹」，而在于它是否在<strong>生产速度</strong>下仍保留足够相关性。</p>
+<h3 id="Q68-什么是重排？为何有用？"><a href="#Q68-什么是重排？为何有用？" class="headerlink" title="*Q68. 什么是重排？为何有用？"></a>*Q68. 什么是重排？为何有用？</h3><p><strong>答。</strong>重排对一阶段检索返回的<strong>短名单</strong>应用<strong>更昂贵</strong>的相关性模型。初始检索器最大化<strong>速度与召回</strong>；重排改善<strong>顺序</strong>，使最佳证据抵达生成器。</p>
+<p>常见模式是<strong>双编码器检索</strong>再接<strong>交叉编码器重排</strong>。这兼得向量搜索的<strong>可扩展性</strong>与更丰富<strong>查询—文档交互</strong>的<strong>精确率</strong>。interview中把重排解释为<strong>第二阶段质量过滤</strong>。</p>
 <h3 id="Q69-查询改写如何帮助检索？"><a href="#Q69-查询改写如何帮助检索？" class="headerlink" title="Q69. 查询改写如何帮助检索？"></a>Q69. 查询改写如何帮助检索？</h3><p><strong>答。</strong>查询改写把用户的<strong>原始问题</strong>转成更贴合<strong>索引内容</strong>的形式。系统可能<strong>展开缩写、规范化行话、补关键词、消歧实体</strong>，或将一个复杂查询<strong>拆成</strong>多个聚焦的检索意图。</p>
 <p>关键是：用户不会自然地说「<strong>索引友好</strong>」的话。强回答是：查询改写常是在<strong>不重嵌整个语料</strong>的前提下改善召回的<strong>最便宜</strong>手段之一。</p>
 <h3 id="Q70-检索质量哪些离线指标最重要？"><a href="#Q70-检索质量哪些离线指标最重要？" class="headerlink" title="Q70. 检索质量哪些离线指标最重要？"></a>Q70. 检索质量哪些离线指标最重要？</h3><p><strong>答。</strong>Recall@k 度量相关证据是否出现在短名单里。<strong>平均倒数排名（MRR）</strong>与 <strong>nDCG</strong> 度量相关项是否靠近<strong>列表顶部</strong>。对答案生成系统，段落级相关性还应与<strong>端到端有据答案质量</strong>挂钩。</p>
-<p>最强的面试回答是：检索指标不应与<strong>生成结果</strong>割裂。离线很强的检索器若向生成器喂<strong>噪声证据</strong>，仍可能在用户任务上失败。</p>
+<p>最强的interview回答是：检索指标不应与<strong>生成结果</strong>割裂。离线很强的检索器若向生成器喂<strong>噪声证据</strong>，仍可能在用户任务上失败。</p>
 <hr>
 
       </div>
